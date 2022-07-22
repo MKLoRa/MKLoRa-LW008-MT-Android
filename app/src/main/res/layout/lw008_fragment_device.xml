@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lw008_grey_ebebeb"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_time_zone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Time Zone"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tv_time_zone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_time_zone" />
+
+            <TextView
+                android:id="@+id/tv_time_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:minWidth="70dp"
+                android:onClick="selectTimeZone"
+                android:padding="12dp"
+                android:text="UTC"
+                android:textColor="@color/lw008_white_ffffff"
+                android:textSize="15sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_low_power_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_time_zone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Low Power Prompt"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tv_low_power_prompt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_low_power_prompt" />
+
+            <TextView
+                android:id="@+id/tv_low_power_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:minWidth="70dp"
+                android:onClick="selectLowPowerPrompt"
+                android:padding="12dp"
+                android:text="10%"
+                android:textColor="@color/lw008_white_ffffff"
+                android:textSize="15sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_low_power_prompt_tips"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="@string/low_power_prompt_tips_lw008"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_low_power_prompt" />
+
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_low_power_prompt_tips" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Low Power Payload"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/iv_low_power_payload"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_low_power_payload" />
+
+            <ImageView
+                android:id="@+id/iv_low_power_payload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:onClick="onLowPowerPayload"
+                android:padding="6dp"
+                android:src="@drawable/lw008_ic_unchecked"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_low_power_prompt_tips" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_vibration_intensity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_low_power_prompt">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vibration Intensity"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tv_vibration_intensity"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_vibration_intensity" />
+
+            <TextView
+                android:id="@+id/tv_vibration_intensity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:minWidth="70dp"
+                android:onClick="onVibrationIntensity"
+                android:padding="12dp"
+                android:text="No"
+                android:textColor="@color/lw008_white_ffffff"
+                android:textSize="15sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_on_off"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_vibration_intensity">
+
+            <TextView
+                android:id="@+id/tv_on_off"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onOnOff"
+                android:text="ON/OFF Settings"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_factory_reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_on_off">
+
+            <TextView
+                android:id="@+id/tv_factory_reset"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onFactoryReset"
+                android:text="Factory Reset"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_device_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_factory_reset">
+
+            <TextView
+                android:id="@+id/tv_device_info"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onDeviceInfo"
+                android:text="@string/device_information"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

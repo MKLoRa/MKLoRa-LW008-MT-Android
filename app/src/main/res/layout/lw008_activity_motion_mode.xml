@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lw008_grey_f2f2f2"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/lw008_blue_2f84d0">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:drawableLeft="@drawable/lw008_ic_back"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:onClick="onBack"
+            android:paddingLeft="16dp"
+            android:text=""
+            android:textColor="@color/lw008_white_ffffff"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/motion_mode"
+            android:textColor="@color/lw008_white_ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:onClick="onSave"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/lw008_ic_save" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_fix_on_start"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/lw008_white_ffffff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <CheckBox
+                    android:id="@+id/cb_fix_on_start"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Fix On Start"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_on_start" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number Of Fix On Start"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_fix_on_start_number"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/et_fix_on_start_number" />
+
+                <EditText
+                    android:id="@+id/et_fix_on_start_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:hint="1~255"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textColorHint="@color/lw008_grey_ebebeb"
+                    android:textSize="15sp"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_on_start"
+                    app:layout_constraintWidth_percent="0.25" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_fix_on_start_number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pos-Strategy On Start"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pos_strategy_on_start"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_pos_strategy_on_start" />
+
+                <TextView
+                    android:id="@+id/tv_pos_strategy_on_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:minWidth="70dp"
+                    android:onClick="selectPosStrategyStart"
+                    android:padding="12dp"
+                    android:text="GPS"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_fix_on_start_number" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_fix_in_trip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_fix_on_start">
+
+                <CheckBox
+                    android:id="@+id/cb_fix_in_trip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Fix In Trip"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_in_trip" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Report Interval In Trip"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_report_interval_in_trip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/et_report_interval_in_trip" />
+
+                <EditText
+                    android:id="@+id/et_report_interval_in_trip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:hint="10~86400"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textColorHint="@color/lw008_grey_ebebeb"
+                    android:textSize="15sp"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_in_trip"
+                    app:layout_constraintWidth_percent="0.3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="s"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_report_interval_in_trip"
+                    app:layout_constraintLeft_toRightOf="@id/et_report_interval_in_trip"
+                    app:layout_constraintTop_toTopOf="@id/et_report_interval_in_trip" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_report_interval_in_trip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pos-Strategy In Trip"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pos_strategy_in_trip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_pos_strategy_in_trip" />
+
+                <TextView
+                    android:id="@+id/tv_pos_strategy_in_trip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:minWidth="70dp"
+                    android:onClick="selectPosStrategyTrip"
+                    android:padding="12dp"
+                    android:text="GPS"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_report_interval_in_trip" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_fix_on_end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_fix_in_trip">
+
+                <CheckBox
+                    android:id="@+id/cb_fix_on_end"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Fix On End"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_on_end" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trip End Timeout"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_trip_end_timeout"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/et_trip_end_timeout" />
+
+                <EditText
+                    android:id="@+id/et_trip_end_timeout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:hint="3~180"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textColorHint="@color/lw008_grey_ebebeb"
+                    android:textSize="15sp"
+                    app:layout_constraintHorizontal_bias="0.81"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_on_end"
+                    app:layout_constraintWidth_percent="0.25" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="x10s"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_trip_end_timeout"
+                    app:layout_constraintLeft_toRightOf="@id/et_trip_end_timeout"
+                    app:layout_constraintTop_toTopOf="@id/et_trip_end_timeout" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_trip_end_timeout" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number Of Fix On End"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_fix_on_end_number"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/et_fix_on_end_number" />
+
+                <EditText
+                    android:id="@+id/et_fix_on_end_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:hint="1~255"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textColorHint="@color/lw008_grey_ebebeb"
+                    android:textSize="15sp"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_trip_end_timeout"
+                    app:layout_constraintWidth_percent="0.25" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_fix_on_end_number" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Report Interval On End"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_report_interval_on_end"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/et_report_interval_on_end" />
+
+                <EditText
+                    android:id="@+id/et_report_interval_on_end"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:hint="10~300"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textColorHint="@color/lw008_grey_ebebeb"
+                    android:textSize="15sp"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_fix_on_end_number"
+                    app:layout_constraintWidth_percent="0.25" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="s"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_report_interval_on_end"
+                    app:layout_constraintLeft_toRightOf="@id/et_report_interval_on_end"
+                    app:layout_constraintTop_toTopOf="@id/et_report_interval_on_end" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_report_interval_on_end" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pos-Strategy On End"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pos_strategy_on_end"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_pos_strategy_on_end" />
+
+                <TextView
+                    android:id="@+id/tv_pos_strategy_on_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:minWidth="70dp"
+                    android:onClick="selectPosStrategyEnd"
+                    android:padding="12dp"
+                    android:text="GPS"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_report_interval_on_end" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_notify_event"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_fix_on_end">
+
+                <CheckBox
+                    android:id="@+id/cb_notify_on_start"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Notify Event On Start"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_notify_on_start" />
+
+                <CheckBox
+                    android:id="@+id/cb_notify_in_trip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:button="@null"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Notify Event In Trip"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_notify_on_start" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_notify_in_trip" />
+
+                <CheckBox
+                    android:id="@+id/cb_notify_on_end"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:button="@null"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Notify Event On End"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_notify_in_trip" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>
