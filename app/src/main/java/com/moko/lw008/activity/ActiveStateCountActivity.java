@@ -7,17 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
-import com.moko.lw008.dialog.BottomDialog;
+import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -30,33 +33,26 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DownlinkForPosActivity extends BaseActivity {
+public class ActiveStateCountActivity extends BaseActivity {
 
-    @BindView(R2.id.tv_downlink_pos_strategy)
-    TextView tvDownlinkPosStrategy;
+    @BindView(R2.id.cb_active_state_count)
+    CheckBox cbActiveStateCount;
+    @BindView(R2.id.et_active_state_timeout)
+    EditText etActiveStateTimeout;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
-    private ArrayList<String> mValues;
-    private int mSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_downlink_for_pos);
+        setContentView(R.layout.lw008_activity_active_state_count);
         ButterKnife.bind(this);
-        mValues = new ArrayList<>();
-        mValues.add("WIFI");
-        mValues.add("BLE");
-        mValues.add("GPS");
-        mValues.add("WIFI+GPS");
-        mValues.add("BLE+GPS");
-        mValues.add("WIFI+BLE");
-        mValues.add("WIFI+BLE+GPS");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -65,7 +61,8 @@ public class DownlinkForPosActivity extends BaseActivity {
         mReceiverTag = true;
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getDownLinkPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getActiveStateCountEnable());
+        orderTasks.add(OrderTaskAssembler.getActiveStateTimeout());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -112,14 +109,23 @@ public class DownlinkForPosActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_DOWN_LINK_POS_STRATEGY:
+                                    case KEY_ACTIVE_STATE_COUNT_ENABLE:
+                                        if (result != 1) {
+                                            savedParamsError = true;
+                                        }
+                                        break;
+                                    case KEY_ACTIVE_STATE_TIMEOUT:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(DownlinkForPosActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            ToastUtils.showToast(ActiveStateCountActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Saved Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
                                         }
                                         break;
                                 }
@@ -127,11 +133,17 @@ public class DownlinkForPosActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_DOWN_LINK_POS_STRATEGY:
+                                    case KEY_ACTIVE_STATE_COUNT_ENABLE:
                                         if (length > 0) {
-                                            int strategy = value[4] & 0xFF;
-                                            mSelected = strategy;
-                                            tvDownlinkPosStrategy.setText(mValues.get(mSelected));
+                                            int enable = value[4] & 0xFF;
+                                            cbActiveStateCount.setChecked(enable == 1);
+                                        }
+                                        break;
+                                    case KEY_ACTIVE_STATE_TIMEOUT:
+                                        if (length > 0) {
+                                            byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                            int timeout = MokoUtils.toInt(timeoutBytes);
+                                            etActiveStateTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
                                 }
@@ -204,18 +216,22 @@ public class DownlinkForPosActivity extends BaseActivity {
         finish();
     }
 
-    public void selectPosStrategy(View view) {
-        if (isWindowLocked())
+    public void onSave(View view) {
+        final String timeoutStr = etActiveStateTimeout.getText().toString();
+        if (TextUtils.isEmpty(timeoutStr)) {
+            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
             return;
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> {
-            mSelected = value;
-            tvDownlinkPosStrategy.setText(mValues.get(value));
-            savedParamsError = false;
-            showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDownLinkPosStrategy(mSelected));
-        });
-        dialog.show(getSupportFragmentManager());
+        }
+        final int timeout = Integer.parseInt(timeoutStr);
+        if (timeout < 1 || timeout > 86400) {
+            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+            return;
+        }
+        savedParamsError = false;
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setActiveStateCountEnable(cbActiveStateCount.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setActiveStateTimeout(timeout));
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

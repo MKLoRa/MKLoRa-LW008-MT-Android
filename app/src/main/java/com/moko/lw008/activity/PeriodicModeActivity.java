@@ -56,9 +56,13 @@ public class PeriodicModeActivity extends BaseActivity {
         setContentView(R.layout.lw008_activity_periodic_mode);
         ButterKnife.bind(this);
         mValues = new ArrayList<>();
+        mValues.add("WIFI");
         mValues.add("BLE");
         mValues.add("GPS");
-        mValues.add("BLE&GPS");
+        mValues.add("WIFI+GPS");
+        mValues.add("BLE+GPS");
+        mValues.add("WIFI+BLE");
+        mValues.add("WIFI+BLE+GPS");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -238,7 +242,7 @@ public class PeriodicModeActivity extends BaseActivity {
             return;
         }
         final int interval = Integer.parseInt(intervalStr);
-        if (interval < 1 || interval > 14400) {
+        if (interval < 30 || interval > 86400) {
             ToastUtils.showToast(this, "Para error!");
             return;
         }

@@ -2,14 +2,11 @@ package com.moko.lw008.utils;
 
 import android.os.ParcelUuid;
 import android.os.SystemClock;
-import android.util.SparseArray;
 
-import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.entity.AdvInfo;
 import com.moko.support.lw008.entity.DeviceInfo;
 import com.moko.support.lw008.service.DeviceInfoParseable;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -31,38 +28,32 @@ public class AdvInfoAnalysisImpl implements DeviceInfoParseable<AdvInfo> {
         Map<ParcelUuid, byte[]> map = record.getServiceData();
         if (map == null || map.isEmpty())
             return null;
-        SparseArray<byte[]> manufacturer = result.getScanRecord().getManufacturerSpecificData();
-        if (manufacturer == null || manufacturer.size() == 0)
-            return null;
-        byte[] manufacturerSpecificDataByte = record.getManufacturerSpecificData(manufacturer.keyAt(0));
-        if (manufacturerSpecificDataByte.length != 13)
-            return null;
-
+        // 0:LR1110,1:L76
         int deviceType = -1;
+        int txPower = -1;
+        boolean lowPower = false;
+        boolean verifyEnable = false;
         Iterator iterator = map.keySet().iterator();
         while (iterator.hasNext()) {
             ParcelUuid parcelUuid = (ParcelUuid) iterator.next();
-            if (parcelUuid.toString().startsWith("0000aa07")) {
+            if (parcelUuid.toString().startsWith("0000aa09")) {
                 byte[] bytes = map.get(parcelUuid);
                 if (bytes != null) {
                     deviceType = bytes[0] & 0xFF;
+                    txPower = bytes[1];
+                    lowPower = (bytes[3] & 0x01) == 0x01;
+                    verifyEnable = (bytes[3] & 0x02) == 0x02;
                 }
             }
         }
         if (deviceType == -1)
             return null;
-        int txPower = manufacturerSpecificDataByte[6];
-        int battery = manufacturerSpecificDataByte[7] & 0xFF;
-        int voltage = MokoUtils.toInt(Arrays.copyOfRange(manufacturerSpecificDataByte, 8, 10));
-        boolean verifyEnable = manufacturerSpecificDataByte[10] == 1;
-
-
         AdvInfo advInfo;
         if (advInfoHashMap.containsKey(deviceInfo.mac)) {
             advInfo = advInfoHashMap.get(deviceInfo.mac);
             advInfo.name = deviceInfo.name;
             advInfo.rssi = deviceInfo.rssi;
-            advInfo.battery = battery;
+            advInfo.lowPower = lowPower;
             advInfo.deviceType = deviceType;
             long currentTime = SystemClock.elapsedRealtime();
             long intervalTime = currentTime - advInfo.scanTime;
@@ -70,20 +61,18 @@ public class AdvInfoAnalysisImpl implements DeviceInfoParseable<AdvInfo> {
             advInfo.scanTime = currentTime;
             advInfo.txPower = txPower;
             advInfo.verifyEnable = verifyEnable;
-            advInfo.voltage = voltage;
             advInfo.connectable = result.isConnectable();
         } else {
             advInfo = new AdvInfo();
             advInfo.name = deviceInfo.name;
             advInfo.mac = deviceInfo.mac;
             advInfo.rssi = deviceInfo.rssi;
-            advInfo.battery = battery;
+            advInfo.lowPower = lowPower;
             advInfo.deviceType = deviceType;
             advInfo.scanTime = SystemClock.elapsedRealtime();
             advInfo.deviceType = deviceType;
             advInfo.txPower = txPower;
             advInfo.verifyEnable = verifyEnable;
-            advInfo.voltage = voltage;
             advInfo.connectable = result.isConnectable();
             advInfoHashMap.put(deviceInfo.mac, advInfo);
         }

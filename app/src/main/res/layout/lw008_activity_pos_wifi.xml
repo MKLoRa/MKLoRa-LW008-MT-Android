@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lw008_grey_ebebeb"
+    android:background="@color/lw008_white_ffffff"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/application_setting"
+            android:text="WIFI Fix"
             android:textColor="@color/lw008_white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -47,42 +47,38 @@
 
     </RelativeLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:background="@color/lw008_white_ffffff"
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_sync_interval"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lw008_white_ffffff"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time Sync Interval"
+                android:text="Positioning Timeout"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_sync_interval"
+                app:layout_constraintBottom_toBottomOf="@id/et_pos_timeout"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_sync_interval" />
+                app:layout_constraintTop_toTopOf="@id/et_pos_timeout" />
 
             <EditText
-                android:id="@+id/et_sync_interval"
+                android:id="@+id/et_pos_timeout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:hint="0~255"
+                android:hint="1~4"
                 android:inputType="number"
-                android:maxLength="3"
+                android:maxLength="1"
                 android:textColor="@color/lw008_black_333333"
                 android:textColorHint="@color/lw008_grey_ebebeb"
                 android:textSize="15sp"
@@ -90,76 +86,101 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.25" />
+                app:layout_constraintWidth_percent="0.2" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="H"
+                android:text="x2.5s"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_sync_interval"
-                app:layout_constraintLeft_toRightOf="@id/et_sync_interval"
-                app:layout_constraintTop_toTopOf="@id/et_sync_interval" />
+                app:layout_constraintBottom_toBottomOf="@id/et_pos_timeout"
+                app:layout_constraintLeft_toRightOf="@id/et_pos_timeout"
+                app:layout_constraintTop_toTopOf="@id/et_pos_timeout" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_pos_timeout" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_network_check_interval"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/lw008_white_ffffff"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_sync_interval">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Network Interval"
+                android:text="Number Of BSSID"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_network_check_interval"
+                app:layout_constraintBottom_toBottomOf="@id/et_bssid_number"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_network_check_interval" />
+                app:layout_constraintTop_toTopOf="@id/et_bssid_number" />
 
             <EditText
-                android:id="@+id/et_network_check_interval"
+                android:id="@+id/et_bssid_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:hint="0~255"
+                android:hint="1~5"
                 android:inputType="number"
-                android:maxLength="3"
+                android:maxLength="1"
                 android:text=""
                 android:textColor="@color/lw008_black_333333"
                 android:textColorHint="@color/lw008_grey_ebebeb"
                 android:textSize="15sp"
-                app:layout_constraintHorizontal_bias="0.8"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_pos_timeout"
+                app:layout_constraintWidth_percent="0.2" />
+
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.25" />
+                app:layout_constraintTop_toBottomOf="@id/et_bssid_number" />
+
+            <TextView
+                android:id="@+id/tv_wifi_data_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:minWidth="100dp"
+                android:onClick="onWifiDataType"
+                android:padding="10dp"
+                android:text="DAS"
+                android:textColor="@color/lw008_white_ffffff"
+                android:textSize="15sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_bssid_number" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="H"
+                android:text="WIFI Data Type"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_network_check_interval"
-                app:layout_constraintLeft_toRightOf="@id/et_network_check_interval"
-                app:layout_constraintTop_toTopOf="@id/et_network_check_interval" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_wifi_data_type"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_wifi_data_type" />
 
+
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_wifi_data_type" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </LinearLayout>

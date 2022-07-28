@@ -97,15 +97,21 @@ public class AuxiliaryOperationActivity extends BaseActivity {
         startActivity(new Intent(this, DownlinkForPosActivity.class));
     }
 
+    public void onVibrationDetection(View view) {
+        if (isWindowLocked())
+            return;
+        startActivity(new Intent(this, VibrationDetectionActivity.class));
+    }
+
     public void onManDownDetection(View view) {
         if (isWindowLocked())
             return;
         startActivity(new Intent(this, ManDownDetectionActivity.class));
     }
 
-    public void onAlarmFunction(View view) {
+    public void onActiveStateCount(View view) {
         if (isWindowLocked())
             return;
-        startActivity(new Intent(this, AlarmFunctionActivity.class));
+        startActivity(new Intent(this, ActiveStateCountActivity.class));
     }
 }

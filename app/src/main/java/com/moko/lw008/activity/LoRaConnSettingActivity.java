@@ -87,8 +87,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     TextView tvDr;
     @BindView(R2.id.rl_dr)
     RelativeLayout rlDr;
-    @BindView(R2.id.tv_transmissions)
-    TextView tvTransmissions;
     @BindView(R2.id.tv_dr_1)
     TextView tvDr1;
     @BindView(R2.id.tv_dr_2)
@@ -108,7 +106,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     private ArrayList<String> mModeList;
     private ArrayList<String> mRegionsList;
     private ArrayList<String> mMessageTypeList;
-    private ArrayList<String> mTransmissionsNumberList;
     private ArrayList<String> mMaxRetransmissionTimesList;
     private int mSelectedMode;
     private int mSelectedRegion;
@@ -118,7 +115,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     private int mSelectedDr;
     private int mSelectedDr1;
     private int mSelectedDr2;
-    private int mSelectedTransmissions;
     private int mSelectedMaxRetransmissionTimes;
     private int mMaxCH;
     private int mMaxDR;
@@ -147,12 +143,9 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         mMessageTypeList.add("Unconfirmed");
         mMessageTypeList.add("Confirmed");
         mMaxRetransmissionTimesList = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 3; i++) {
             mMaxRetransmissionTimesList.add(String.valueOf(i));
         }
-        mTransmissionsNumberList = new ArrayList<>();
-        mTransmissionsNumberList.add("1");
-        mTransmissionsNumberList.add("2");
         cbAdvanceSetting.setOnCheckedChangeListener(this);
         cbAdr.setOnCheckedChangeListener(this);
         EventBus.getDefault().register(this);
@@ -257,7 +250,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                             LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.restart());
                                         }
                                         break;
-                                    case KEY_RESTART:
+                                    case KEY_REBOOT:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
@@ -384,9 +377,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                             final int adr = value[4] & 0xFF;
                                             cbAdr.setChecked(adr == 1);
                                             llAdrOptions.setVisibility(cbAdr.isChecked() ? View.GONE : View.VISIBLE);
-                                            final int number = value[5] & 0xFF;
-                                            mSelectedTransmissions = number - 1;
-                                            tvTransmissions.setText(mTransmissionsNumberList.get(mSelectedTransmissions));
                                             final int dr1 = value[6] & 0xFF;
                                             mSelectedDr1 = dr1;
                                             final int dr2 = value[7] & 0xFF;
@@ -558,8 +548,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         tvDr.setText(String.valueOf(mSelectedDr));
         tvDr1.setText(String.valueOf(mSelectedDr1));
         tvDr2.setText(String.valueOf(mSelectedDr2));
-        mSelectedTransmissions = 0;
-        tvTransmissions.setText(mTransmissionsNumberList.get(mSelectedTransmissions));
     }
 
     private ArrayList<String> mCHList;
@@ -727,18 +715,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         bottomDialog.show(getSupportFragmentManager());
     }
 
-    public void selectTransmissions(View view) {
-        if (isWindowLocked())
-            return;
-        BottomDialog bottomDialog = new BottomDialog();
-        bottomDialog.setDatas(mTransmissionsNumberList, mSelectedTransmissions);
-        bottomDialog.setListener(value -> {
-            mSelectedTransmissions = value;
-            tvTransmissions.setText(mTransmissionsNumberList.get(value));
-        });
-        bottomDialog.show(getSupportFragmentManager());
-    }
-
     public void selectMaxRetransmissionTimes(View view) {
         if (isWindowLocked())
             return;
@@ -849,9 +825,8 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         }
         orderTasks.add(OrderTaskAssembler.setLoraAdrAckLimit(adrAckLimit));
         orderTasks.add(OrderTaskAssembler.setLoraAdrAckDelay(adrAckDelay));
-
-        orderTasks.add(OrderTaskAssembler.setLoraUplinkStrategy(cbAdr.isChecked() ? 1 : 0,
-                mSelectedTransmissions + 1, mSelectedDr1, mSelectedDr2));
+        // 数据发送次数默认为1
+        orderTasks.add(OrderTaskAssembler.setLoraUplinkStrategy(cbAdr.isChecked() ? 1 : 0, 1, mSelectedDr1, mSelectedDr2));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         showSyncingProgressDialog();
     }

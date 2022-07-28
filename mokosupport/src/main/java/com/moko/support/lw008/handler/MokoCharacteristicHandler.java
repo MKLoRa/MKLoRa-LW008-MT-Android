@@ -21,13 +21,6 @@ public class MokoCharacteristicHandler {
         if (mCharacteristicMap != null && !mCharacteristicMap.isEmpty()) {
             mCharacteristicMap.clear();
         }
-        if (gatt.getService(OrderServices.SERVICE_DEVICE_NAME.getUuid()) != null) {
-            final BluetoothGattService service = gatt.getService(OrderServices.SERVICE_DEVICE_NAME.getUuid());
-            if (service.getCharacteristic(OrderCHAR.CHAR_DEVICE_NAME.getUuid()) != null) {
-                final BluetoothGattCharacteristic characteristic = service.getCharacteristic(OrderCHAR.CHAR_DEVICE_NAME.getUuid());
-                mCharacteristicMap.put(OrderCHAR.CHAR_DEVICE_NAME, characteristic);
-            }
-        }
         if (gatt.getService(OrderServices.SERVICE_DEVICE_INFO.getUuid()) != null) {
             final BluetoothGattService service = gatt.getService(OrderServices.SERVICE_DEVICE_INFO.getUuid());
             if (service.getCharacteristic(OrderCHAR.CHAR_MODEL_NUMBER.getUuid()) != null) {
@@ -68,6 +61,10 @@ public class MokoCharacteristicHandler {
             if (service.getCharacteristic(OrderCHAR.CHAR_PARAMS.getUuid()) != null) {
                 final BluetoothGattCharacteristic characteristic = service.getCharacteristic(OrderCHAR.CHAR_PARAMS.getUuid());
                 mCharacteristicMap.put(OrderCHAR.CHAR_PARAMS, characteristic);
+            }
+            if (service.getCharacteristic(OrderCHAR.CHAR_STORAGE_DATA_NOTIFY.getUuid()) != null) {
+                final BluetoothGattCharacteristic characteristic = service.getCharacteristic(OrderCHAR.CHAR_STORAGE_DATA_NOTIFY.getUuid());
+                mCharacteristicMap.put(OrderCHAR.CHAR_STORAGE_DATA_NOTIFY, characteristic);
             }
             if (service.getCharacteristic(OrderCHAR.CHAR_LOG.getUuid()) != null) {
                 final BluetoothGattCharacteristic characteristic = service.getCharacteristic(OrderCHAR.CHAR_LOG.getUuid());

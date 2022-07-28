@@ -21,6 +21,7 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
+import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -42,34 +43,18 @@ import butterknife.ButterKnife;
 
 public class ManDownDetectionActivity extends BaseActivity {
 
-
     @BindView(R2.id.cb_man_down_detection)
     CheckBox cbManDownDetection;
-    @BindView(R2.id.et_man_down_detection_timeout)
-    EditText etManDownDetectionTimeout;
-    @BindView(R2.id.tv_man_down_pos_strategy)
-    TextView tvManDownPosStrategy;
-    @BindView(R2.id.et_man_down_report_interval)
-    EditText etManDownReportInterval;
-    @BindView(R2.id.cb_man_down_on_start)
-    CheckBox cbManDownOnStart;
-    @BindView(R2.id.cb_man_down_on_end)
-    CheckBox cbManDownOnEnd;
+    @BindView(R2.id.et_idle_detection_timeout)
+    EditText etIdleDetectionTimeout;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
-
-    private ArrayList<String> mValues;
-    private int mSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lw008_activity_man_down_detection);
         ButterKnife.bind(this);
-        mValues = new ArrayList<>();
-        mValues.add("BLE");
-        mValues.add("GPS");
-        mValues.add("BLE&GPS");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -80,10 +65,6 @@ public class ManDownDetectionActivity extends BaseActivity {
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.getManDownDetectionEnable());
         orderTasks.add(OrderTaskAssembler.getManDownDetectionTimeout());
-        orderTasks.add(OrderTaskAssembler.getManDownPosStrategy());
-        orderTasks.add(OrderTaskAssembler.getManDownReportInterval());
-        orderTasks.add(OrderTaskAssembler.getManDownStartEventNotifyEnable());
-        orderTasks.add(OrderTaskAssembler.getManDownEndEventNotifyEnable());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -130,23 +111,24 @@ public class ManDownDetectionActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_MAN_DOWN_DETECTION_TIMEOUT:
-                                    case KEY_MAN_DOWN_POS_STRATEGY:
-                                    case KEY_MAN_DOWN_REPORT_INTERVAL:
-                                    case KEY_MAN_DOWN_START_EVENT_NOTIFY_ENABLE:
-                                    case KEY_MAN_DOWN_END_EVENT_NOTIFY_ENABLE:
+                                    case KEY_MAN_DOWN_DETECTION_ENABLE:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         break;
-                                    case KEY_MAN_DOWN_DETECTION_ENABLE:
+                                    case KEY_MAN_DOWN_DETECTION_TIMEOUT:
+                                    case KEY_MAN_DOWN_IDLE_RESET:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
                                             ToastUtils.showToast(ManDownDetectionActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Saved Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
                                         }
                                         break;
                                 }
@@ -164,33 +146,7 @@ public class ManDownDetectionActivity extends BaseActivity {
                                         if (length > 0) {
                                             byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                             int timeout = MokoUtils.toInt(timeoutBytes);
-                                            etManDownDetectionTimeout.setText(String.valueOf(timeout));
-                                        }
-                                        break;
-                                    case KEY_MAN_DOWN_POS_STRATEGY:
-                                        if (length > 0) {
-                                            int strategy = value[4] & 0xFF;
-                                            mSelected = strategy;
-                                            tvManDownPosStrategy.setText(mValues.get(mSelected));
-                                        }
-                                        break;
-                                    case KEY_MAN_DOWN_REPORT_INTERVAL:
-                                        if (length > 0) {
-                                            byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            int interval = MokoUtils.toInt(intervalBytes);
-                                            etManDownReportInterval.setText(String.valueOf(interval));
-                                        }
-                                        break;
-                                    case KEY_MAN_DOWN_START_EVENT_NOTIFY_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            cbManDownOnStart.setChecked(enable == 1);
-                                        }
-                                        break;
-                                    case KEY_MAN_DOWN_END_EVENT_NOTIFY_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            cbManDownOnEnd.setChecked(enable == 1);
+                                            etIdleDetectionTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
                                 }
@@ -270,51 +226,40 @@ public class ManDownDetectionActivity extends BaseActivity {
             showSyncingProgressDialog();
             saveParams();
         } else {
-            ToastUtils.showToast(this, "Para error!");
+            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
         }
     }
 
     private boolean isValid() {
-        final String timeoutStr = etManDownDetectionTimeout.getText().toString();
+        final String timeoutStr = etIdleDetectionTimeout.getText().toString();
         if (TextUtils.isEmpty(timeoutStr))
             return false;
         final int timeout = Integer.parseInt(timeoutStr);
-        if (timeout < 1 || timeout > 120)
-            return false;
-        final String intervalStr = etManDownReportInterval.getText().toString();
-        if (TextUtils.isEmpty(intervalStr))
-            return false;
-        final int interval = Integer.parseInt(intervalStr);
-        if (interval < 10 || interval > 600)
+        if (timeout < 1 || timeout > 8760)
             return false;
         return true;
 
     }
 
     private void saveParams() {
-        final String timeoutStr = etManDownDetectionTimeout.getText().toString();
+        final String timeoutStr = etIdleDetectionTimeout.getText().toString();
         final int timeout = Integer.parseInt(timeoutStr);
-        final String intervalStr = etManDownReportInterval.getText().toString();
-        final int interval = Integer.parseInt(intervalStr);
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setManDownDetectionTimeout(timeout));
-        orderTasks.add(OrderTaskAssembler.setManDownReportInterval(interval));
-        orderTasks.add(OrderTaskAssembler.setManDownPosStrategy(mSelected));
-        orderTasks.add(OrderTaskAssembler.setManDownStartEventNotifyEnable(cbManDownOnStart.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setManDownEndEventNotifyEnable(cbManDownOnEnd.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setManDownDetectionEnable(cbManDownDetection.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setManDownDetectionTimeout(timeout));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-    public void selectPosStrategy(View view) {
-        if (isWindowLocked())
-            return;
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> {
-            mSelected = value;
-            tvManDownPosStrategy.setText(mValues.get(value));
+    public void onReset(View view) {
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("Reset Idle Status");
+        dialog.setMessage("Whether to confirm the reset");
+        dialog.setCancel("YES");
+        dialog.setConfirm("Cancel");
+        dialog.setOnAlertCancelListener(() -> {
+            showSyncingProgressDialog();
+            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setManDownIdleReset());
         });
         dialog.show(getSupportFragmentManager());
     }

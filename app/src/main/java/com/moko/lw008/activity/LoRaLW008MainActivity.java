@@ -343,6 +343,7 @@ public class LoRaLW008MainActivity extends BaseActivity implements MokoScanDevic
 
     private String mPassword;
     private String mSavedPassword;
+    private int mDeviceType;
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -357,6 +358,7 @@ public class LoRaLW008MainActivity extends BaseActivity implements MokoScanDevic
                 mokoBleScanner.stopScanDevice();
             }
             isVerifyEnable = advInfo.verifyEnable;
+            mDeviceType = advInfo.deviceType;
             if (!isVerifyEnable) {
                 showLoadingProgressDialog();
                 ivRefresh.postDelayed(() -> LoRaLW008MokoSupport.getInstance().connDevice(advInfo.mac), 500);
@@ -447,6 +449,7 @@ public class LoRaLW008MainActivity extends BaseActivity implements MokoScanDevic
             if (!isVerifyEnable) {
                 XLog.i("Success");
                 Intent i = new Intent(LoRaLW008MainActivity.this, DeviceInfoActivity.class);
+                i.putExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, mDeviceType);
                 startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
                 return;
             }
@@ -489,6 +492,7 @@ public class LoRaLW008MainActivity extends BaseActivity implements MokoScanDevic
                                 SPUtiles.setStringValue(LoRaLW008MainActivity.this, AppConstants.SP_KEY_SAVED_PASSWORD_LW008, mSavedPassword);
                                 XLog.i("Success");
                                 Intent i = new Intent(LoRaLW008MainActivity.this, DeviceInfoActivity.class);
+                                i.putExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, mDeviceType);
                                 startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
                             }
                             if (0 == result) {

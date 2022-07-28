@@ -44,8 +44,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
 
     @BindView(R2.id.et_adv_name)
     EditText etAdvName;
-    @BindView(R2.id.et_adv_interval)
-    EditText etAdvInterval;
     @BindView(R2.id.et_adv_timeout)
     EditText etAdvTimeout;
     @BindView(R2.id.iv_login_mode)
@@ -78,10 +76,9 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.getAdvName());
-        orderTasks.add(OrderTaskAssembler.getAdvInterval());
+        orderTasks.add(OrderTaskAssembler.getAdvTxPower());
         orderTasks.add(OrderTaskAssembler.getAdvTimeout());
         orderTasks.add(OrderTaskAssembler.getPasswordVerifyEnable());
-        orderTasks.add(OrderTaskAssembler.getAdvTxPower());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -129,7 +126,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
                                     case KEY_ADV_NAME:
-                                    case KEY_ADV_INTERVAL:
                                     case KEY_ADV_TIMEOUT:
                                     case KEY_ADV_TX_POWER:
                                         if (result != 1) {
@@ -154,12 +150,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
                                     case KEY_ADV_NAME:
                                         if (length > 0) {
                                             etAdvName.setText(new String(Arrays.copyOfRange(value, 4, 4 + length)));
-                                        }
-                                        break;
-                                    case KEY_ADV_INTERVAL:
-                                        if (length > 0) {
-                                            int interval = value[4] & 0xFF;
-                                            etAdvInterval.setText(String.valueOf(interval));
                                         }
                                         break;
                                     case KEY_ADV_TIMEOUT:
@@ -241,13 +231,6 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
     }
 
     private boolean isValid() {
-        final String advIntervalStr = etAdvInterval.getText().toString();
-        if (TextUtils.isEmpty(advIntervalStr))
-            return false;
-        final int interval = Integer.parseInt(advIntervalStr);
-        if (interval < 1 || interval > 100) {
-            return false;
-        }
         final String advTimeoutStr = etAdvTimeout.getText().toString();
         if (TextUtils.isEmpty(advTimeoutStr))
             return false;
@@ -261,16 +244,13 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
 
     private void saveParams() {
         final String advName = etAdvName.getText().toString();
-        final String intervalStr = etAdvInterval.getText().toString();
         final String timeoutStr = etAdvTimeout.getText().toString();
-        final int interval = Integer.parseInt(intervalStr);
         final int timeout = Integer.parseInt(timeoutStr);
         final int progress = sbTxPower.getProgress();
         TxPowerEnum txPowerEnum = TxPowerEnum.fromOrdinal(progress);
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setAdvName(advName));
-        orderTasks.add(OrderTaskAssembler.setAdvInterval(interval));
         orderTasks.add(OrderTaskAssembler.setAdvTimeout(timeout));
         if (txPowerEnum != null) {
             orderTasks.add(OrderTaskAssembler.setAdvTxPower(txPowerEnum.getTxPower()));

@@ -1,21 +1,20 @@
 package com.moko.lw008.activity;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
-import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -28,41 +27,40 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AlarmFunctionActivity extends BaseActivity {
+public class PosGpsL76CFixActivity extends BaseActivity {
 
 
-    @BindView(R2.id.tv_alarm_type)
-    TextView tvAlarmType;
-    @BindView(R2.id.et_exit_alarm_duration)
-    EditText etExitAlarmDuration;
+    @BindView(R2.id.et_pdop_limit)
+    EditText etPdopLimit;
+    @BindView(R2.id.et_position_timeout)
+    EditText etPositionTimeout;
+    @BindView(R2.id.cb_extreme_mode)
+    CheckBox cbExtremeMode;
+
     private boolean savedParamsError;
 
-    private int mSelected;
-    private ArrayList<String> mValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_alarm_function);
+        setContentView(R.layout.lw008_activity_pos_gps_l76c);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        mValues = new ArrayList<>();
-        mValues.add("NO");
-        mValues.add("Alert");
-        mValues.add("SOS");
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getAlarmType());
-        orderTasks.add(OrderTaskAssembler.getAlarmExitPressDuration());
+        orderTasks.add(OrderTaskAssembler.getGPSPosTimeoutL76());
+        orderTasks.add(OrderTaskAssembler.getGPSPDOPLimitL76());
+        orderTasks.add(OrderTaskAssembler.getGPSExtremeModeL76());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
         final String action = event.getAction();
         runOnUiThread(() -> {
@@ -72,7 +70,7 @@ public class AlarmFunctionActivity extends BaseActivity {
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
     public void onOrderTaskResponseEvent(OrderTaskResponseEvent event) {
         final String action = event.getAction();
         if (!MokoConstants.ACTION_CURRENT_DATA.equals(action))
@@ -105,17 +103,18 @@ public class AlarmFunctionActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_ALARM_TYPE:
+                                    case KEY_GPS_POS_TIMEOUT_L76C:
+                                    case KEY_GPS_PDOP_LIMIT_L76C:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         break;
-                                    case KEY_ALARM_EXIT_PRESS_DURATION:
+                                    case KEY_GPS_EXTREME_MODE_L76C:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(AlarmFunctionActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            ToastUtils.showToast(PosGpsL76CFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
                                             ToastUtils.showToast(this, "Saved Successfully！");
                                         }
@@ -125,17 +124,23 @@ public class AlarmFunctionActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_ALARM_TYPE:
+                                    case KEY_GPS_POS_TIMEOUT_L76C:
                                         if (length > 0) {
-                                            int type = value[4] & 0xFF;
-                                            mSelected = type;
-                                            tvAlarmType.setText(mValues.get(type));
+                                            byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                            int timeout = MokoUtils.toInt(timeoutBytes);
+                                            etPositionTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
-                                    case KEY_ALARM_EXIT_PRESS_DURATION:
+                                    case KEY_GPS_PDOP_LIMIT_L76C:
                                         if (length > 0) {
-                                            int duration = value[4] & 0xFF;
-                                            etExitAlarmDuration.setText(String.valueOf(duration));
+                                            int limit = value[4] & 0xFF;
+                                            etPdopLimit.setText(String.valueOf(limit));
+                                        }
+                                        break;
+                                    case KEY_GPS_EXTREME_MODE_L76C:
+                                        if (length > 0) {
+                                            int enable = value[4] & 0xFF;
+                                            cbExtremeMode.setChecked(enable == 1);
                                         }
                                         break;
                                 }
@@ -145,6 +150,50 @@ public class AlarmFunctionActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public void onSave(View view) {
+        if (isWindowLocked())
+            return;
+        if (isValid()) {
+            showSyncingProgressDialog();
+            saveParams();
+        } else {
+            ToastUtils.showToast(this, "Para error!");
+        }
+    }
+
+    private boolean isValid() {
+        final String posTimeoutStr = etPositionTimeout.getText().toString();
+        if (TextUtils.isEmpty(posTimeoutStr))
+            return false;
+        final int posTimeout = Integer.parseInt(posTimeoutStr);
+        if (posTimeout < 60 || posTimeout > 600) {
+            return false;
+        }
+        final String pdopLimitStr = etPdopLimit.getText().toString();
+        if (TextUtils.isEmpty(pdopLimitStr))
+            return false;
+        final int pdopLimit = Integer.parseInt(pdopLimitStr);
+        if (pdopLimit < 25 || pdopLimit > 100) {
+            return false;
+        }
+        return true;
+
+    }
+
+
+    private void saveParams() {
+        final String posTimeoutStr = etPositionTimeout.getText().toString();
+        final int posTimeout = Integer.parseInt(posTimeoutStr);
+        final String pdopLimitStr = etPdopLimit.getText().toString();
+        final int pdopLimit = Integer.parseInt(pdopLimitStr);
+        savedParamsError = false;
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setGPSPosTimeoutL76C(posTimeout));
+        orderTasks.add(OrderTaskAssembler.setGPSPDOPLimitL76C(pdopLimit));
+        orderTasks.add(OrderTaskAssembler.setGPSExtremeModeL76C(cbExtremeMode.isChecked() ? 1 : 0));
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     @Override
@@ -180,48 +229,5 @@ public class AlarmFunctionActivity extends BaseActivity {
     private void backHome() {
         setResult(RESULT_OK);
         finish();
-    }
-
-    public void onSave(View view) {
-        final String durationStr = etExitAlarmDuration.getText().toString();
-        if (TextUtils.isEmpty(durationStr)) {
-            ToastUtils.showToast(this, "Para error!");
-            return;
-        }
-        final int timeout = Integer.parseInt(durationStr);
-        if (timeout < 5 || timeout > 15) {
-            ToastUtils.showToast(this, "Para error!");
-            return;
-        }
-        savedParamsError = false;
-        showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setAlarmType(mSelected));
-        orderTasks.add(OrderTaskAssembler.setAlarmExitPressDuration(timeout));
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-    }
-
-    public void onAlertSettings(View view) {
-        if (isWindowLocked())
-            return;
-        startActivity(new Intent(this, AlarmAlertSettingsActivity.class));
-    }
-
-    public void onSOSSettings(View view) {
-        if (isWindowLocked())
-            return;
-        startActivity(new Intent(this, AlarmSOSSettingsActivity.class));
-    }
-
-    public void selectAlarmType(View view) {
-        if (isWindowLocked())
-            return;
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> {
-            mSelected = value;
-            tvAlarmType.setText(mValues.get(value));
-        });
-        dialog.show(getSupportFragmentManager());
     }
 }

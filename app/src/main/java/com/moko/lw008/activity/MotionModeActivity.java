@@ -83,9 +83,13 @@ public class MotionModeActivity extends BaseActivity {
         setContentView(R.layout.lw008_activity_motion_mode);
         ButterKnife.bind(this);
         mValues = new ArrayList<>();
+        mValues.add("WIFI");
         mValues.add("BLE");
         mValues.add("GPS");
-        mValues.add("BLE&GPS");
+        mValues.add("WIFI+GPS");
+        mValues.add("BLE+GPS");
+        mValues.add("WIFI+BLE");
+        mValues.add("WIFI+BLE+GPS");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -99,7 +103,7 @@ public class MotionModeActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.getMotionStartPosStrategy());
         orderTasks.add(OrderTaskAssembler.getMotionTripInterval());
         orderTasks.add(OrderTaskAssembler.getMotionTripPosStrategy());
-        orderTasks.add(OrderTaskAssembler.getAccMotionEndTimeout());
+        orderTasks.add(OrderTaskAssembler.getMotionEndTimeout());
         orderTasks.add(OrderTaskAssembler.getMotionEndNumber());
         orderTasks.add(OrderTaskAssembler.getMotionEndInterval());
         orderTasks.add(OrderTaskAssembler.getMotionEndPosStrategy());
@@ -153,7 +157,7 @@ public class MotionModeActivity extends BaseActivity {
                                     case KEY_MOTION_MODE_START_POS_STRATEGY:
                                     case KEY_MOTION_MODE_TRIP_REPORT_INTERVAL:
                                     case KEY_MOTION_MODE_TRIP_POS_STRATEGY:
-                                    case KEY_ACC_MOTION_END_TIMEOUT:
+                                    case KEY_MOTION_MODE_END_TIMEOUT:
                                     case KEY_MOTION_MODE_END_NUMBER:
                                     case KEY_MOTION_MODE_END_REPORT_INTERVAL:
                                     case KEY_MOTION_MODE_END_POS_STRATEGY:
@@ -214,7 +218,7 @@ public class MotionModeActivity extends BaseActivity {
                                             tvPosStrategyInTrip.setText(mValues.get(mTripSelected));
                                         }
                                         break;
-                                    case KEY_ACC_MOTION_END_TIMEOUT:
+                                    case KEY_MOTION_MODE_END_TIMEOUT:
                                         if (length > 0) {
                                             int timeout = value[4] & 0xFF;
                                             etTripEndTimeout.setText(String.valueOf(timeout));
@@ -374,7 +378,7 @@ public class MotionModeActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setMotionStartPosStrategy(mStartSelected));
         orderTasks.add(OrderTaskAssembler.setMotionTripInterval(intervalTrip));
         orderTasks.add(OrderTaskAssembler.setMotionTripPosStrategy(mTripSelected));
-        orderTasks.add(OrderTaskAssembler.setAccMotionEndTimeout(endTimeout));
+        orderTasks.add(OrderTaskAssembler.setMotionEndTimeout(endTimeout));
         orderTasks.add(OrderTaskAssembler.setMotionEndNumber(endNumber));
         orderTasks.add(OrderTaskAssembler.setMotionEndInterval(endInterval));
         orderTasks.add(OrderTaskAssembler.setMotionEndPosStrategy(mEndSelected));

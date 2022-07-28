@@ -65,9 +65,13 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         setContentView(R.layout.lw008_activity_timing_mode);
         ButterKnife.bind(this);
         mValues = new ArrayList<>();
+        mValues.add("WIFI");
         mValues.add("BLE");
         mValues.add("GPS");
-        mValues.add("BLE&GPS");
+        mValues.add("WIFI+GPS");
+        mValues.add("BLE+GPS");
+        mValues.add("WIFI+BLE");
+        mValues.add("WIFI+BLE+GPS");
         mHourValues = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             mHourValues.add(String.format("%02d", i));

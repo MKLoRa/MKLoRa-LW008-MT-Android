@@ -48,83 +48,110 @@
 
     </RelativeLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@color/lw008_white_ffffff"
-        android:padding="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tv_downlink_for_pos"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:drawableRight="@drawable/lw008_ic_arrow_right"
-            android:gravity="center_vertical"
-            android:onClick="onDownlinkForPos"
-            android:text="@string/downlink_for_position"
-            android:textColor="@color/lw008_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            style="@style/lw008_divider_line"
-            android:layout_width="0dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_downlink_for_pos" />
+            <TextView
+                android:id="@+id/tv_downlink_for_pos"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onDownlinkForPos"
+                android:text="@string/downlink_for_position"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_downlink_for_pos" />
 
-        <TextView
-            android:id="@+id/tv_man_down_detection"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            android:drawableRight="@drawable/lw008_ic_arrow_right"
-            android:gravity="center_vertical"
-            android:onClick="onManDownDetection"
-            android:text="@string/man_down_detection"
-            android:textColor="@color/lw008_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_downlink_for_pos" />
+            <TextView
+                android:id="@+id/tv_vibration_detection"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onVibrationDetection"
+                android:text="@string/vibration_detection"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_downlink_for_pos" />
 
-        <View
-            style="@style/lw008_divider_line"
-            android:layout_width="0dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_man_down_detection" />
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_vibration_detection" />
 
-        <TextView
-            android:id="@+id/tv_active_state_count"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            android:drawableRight="@drawable/lw008_ic_arrow_right"
-            android:gravity="center_vertical"
-            android:onClick="onAlarmFunction"
-            android:text="@string/alarm_function"
-            android:textColor="@color/lw008_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_man_down_detection" />
+            <TextView
+                android:id="@+id/tv_man_down_detection"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onManDownDetection"
+                android:text="@string/man_down_detection"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_vibration_detection" />
 
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_man_down_detection" />
+
+            <TextView
+                android:id="@+id/tv_active_state_count"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onActiveStateCount"
+                android:text="@string/active_state_count"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_man_down_detection" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

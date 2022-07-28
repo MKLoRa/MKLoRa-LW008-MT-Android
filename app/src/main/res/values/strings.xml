@@ -36,6 +36,7 @@
     <string name="title_device">DEVICE</string>
     <string name="connection_setting">Connection Settings</string>
     <string name="application_setting">Application Settings</string>
+    <string name="wifi_fix">WIFI Fix</string>
     <string name="bluetooth_fix">Bluetooth Fix</string>
     <string name="gps_fix">GPS Fix</string>
     <string name="general_device_mode">Device Mode</string>
@@ -47,10 +48,13 @@
     <string name="periodic_mode">Periodic Mode</string>
     <string name="motion_mode">Motion Mode</string>
     <string name="downlink_for_position">Downlink For Position</string>
+    <string name="vibration_detection">Shock Detection</string>
     <string name="man_down_detection">ManDown Detection</string>
-    <string name="alarm_function">Alarm Function</string>
+    <string name="active_state_count">Active State Count</string>
     <string name="device_information">Device Information</string>
-    <string name="low_power_prompt_tips_lw008">*When the battery is less than or equal to %s, the red LED will flash once every 30 seconds.</string>
+    <string name="local_data_sync">Local Data Sync</string>
+    <string name="indicator_settings">Indicator Settings</string>
+    <string name="low_power_prompt_tips">*When the battery is less than or equal to %s, the green LED will flash once every 10 seconds.</string>
     <string name="mkibeacon_acc"><![CDATA[MKiBeacon&ACC]]></string>
     <string name="mkibeacon_acc_uuid"><![CDATA[MKiBeacon&ACC UUID]]></string>
     <string name="mkibeacon_acc_major"><![CDATA[MKiBeacon&ACC Major]]></string>

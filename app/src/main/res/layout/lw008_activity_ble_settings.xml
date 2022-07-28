@@ -99,61 +99,65 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_adv_name" />
 
-
             <TextView
+                android:id="@+id/tx_power"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ADV Interval"
-                android:textColor="@color/lw008_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_adv_interval"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_adv_interval" />
-
-            <EditText
-                android:id="@+id/et_adv_interval"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:hint="1~100"
-                android:inputType="number"
-                android:maxLength="3"
-                android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
-                android:textSize="15sp"
-                app:layout_constraintHorizontal_bias="0.7"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_adv_name"
-                app:layout_constraintWidth_percent="0.25" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text=" x 100ms"
+                android:layout_marginBottom="20dp"
+                android:text="Tx Power"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/et_adv_interval"
-                app:layout_constraintLeft_toRightOf="@id/et_adv_interval"
-                app:layout_constraintTop_toTopOf="@id/et_adv_interval" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_adv_name" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tx_power_range"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="(-40,-20,-16,-12,-8-4,0,+3,+4,+5,+6,+7,+8)"
+                android:textColor="@color/lw008_grey_b3b3b3"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/tx_power"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_adv_status"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/lw008_white_ffffff"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_adv_params">
+            <SeekBar
+                android:id="@+id/sb_tx_power"
+                style="@style/LW008CustomSeekbarStyle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:max="12"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:progress="0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/tv_tx_power_value"
+                app:layout_constraintTop_toBottomOf="@id/tx_power_range" />
+
+            <TextView
+                android:id="@+id/tv_tx_power_value"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="0dBm"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/sb_tx_power"
+                app:layout_constraintLeft_toRightOf="@id/sb_tx_power"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sb_tx_power" />
+
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sb_tx_power" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -170,6 +174,7 @@
                 android:id="@+id/et_adv_timeout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:hint="1~60"
                 android:inputType="number"
@@ -181,7 +186,7 @@
                 app:layout_constraintHorizontal_bias="0.82"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sb_tx_power"
                 app:layout_constraintWidth_percent="0.2" />
 
             <TextView
@@ -195,13 +200,19 @@
                 app:layout_constraintLeft_toRightOf="@id/et_adv_timeout"
                 app:layout_constraintTop_toTopOf="@id/et_adv_timeout" />
 
-            <View
-                style="@style/lw008_divider_line"
-                android:layout_width="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_adv_timeout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_adv_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lw008_white_ffffff"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_adv_params">
+
 
             <TextView
                 android:layout_width="0dp"
@@ -219,7 +230,6 @@
                 android:id="@+id/iv_login_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:onClick="onChangeLoginMode"
                 android:paddingLeft="6dp"
@@ -227,7 +237,7 @@
                 android:paddingBottom="6dp"
                 android:src="@drawable/lw008_ic_unchecked"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_adv_timeout" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 style="@style/lw008_divider_line"
@@ -253,72 +263,10 @@
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_login_mode" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/lw008_white_ffffff"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_adv_status">
-
-            <TextView
-                android:id="@+id/tx_power"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="Tx Power"
-                android:textColor="@color/lw008_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="(-40,-20,-16,-12,-8-4,0,+3,+4)"
-                android:textColor="@color/lw008_grey_b3b3b3"
-                android:textSize="12sp"
-                app:layout_constraintBaseline_toBaselineOf="@id/tx_power"
-                app:layout_constraintLeft_toRightOf="@id/tx_power" />
-
-            <SeekBar
-                android:id="@+id/sb_tx_power"
-                style="@style/LW008CustomSeekbarStyle"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:max="8"
-                android:maxHeight="2dp"
-                android:minHeight="2dp"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:progress="0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/tv_tx_power_value"
-                app:layout_constraintTop_toBottomOf="@id/tx_power" />
-
-            <TextView
-                android:id="@+id/tv_tx_power_value"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0dBm"
-                android:textColor="@color/lw008_black_333333"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/sb_tx_power"
-                app:layout_constraintLeft_toRightOf="@id/sb_tx_power"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/sb_tx_power" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

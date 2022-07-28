@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lw008_grey_ebebeb"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/lw008_blue_2f84d0">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:drawableLeft="@drawable/lw008_ic_back"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:onClick="onBack"
+            android:paddingLeft="16dp"
+            android:text=""
+            android:textColor="@color/lw008_white_ffffff"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/indicator_settings"
+            android:textColor="@color/lw008_white_ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:onClick="onSave"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/lw008_ic_save" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp">
+
+                <CheckBox
+                    android:id="@+id/cb_low_power"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:checked="false"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Low-power"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_low_power" />
+
+                <CheckBox
+                    android:id="@+id/cb_network_check"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:button="@null"
+                    android:checked="false"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Network Check"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_low_power" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp">
+
+                <CheckBox
+                    android:id="@+id/cb_fix"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:checked="false"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="In Fix"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix" />
+
+                <CheckBox
+                    android:id="@+id/cb_fix_success"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:button="@null"
+                    android:checked="false"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Fix Successful"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix" />
+
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_success" />
+
+                <CheckBox
+                    android:id="@+id/cb_fix_fail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:button="@null"
+                    android:checked="false"
+                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Fail To Fix"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cb_fix_success" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

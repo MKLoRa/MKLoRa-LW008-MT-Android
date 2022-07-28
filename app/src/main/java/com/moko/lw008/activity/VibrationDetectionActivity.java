@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -17,7 +19,7 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
-import com.moko.lw008.dialog.BottomDialog;
+import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -35,28 +37,22 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DownlinkForPosActivity extends BaseActivity {
+public class VibrationDetectionActivity extends BaseActivity {
 
-    @BindView(R2.id.tv_downlink_pos_strategy)
-    TextView tvDownlinkPosStrategy;
+    @BindView(R2.id.cb_vibration_detection)
+    CheckBox cbVibrationDetection;
+    @BindView(R2.id.et_vibration_report_interval)
+    EditText etVibrationReportInterval;
+    @BindView(R2.id.et_vibration_timeout)
+    EditText etVibrationTimeout;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
-    private ArrayList<String> mValues;
-    private int mSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_downlink_for_pos);
+        setContentView(R.layout.lw008_activity_vibration_detection);
         ButterKnife.bind(this);
-        mValues = new ArrayList<>();
-        mValues.add("WIFI");
-        mValues.add("BLE");
-        mValues.add("GPS");
-        mValues.add("WIFI+GPS");
-        mValues.add("BLE+GPS");
-        mValues.add("WIFI+BLE");
-        mValues.add("WIFI+BLE+GPS");
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -65,7 +61,9 @@ public class DownlinkForPosActivity extends BaseActivity {
         mReceiverTag = true;
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getDownLinkPosStrategy());
+        orderTasks.add(OrderTaskAssembler.getShockDetectionEnable());
+        orderTasks.add(OrderTaskAssembler.getShockReportInterval());
+        orderTasks.add(OrderTaskAssembler.getShockReportTimeout());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -112,14 +110,24 @@ public class DownlinkForPosActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_DOWN_LINK_POS_STRATEGY:
+                                    case KEY_SHOCK_DETECTION_ENABLE:
+                                    case KEY_SHOCK_REPORT_INTERVAL:
+                                        if (result != 1) {
+                                            savedParamsError = true;
+                                        }
+                                        break;
+                                    case KEY_SHOCK_TIMEOUT:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(DownlinkForPosActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            ToastUtils.showToast(VibrationDetectionActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Saved Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
                                         }
                                         break;
                                 }
@@ -127,11 +135,22 @@ public class DownlinkForPosActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_DOWN_LINK_POS_STRATEGY:
+                                    case KEY_SHOCK_DETECTION_ENABLE:
                                         if (length > 0) {
-                                            int strategy = value[4] & 0xFF;
-                                            mSelected = strategy;
-                                            tvDownlinkPosStrategy.setText(mValues.get(mSelected));
+                                            int enable = value[4] & 0xFF;
+                                            cbVibrationDetection.setChecked(enable == 1);
+                                        }
+                                        break;
+                                    case KEY_SHOCK_REPORT_INTERVAL:
+                                        if (length > 0) {
+                                            int interval = value[4] & 0xFF;
+                                            etVibrationReportInterval.setText(String.valueOf(interval));
+                                        }
+                                        break;
+                                    case KEY_SHOCK_TIMEOUT:
+                                        if (length > 0) {
+                                            int timeout = value[4] & 0xFF;
+                                            etVibrationTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
                                 }
@@ -204,18 +223,44 @@ public class DownlinkForPosActivity extends BaseActivity {
         finish();
     }
 
-    public void selectPosStrategy(View view) {
+    public void onSave(View view) {
         if (isWindowLocked())
             return;
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mValues, mSelected);
-        dialog.setListener(value -> {
-            mSelected = value;
-            tvDownlinkPosStrategy.setText(mValues.get(value));
-            savedParamsError = false;
+        if (isValid()) {
             showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDownLinkPosStrategy(mSelected));
-        });
-        dialog.show(getSupportFragmentManager());
+            saveParams();
+        } else {
+            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+        }
+    }
+
+    private boolean isValid() {
+        final String intervalStr = etVibrationReportInterval.getText().toString();
+        if (TextUtils.isEmpty(intervalStr))
+            return false;
+        final int interval = Integer.parseInt(intervalStr);
+        if (interval < 3 || interval > 255)
+            return false;
+        final String timeoutStr = etVibrationTimeout.getText().toString();
+        if (TextUtils.isEmpty(timeoutStr))
+            return false;
+        final int timeout = Integer.parseInt(timeoutStr);
+        if (timeout < 1 || timeout > 20)
+            return false;
+        return true;
+
+    }
+
+    private void saveParams() {
+        final String intervalStr = etVibrationReportInterval.getText().toString();
+        final int interval = Integer.parseInt(intervalStr);
+        final String timeoutStr = etVibrationTimeout.getText().toString();
+        final int timeout = Integer.parseInt(timeoutStr);
+        savedParamsError = false;
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setShockDetectionEnable(cbVibrationDetection.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setShockReportInterval(interval));
+        orderTasks.add(OrderTaskAssembler.setShockTimeout(timeout));
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

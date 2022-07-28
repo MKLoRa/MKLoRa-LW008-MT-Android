@@ -259,6 +259,56 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_motion_duration" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shock Thresholds"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/et_vibration_thresholds"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/et_vibration_thresholds" />
+
+            <EditText
+                android:id="@+id/et_vibration_thresholds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:hint="10~255"
+                android:inputType="number"
+                android:maxLength="3"
+                android:text=""
+                android:textColor="@color/lw008_black_333333"
+                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textSize="15sp"
+                app:layout_constraintHorizontal_bias="0.75"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_motion_duration"
+                app:layout_constraintWidth_percent="0.25" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="x10mg"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/et_vibration_thresholds"
+                app:layout_constraintLeft_toRightOf="@id/et_vibration_thresholds"
+                app:layout_constraintTop_toTopOf="@id/et_vibration_thresholds" />
+
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_vibration_thresholds" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </LinearLayout>

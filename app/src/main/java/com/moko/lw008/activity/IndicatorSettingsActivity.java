@@ -1,15 +1,21 @@
 package com.moko.lw008.activity;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
 import com.moko.lw008.dialog.AlertMessageDialog;
@@ -25,39 +31,46 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OnOffActivity extends BaseActivity {
+public class IndicatorSettingsActivity extends BaseActivity {
 
-
-    @BindView(R2.id.iv_shutdown_payload)
-    ImageView ivShutdownPayload;
-    @BindView(R2.id.iv_off_by_button)
-    ImageView ivOffByButton;
-    @BindView(R2.id.iv_power_off)
-    ImageView ivPowerOff;
+    @BindView(R2.id.cb_low_power)
+    CheckBox cbLowPower;
+    @BindView(R2.id.cb_network_check)
+    CheckBox cbNetworkCheck;
+    @BindView(R2.id.cb_fix)
+    CheckBox cbFix;
+    @BindView(R2.id.cb_fix_success)
+    CheckBox cbFixSuccess;
+    @BindView(R2.id.cb_fix_fail)
+    CheckBox cbFixFail;
+    private boolean mReceiverTag = false;
     private boolean savedParamsError;
-    private boolean mShutdownPayloadEnable;
-    private boolean mOFFByButtonEnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_on_off_settings);
+        setContentView(R.layout.lw008_activity_indicator_settings);
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+        // 注册广播接收器
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
+        mReceiverTag = true;
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getShutdownPayloadEnable());
-        orderTasks.add(OrderTaskAssembler.getBtnCloseEnable());
+        orderTasks.add(OrderTaskAssembler.getIndicatorStatus());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
         final String action = event.getAction();
         runOnUiThread(() -> {
@@ -67,7 +80,7 @@ public class OnOffActivity extends BaseActivity {
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
     public void onOrderTaskResponseEvent(OrderTaskResponseEvent event) {
         final String action = event.getAction();
         if (!MokoConstants.ACTION_CURRENT_DATA.equals(action))
@@ -100,15 +113,18 @@ public class OnOffActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_BUTTON_CLOSE_ENABLE:
-                                    case KEY_SHUTDOWN_PAYLOAD_ENABLE:
+                                    case KEY_INDICATOR_STATUS:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(OnOffActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            ToastUtils.showToast(IndicatorSettingsActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Saved Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
                                         }
                                         break;
                                 }
@@ -116,18 +132,15 @@ public class OnOffActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_BUTTON_CLOSE_ENABLE:
+                                    case KEY_INDICATOR_STATUS:
                                         if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mOFFByButtonEnable = enable == 1;
-                                            ivOffByButton.setImageResource(mOFFByButtonEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
-                                        }
-                                        break;
-                                    case KEY_SHUTDOWN_PAYLOAD_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            mShutdownPayloadEnable = enable == 1;
-                                            ivShutdownPayload.setImageResource(mShutdownPayloadEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            byte[] indicatorBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                            int indicator = MokoUtils.toInt(indicatorBytes);
+                                            cbLowPower.setChecked((indicator & 1) == 1);
+                                            cbNetworkCheck.setChecked((indicator & 2) == 2);
+                                            cbFix.setChecked((indicator & 4) == 4);
+                                            cbFixSuccess.setChecked((indicator & 8) == 8);
+                                            cbFixFail.setChecked((indicator & 16) == 16);
                                         }
                                         break;
                                 }
@@ -139,9 +152,35 @@ public class OnOffActivity extends BaseActivity {
         });
     }
 
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent != null) {
+                String action = intent.getAction();
+                if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                    switch (blueState) {
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            dismissSyncProgressDialog();
+                            finish();
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mReceiverTag) {
+            mReceiverTag = false;
+            // 注销广播
+            unregisterReceiver(mReceiver);
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -174,42 +213,16 @@ public class OnOffActivity extends BaseActivity {
         finish();
     }
 
-
-    public void onShutdownPayload(View view) {
+    public void onSave(View view) {
         if (isWindowLocked())
             return;
-        mShutdownPayloadEnable = !mShutdownPayloadEnable;
+        int indicator = (cbLowPower.isChecked() ? 1 : 0)
+                | (cbNetworkCheck.isChecked() ? 2 : 0)
+                | (cbFix.isChecked() ? 4 : 0)
+                | (cbFixSuccess.isChecked() ? 8 : 0)
+                | (cbFixFail.isChecked() ? 16 : 0);
         savedParamsError = false;
         showSyncingProgressDialog();
-        ArrayList<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setShutdownPayloadEnable(mShutdownPayloadEnable ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.getShutdownPayloadEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-    }
-
-    public void onOFFByButton(View view) {
-        if (isWindowLocked())
-            return;
-        mOFFByButtonEnable = !mOFFByButtonEnable;
-        savedParamsError = false;
-        showSyncingProgressDialog();
-        ArrayList<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setBtnCloseEnable(mOFFByButtonEnable ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.getBtnCloseEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-    }
-
-    public void onPowerOff(View view) {
-        if (isWindowLocked())
-            return;
-        AlertMessageDialog dialog = new AlertMessageDialog();
-        dialog.setTitle("Warning!");
-        dialog.setMessage("Are you sure to turn off the device? Please make sure the device has a button to turn on!");
-        dialog.setConfirm("OK");
-        dialog.setOnAlertConfirmListener(() -> {
-            showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.close());
-        });
-        dialog.show(getSupportFragmentManager());
+        LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setIndicatorStatus(indicator));
     }
 }

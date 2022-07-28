@@ -37,11 +37,11 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void restart() {
+    public void reboot() {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_RESTART.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_REBOOT.getParamsKey(),
                 (byte) 0x00
         };
         response.responseValue = data;
@@ -57,82 +57,129 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setBtnCloseEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setTime() {
+        Calendar calendar = Calendar.getInstance();
+        TimeZone timeZone = TimeZone.getTimeZone("GMT");
+        calendar.setTimeZone(timeZone);
+        long time = calendar.getTimeInMillis() / 1000;
+        byte[] bytes = new byte[4];
+        for (int i = 0; i < 4; ++i) {
+            bytes[i] = (byte) (time >> 8 * (3 - i) & 255);
+        }
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_BUTTON_CLOSE_ENABLE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_TIME_UTC.getParamsKey(),
+                (byte) 0x04,
+                bytes[0],
+                bytes[1],
+                bytes[2],
+                bytes[3],
+        };
+        response.responseValue = data;
+    }
+
+    public void setTimeZone(@IntRange(from = -24, to = 28) int timeZone) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_TIME_ZONE.getParamsKey(),
+                (byte) 0x01,
+                (byte) timeZone
+        };
+        response.responseValue = data;
+    }
+
+    public void setDeviceMode(@IntRange(from = 1, to = 4) int mode) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_DEVICE_MODE.getParamsKey(),
+                (byte) 0x01,
+                (byte) mode
+        };
+        response.responseValue = data;
+    }
+
+    public void setIndicatorStatus(@IntRange(from = 0, to = 31) int status) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_INDICATOR_STATUS.getParamsKey(),
+                (byte) 0x01,
+                (byte) status
+        };
+        response.responseValue = data;
+    }
+
+    public void setHeartBeatInterval(@IntRange(from = 300, to = 86400) int interval) {
+        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_HEARTBEAT_INTERVAL.getParamsKey(),
+                (byte) 0x02,
+                intervalBytes[0],
+                intervalBytes[1]
+        };
+        response.responseValue = data;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        byte[] manufacturerBytes = manufacturer.getBytes();
+        int length = manufacturerBytes.length;
+        data = new byte[length + 4];
+        data[0] = (byte) 0xED;
+        data[1] = (byte) 0x01;
+        data[2] = (byte) ParamsKeyEnum.KEY_MANUFACTURER.getParamsKey();
+        data[3] = (byte) length;
+        for (int i = 0; i < manufacturerBytes.length; i++) {
+            data[i + 4] = manufacturerBytes[i];
+        }
+        response.responseValue = data;
+    }
+
+
+    public void setShutdownInfoReport(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_SHUTDOWN_PAYLOAD_ENABLE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
         };
         response.responseValue = data;
     }
 
-    public void setLowPowerPercent(@IntRange(from = 10, to = 60) int percent) {
+    public void setOfflineLocationEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_OFFLINE_LOCATION_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+    }
+
+
+    public void setLowPowerReportEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_LOW_POWER_PAYLOAD_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_LOW_POWER_PERCENT.getParamsKey(),
                 (byte) 0x01,
                 (byte) percent
-        };
-        response.responseValue = data;
-    }
-
-    public void setLowPowerReportEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_LOW_POWER_REPORT_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setAdvName(String advName) {
-        byte[] advNameBytes = advName.getBytes();
-        int length = advNameBytes.length;
-        data = new byte[length + 4];
-        data[0] = (byte) 0xED;
-        data[1] = (byte) 0x01;
-        data[2] = (byte) ParamsKeyEnum.KEY_ADV_NAME.getParamsKey();
-        data[3] = (byte) length;
-        for (int i = 0; i < advNameBytes.length; i++) {
-            data[i + 4] = advNameBytes[i];
-        }
-        response.responseValue = data;
-    }
-
-    public void setAdvInterval(@IntRange(from = 1, to = 100) int advInterval) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ADV_INTERVAL.getParamsKey(),
-                (byte) 0x01,
-                (byte) advInterval
-        };
-        response.responseValue = data;
-    }
-
-    public void setAdvTxPower(int txPower) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ADV_TX_POWER.getParamsKey(),
-                (byte) 0x01,
-                (byte) txPower
-        };
-        response.responseValue = data;
-    }
-
-    public void setAdvTimeout(@IntRange(from = 1, to = 60) int timeout) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ADV_TIMEOUT.getParamsKey(),
-                (byte) 0x01,
-                (byte) timeout
         };
         response.responseValue = data;
     }
@@ -162,133 +209,55 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-
-    public void setTimeZone(@IntRange(from = -24, to = 28) int timeZone) {
+    public void setAdvTimeout(@IntRange(from = 1, to = 60) int timeout) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_TIME_ZONE.getParamsKey(),
-                (byte) 0x01,
-                (byte) timeZone
-        };
-        response.responseValue = data;
-    }
-
-
-    public void setTime() {
-        Calendar calendar = Calendar.getInstance();
-        TimeZone timeZone = TimeZone.getTimeZone("GMT");
-        calendar.setTimeZone(timeZone);
-        long time = calendar.getTimeInMillis() / 1000;
-        byte[] bytes = new byte[4];
-        for (int i = 0; i < 4; ++i) {
-            bytes[i] = (byte) (time >> 8 * (3 - i) & 255);
-        }
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_TIME_UTC.getParamsKey(),
-                (byte) 0x04,
-                bytes[0],
-                bytes[1],
-                bytes[2],
-                bytes[3],
-        };
-        response.responseValue = data;
-    }
-
-    public void setAccWakeupThreshold(@IntRange(from = 1, to = 20) int threshold) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ACC_WAKEUP_THRESHOLD.getParamsKey(),
-                (byte) 0x01,
-                (byte) threshold
-        };
-        response.responseValue = data;
-    }
-
-    public void setAccWakeupDuration(@IntRange(from = 1, to = 10) int duration) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ACC_WAKEUP_DURATION.getParamsKey(),
-                (byte) 0x01,
-                (byte) duration
-        };
-        response.responseValue = data;
-    }
-
-    public void setAccMotionThreshold(@IntRange(from = 10, to = 250) int threshold) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ACC_MOTION_THRESHOLD.getParamsKey(),
-                (byte) 0x01,
-                (byte) threshold
-        };
-        response.responseValue = data;
-    }
-
-    public void setAccMotionDuration(@IntRange(from = 1, to = 50) int duration) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ACC_MOTION_DURATION.getParamsKey(),
-                (byte) 0x01,
-                (byte) duration
-        };
-        response.responseValue = data;
-    }
-
-    public void setAccMotionEndTimeout(@IntRange(from = 3, to = 180) int timeout) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ACC_MOTION_END_TIMEOUT.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_ADV_TIMEOUT.getParamsKey(),
                 (byte) 0x01,
                 (byte) timeout
         };
         response.responseValue = data;
     }
 
-    public void setShutdownPayloadEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setAdvTxPower(@IntRange(from = -40, to = 8) int txPower) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_SHUTDOWN_PAYLOAD_ENABLE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_ADV_TX_POWER.getParamsKey(),
                 (byte) 0x01,
-                (byte) enable
+                (byte) txPower
         };
         response.responseValue = data;
     }
 
-    public void setDeviceMode(@IntRange(from = 0, to = 3) int mode) {
+    public void setAdvName(String advName) {
+        byte[] advNameBytes = advName.getBytes();
+        int length = advNameBytes.length;
+        data = new byte[length + 4];
+        data[0] = (byte) 0xED;
+        data[1] = (byte) 0x01;
+        data[2] = (byte) ParamsKeyEnum.KEY_ADV_NAME.getParamsKey();
+        data[3] = (byte) length;
+        for (int i = 0; i < advNameBytes.length; i++) {
+            data[i + 4] = advNameBytes[i];
+        }
+        response.responseValue = data;
+    }
+
+    public void setPeriodicPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_DEVICE_MODE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_PERIODIC_MODE_POS_STRATEGY.getParamsKey(),
                 (byte) 0x01,
-                (byte) mode
+                (byte) strategy
         };
         response.responseValue = data;
     }
 
-    public void setHeartBeatInterval(@IntRange(from = 1, to = 14400) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_HEARTBEAT_INTERVAL.getParamsKey(),
-                (byte) 0x02,
-                intervalBytes[0],
-                intervalBytes[1]
-        };
-        response.responseValue = data;
-    }
 
-
-    public void setPeriodicReportInterval(@IntRange(from = 1, to = 14400) int interval) {
+    public void setPeriodicReportInterval(@IntRange(from = 30, to = 86400) int interval) {
         byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
         data = new byte[]{
                 (byte) 0xED,
@@ -302,17 +271,16 @@ public class ParamsWriteTask extends OrderTask {
     }
 
 
-    public void setPeriodicPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
+    public void setTimePosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_PERIODIC_MODE_POS_STRATEGY.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_TIME_MODE_POS_STRATEGY.getParamsKey(),
                 (byte) 0x01,
                 (byte) strategy
         };
         response.responseValue = data;
     }
-
 
     public void setTimePosReportPoints(ArrayList<Integer> timePoints) {
         if (timePoints == null || timePoints.size() == 0) {
@@ -336,35 +304,13 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setTimePosReportPoints(@IntRange(from = 0, to = 2) int strategy) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_TIME_MODE_POS_STRATEGY.getParamsKey(),
-                (byte) 0x01,
-                (byte) strategy
-        };
-        response.responseValue = data;
-    }
-
-    public void setMotionModeEvent(int event) {
+    public void setMotionModeEvent(@IntRange(from = 0, to = 31) int event) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_MOTION_MODE_EVENT.getParamsKey(),
                 (byte) 0x01,
                 (byte) event
-        };
-        response.responseValue = data;
-    }
-
-    public void setMotionStartPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MOTION_MODE_START_POS_STRATEGY.getParamsKey(),
-                (byte) 0x01,
-                (byte) strategy
         };
         response.responseValue = data;
     }
@@ -380,16 +326,17 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setMotionTripPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
+    public void setMotionStartPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MOTION_MODE_TRIP_POS_STRATEGY.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_MOTION_MODE_START_POS_STRATEGY.getParamsKey(),
                 (byte) 0x01,
                 (byte) strategy
         };
         response.responseValue = data;
     }
+
 
     public void setMotionTripInterval(@IntRange(from = 10, to = 86400) int interval) {
         byte[] intervalBytes = MokoUtils.toByteArray(interval, 4);
@@ -406,14 +353,24 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-
-    public void setMotionEndPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
+    public void setMotionTripPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MOTION_MODE_END_POS_STRATEGY.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_MOTION_MODE_TRIP_POS_STRATEGY.getParamsKey(),
                 (byte) 0x01,
                 (byte) strategy
+        };
+        response.responseValue = data;
+    }
+
+    public void setMotionEndTimeout(@IntRange(from = 1, to = 180) int timeout) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MOTION_MODE_END_TIMEOUT.getParamsKey(),
+                (byte) 0x01,
+                (byte) timeout
         };
         response.responseValue = data;
     }
@@ -430,6 +387,7 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
+
     public void setMotionEndInterval(@IntRange(from = 10, to = 300) int interval) {
         byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
         data = new byte[]{
@@ -443,240 +401,46 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setDownLinkPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
+    public void setMotionEndPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_DOWN_LINK_POS_STRATEGY.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_MOTION_MODE_END_POS_STRATEGY.getParamsKey(),
                 (byte) 0x01,
                 (byte) strategy
         };
         response.responseValue = data;
     }
 
-    public void setManDownDetectionEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setWifiPosDataType(@IntRange(from = 0, to = 1) int type) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setManDownPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MAN_DOWN_POS_STRATEGY.getParamsKey(),
-                (byte) 0x01,
-                (byte) strategy
-        };
-        response.responseValue = data;
-    }
-
-    public void setManDownDetectionTimeout(@IntRange(from = 1, to = 120) int timeout) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_TIMEOUT.getParamsKey(),
-                (byte) 0x01,
-                (byte) timeout
-        };
-        response.responseValue = data;
-    }
-
-    public void setManDownReportInterval(@IntRange(from = 10, to = 600) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MAN_DOWN_REPORT_INTERVAL.getParamsKey(),
-                (byte) 0x02,
-                intervalBytes[0],
-                intervalBytes[1]
-        };
-        response.responseValue = data;
-    }
-
-    public void setManDownStartEventNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MAN_DOWN_START_EVENT_NOTIFY_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setManDownEndEventNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_MAN_DOWN_END_EVENT_NOTIFY_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setVibrationIntensity(@IntRange(from = 0, to = 100) int intensity) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_VIBRATION_INTENSITY.getParamsKey(),
-                (byte) 0x01,
-                (byte) intensity
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmType(@IntRange(from = 0, to = 2) int type) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_TYPE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_WIFI_POS_DATA_TYPE.getParamsKey(),
                 (byte) 0x01,
                 (byte) type
         };
         response.responseValue = data;
     }
 
-    public void setAlarmExitPressDuration(@IntRange(from = 5, to = 15) int duration) {
+    public void setWifiPosTimeout(@IntRange(from = 1, to = 4) int timeout) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_EXIT_PRESS_DURATION.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_WIFI_POS_TIMEOUT.getParamsKey(),
                 (byte) 0x01,
-                (byte) duration
+                (byte) timeout
         };
         response.responseValue = data;
     }
 
-    public void setAlarmSOSStartEventNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setWifiPosBSSIDNumber(@IntRange(from = 1, to = 5) int number) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_SOS_START_EVENT_NOTIFY_ENABLE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_WIFI_POS_BSSID_NUMBER.getParamsKey(),
                 (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmSOSEndEventNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_SOS_END_EVENT_NOTIFY_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmSOSPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_SOS_POS_STRATEGY.getParamsKey(),
-                (byte) 0x01,
-                (byte) strategy
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmSOSReportInterval(@IntRange(from = 10, to = 600) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_SOS_REPORT_INTERVAL.getParamsKey(),
-                (byte) 0x02,
-                intervalBytes[0],
-                intervalBytes[1]
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmSOSTriggerMode(@IntRange(from = 0, to = 6) int mode) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_SOS_TRIGGER_MODE.getParamsKey(),
-                (byte) 0x01,
-                (byte) mode
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmAlertStartEventNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_START_EVENT_NOTIFY_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmAlertEndEventNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_END_EVENT_NOTIFY_ENABLE.getParamsKey(),
-                (byte) 0x01,
-                (byte) enable
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmAlertPosStrategy(@IntRange(from = 0, to = 2) int strategy) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_POS_STRATEGY.getParamsKey(),
-                (byte) 0x01,
-                (byte) strategy
-        };
-        response.responseValue = data;
-    }
-
-    public void setAlarmAlertTriggerMode(@IntRange(from = 0, to = 6) int mode) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_ALARM_ALERT_TRIGGER_MODE.getParamsKey(),
-                (byte) 0x01,
-                (byte) mode
-        };
-        response.responseValue = data;
-    }
-
-    public void setGPSPosTimeout(@IntRange(from = 60, to = 600) int timeout) {
-        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 2);
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_GPS_POS_TIMEOUT.getParamsKey(),
-                (byte) 0x02,
-                timeoutBytes[0],
-                timeoutBytes[1]
-        };
-        response.responseValue = data;
-    }
-
-
-    public void setGPSPDOPLimit(@IntRange(from = 25, to = 100) int limit) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_GPS_PDOP_LIMIT.getParamsKey(),
-                (byte) 0x01,
-                (byte) limit,
+                (byte) number
         };
         response.responseValue = data;
     }
@@ -1226,6 +990,141 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
+    public void setGPSPosTimeoutL76(@IntRange(from = 60, to = 600) int timeout) {
+        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 2);
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_TIMEOUT_L76C.getParamsKey(),
+                (byte) 0x02,
+                timeoutBytes[0],
+                timeoutBytes[1]
+        };
+        response.responseValue = data;
+    }
+
+
+    public void setGPSPDOPLimitL76(@IntRange(from = 25, to = 100) int limit) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_PDOP_LIMIT_L76C.getParamsKey(),
+                (byte) 0x01,
+                (byte) limit,
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSExtremeModeL76(@IntRange(from = 0, to = 1) int limit) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_EXTREME_MODE_L76C.getParamsKey(),
+                (byte) 0x01,
+                (byte) limit,
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosTimeout(@IntRange(from = 60, to = 600) int timeout) {
+        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 2);
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_TIMEOUT.getParamsKey(),
+                (byte) 0x02,
+                timeoutBytes[0],
+                timeoutBytes[1]
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosSatelliteThreshold(@IntRange(from = 4, to = 10) int threshold) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_SATELLITE_THRESHOLD.getParamsKey(),
+                (byte) 0x01,
+                (byte) threshold
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosDataType(@IntRange(from = 0, to = 1) int type) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_DATA_TYPE.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosSystem(@IntRange(from = 0, to = 2) int type) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_SYSTEM.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosAutoEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosAuxiliaryLatLon(@IntRange(from = -9000000, to = 9000000) int lat, @IntRange(from = -18000000, to = 18000000) int lon) {
+        byte[] latBytes = MokoUtils.toByteArray(lat, 4);
+        byte[] lonBytes = MokoUtils.toByteArray(lon, 4);
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_AUXILIARY_LAT_LON.getParamsKey(),
+                (byte) 0x08,
+                latBytes[0],
+                latBytes[1],
+                latBytes[2],
+                latBytes[3],
+                lonBytes[0],
+                lonBytes[1],
+                lonBytes[2],
+                lonBytes[3],
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosEphemerisStartNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setGPSPosEphemerisEndNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
     public void setLoraRegion(@IntRange(from = 0, to = 9) int region) {
         data = new byte[]{
                 (byte) 0xED,
@@ -1399,16 +1298,6 @@ public class ParamsWriteTask extends OrderTask {
         };
     }
 
-    public void setLoraMaxRetransmissionTimes(@IntRange(from = 1, to = 8) int interval) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_LORA_MAX_RETRANSMISSION_TIMES.getParamsKey(),
-                (byte) 0x01,
-                (byte) interval
-        };
-    }
-
     public void setLoraAdrAckLimit(@IntRange(from = 1, to = 255) int interval) {
         data = new byte[]{
                 (byte) 0xED,
@@ -1426,6 +1315,183 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) ParamsKeyEnum.KEY_LORA_ADR_ACK_DELAY.getParamsKey(),
                 (byte) 0x01,
                 (byte) interval
+        };
+    }
+
+    public void setLoraMaxRetransmissionTimes(@IntRange(from = 1, to = 4) int interval) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_LORA_MAX_RETRANSMISSION_TIMES.getParamsKey(),
+                (byte) 0x01,
+                (byte) interval
+        };
+    }
+
+    public void setDownLinkPosStrategy(@IntRange(from = 0, to = 6) int strategy) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_DOWN_LINK_POS_STRATEGY.getParamsKey(),
+                (byte) 0x01,
+                (byte) strategy
+        };
+        response.responseValue = data;
+    }
+
+    public void setAccWakeupCondition(@IntRange(from = 1, to = 20) int threshold,
+                                      @IntRange(from = 1, to = 10) int duration) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ACC_WAKEUP_CONDITION.getParamsKey(),
+                (byte) 0x02,
+                (byte) threshold,
+                (byte) duration
+        };
+        response.responseValue = data;
+    }
+
+    public void setAccMotionCondition(@IntRange(from = 10, to = 250) int threshold,
+                                      @IntRange(from = 1, to = 50) int duration) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ACC_MOTION_CONDITION.getParamsKey(),
+                (byte) 0x02,
+                (byte) threshold,
+                (byte) duration
+        };
+        response.responseValue = data;
+    }
+
+    public void setShockDetectionEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_SHOCK_DETECTION_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setAccShockThreshold(@IntRange(from = 10, to = 255) int threshold) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ACC_SHOCK_THRESHOLD.getParamsKey(),
+                (byte) 0x01,
+                (byte) threshold
+        };
+        response.responseValue = data;
+    }
+
+    public void setShockReportInterval(@IntRange(from = 3, to = 255) int interval) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_SHOCK_REPORT_INTERVAL.getParamsKey(),
+                (byte) 0x01,
+                (byte) interval
+        };
+        response.responseValue = data;
+    }
+
+    public void setShockTimeout(@IntRange(from = 1, to = 20) int timeout) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_SHOCK_TIMEOUT.getParamsKey(),
+                (byte) 0x01,
+                (byte) timeout
+        };
+        response.responseValue = data;
+    }
+
+    public void setManDownDetectionEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+
+    public void setManDownDetectionTimeout(@IntRange(from = 1, to = 120) int timeout) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_TIMEOUT.getParamsKey(),
+                (byte) 0x01,
+                (byte) timeout
+        };
+        response.responseValue = data;
+    }
+
+    public void setManDownIdleReset() {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_MAN_DOWN_IDLE_RESET.getParamsKey(),
+                (byte) 0x00
+        };
+        response.responseValue = data;
+    }
+
+    public void setActiveStateCountEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ACTIVE_STATE_COUNT_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setActiveStateTimeout(@IntRange(from = 1, to = 86400) int timeout) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_ACTIVE_STATE_TIMEOUT.getParamsKey(),
+                (byte) 0x01,
+                (byte) timeout
+        };
+        response.responseValue = data;
+    }
+
+    public void readStorageData(@IntRange(from = 1, to = 65535) int time) {
+        byte[] rawDataBytes = MokoUtils.toByteArray(time, 2);
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_READ_STORAGE_DATA.getParamsKey(),
+                (byte) 0x02,
+                rawDataBytes[0],
+                rawDataBytes[1]
+        };
+    }
+
+    public void clearStorageData() {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CLEAR_STORAGE_DATA.getParamsKey(),
+                (byte) 0x00
+        };
+    }
+
+    public void setSyncEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_SYNC_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
         };
     }
 

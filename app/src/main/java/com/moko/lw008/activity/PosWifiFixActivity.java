@@ -1,19 +1,26 @@
 package com.moko.lw008.activity;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
+import com.moko.lw008.dialog.AlertMessageDialog;
+import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -26,33 +33,43 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PosGpsFixActivity extends BaseActivity {
+public class PosWifiFixActivity extends BaseActivity {
 
-
-    @BindView(R2.id.et_pdop_limit)
-    EditText etPdopLimit;
-    @BindView(R2.id.et_position_timeout)
-    EditText etPositionTimeout;
-
+    @BindView(R2.id.et_pos_timeout)
+    EditText etPosTimeout;
+    @BindView(R2.id.et_bssid_number)
+    EditText etBssidNumber;
+    @BindView(R2.id.tv_wifi_data_type)
+    TextView tvWifiDataType;
+    private ArrayList<String> mValues;
+    private int mSelected;
+    private boolean mReceiverTag = false;
     private boolean savedParamsError;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_pos_gps);
+        setContentView(R.layout.lw008_activity_pos_wifi);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        mValues = new ArrayList<>();
+        mValues.add("DAS");
+        mValues.add("Customer");
+        // 注册广播接收器
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
+        mReceiverTag = true;
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getGPSPosTimeout());
-        orderTasks.add(OrderTaskAssembler.getGPSPDOPLimit());
+        orderTasks.add(OrderTaskAssembler.getWifiPosTimeout());
+        orderTasks.add(OrderTaskAssembler.getWifiPosBSSIDNumber());
+        orderTasks.add(OrderTaskAssembler.getWifiPosDataType());
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -99,19 +116,25 @@ public class PosGpsFixActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_GPS_POS_TIMEOUT:
+                                    case KEY_WIFI_POS_TIMEOUT:
+                                    case KEY_WIFI_POS_BSSID_NUMBER:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         break;
-                                    case KEY_GPS_PDOP_LIMIT:
+                                    case KEY_WIFI_POS_DATA_TYPE:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(PosGpsFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            savedParamsError = false;
+                                            ToastUtils.showToast(PosWifiFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Saved Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
                                         }
                                         break;
                                 }
@@ -119,17 +142,22 @@ public class PosGpsFixActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_GPS_POS_TIMEOUT:
+                                    case KEY_WIFI_POS_TIMEOUT:
                                         if (length > 0) {
-                                            byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            int timeout = MokoUtils.toInt(timeoutBytes);
-                                            etPositionTimeout.setText(String.valueOf(timeout));
+                                            int number = value[4] & 0xFF;
+                                            etPosTimeout.setText(String.valueOf(number));
                                         }
                                         break;
-                                    case KEY_GPS_PDOP_LIMIT:
+                                    case KEY_WIFI_POS_BSSID_NUMBER:
                                         if (length > 0) {
-                                            int limit = value[4] & 0xFF;
-                                            etPdopLimit.setText(String.valueOf(limit));
+                                            int number = value[4] & 0xFF;
+                                            etBssidNumber.setText(String.valueOf(number));
+                                        }
+                                        break;
+                                    case KEY_WIFI_POS_DATA_TYPE:
+                                        if (length > 0) {
+                                            mSelected = value[4] & 0xFF;
+                                            tvWifiDataType.setText(mValues.get(mSelected));
                                         }
                                         break;
                                 }
@@ -141,6 +169,18 @@ public class PosGpsFixActivity extends BaseActivity {
         });
     }
 
+    public void onWifiDataType(View view) {
+        if (isWindowLocked())
+            return;
+        BottomDialog dialog = new BottomDialog();
+        dialog.setDatas(mValues, mSelected);
+        dialog.setListener(value -> {
+            mSelected = value;
+            tvWifiDataType.setText(mValues.get(value));
+        });
+        dialog.show(getSupportFragmentManager());
+    }
+
     public void onSave(View view) {
         if (isWindowLocked())
             return;
@@ -148,23 +188,23 @@ public class PosGpsFixActivity extends BaseActivity {
             showSyncingProgressDialog();
             saveParams();
         } else {
-            ToastUtils.showToast(this, "Para error!");
+            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
         }
     }
 
     private boolean isValid() {
-        final String posTimeoutStr = etPositionTimeout.getText().toString();
+        final String posTimeoutStr = etPosTimeout.getText().toString();
         if (TextUtils.isEmpty(posTimeoutStr))
             return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        if (posTimeout < 60 || posTimeout > 600) {
+        if (posTimeout < 1 || posTimeout > 5) {
             return false;
         }
-        final String pdopLimitStr = etPdopLimit.getText().toString();
-        if (TextUtils.isEmpty(pdopLimitStr))
+        final String numberStr = etBssidNumber.getText().toString();
+        if (TextUtils.isEmpty(numberStr))
             return false;
-        final int pdopLimit = Integer.parseInt(pdopLimitStr);
-        if (pdopLimit < 25 || pdopLimit > 100) {
+        final int number = Integer.parseInt(numberStr);
+        if (number < 1 || number > 5) {
             return false;
         }
         return true;
@@ -173,20 +213,46 @@ public class PosGpsFixActivity extends BaseActivity {
 
 
     private void saveParams() {
-        final String posTimeoutStr = etPositionTimeout.getText().toString();
+        final String posTimeoutStr = etPosTimeout.getText().toString();
+        final String numberStr = etBssidNumber.getText().toString();
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        final String pdopLimitStr = etPdopLimit.getText().toString();
-        final int pdopLimit = Integer.parseInt(pdopLimitStr);
-        savedParamsError = false;
+        final int number = Integer.parseInt(numberStr);
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setGPSPosTimeout(posTimeout));
-        orderTasks.add(OrderTaskAssembler.setGPSPDOPLimit(pdopLimit));
+        orderTasks.add(OrderTaskAssembler.setWifiPosTimeout(posTimeout));
+        orderTasks.add(OrderTaskAssembler.setWifiPosBSSIDNumber(number));
+        orderTasks.add(OrderTaskAssembler.setWifiPosDataType(mSelected));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
+
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent != null) {
+                String action = intent.getAction();
+                if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                    int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
+                    switch (blueState) {
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            dismissSyncProgressDialog();
+                            finish();
+                            break;
+                    }
+                }
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mReceiverTag) {
+            mReceiverTag = false;
+            // 注销广播
+            unregisterReceiver(mReceiver);
+        }
         EventBus.getDefault().unregister(this);
     }
 

@@ -155,6 +155,31 @@
                 app:layout_constraintLeft_toRightOf="@id/et_pdop_limit"
                 app:layout_constraintTop_toTopOf="@id/et_pdop_limit" />
 
+            <View
+                style="@style/lw008_divider_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_pdop_limit" />
+
+            <CheckBox
+                android:id="@+id/cb_extreme_mode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:button="@null"
+                android:drawableRight="@drawable/lw008_selector_cb_btn"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="Extreme Mode"
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_pdop_limit" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </LinearLayout>

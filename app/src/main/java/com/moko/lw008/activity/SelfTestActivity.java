@@ -32,6 +32,8 @@ public class SelfTestActivity extends BaseActivity {
 
     @BindView(R2.id.tv_selftest_status)
     TextView tvSelftestStatus;
+    @BindView(R2.id.tv_flash_status)
+    TextView tvFlashStatus;
     @BindView(R2.id.tv_axis_status)
     TextView tvAxisStatus;
     @BindView(R2.id.tv_gps_status)
@@ -99,14 +101,12 @@ public class SelfTestActivity extends BaseActivity {
                                             int status = value[4] & 0xFF;
                                             if (status == 0)
                                                 tvSelftestStatus.setVisibility(View.VISIBLE);
-                                            else if (status == 1)
-                                                tvAxisStatus.setVisibility(View.VISIBLE);
-                                            else if (status == 2)
+                                            if ((status & 0x01) == 0x01)
                                                 tvGpsStatus.setVisibility(View.VISIBLE);
-                                            else {
+                                            if ((status & 0x02) == 0x02)
                                                 tvAxisStatus.setVisibility(View.VISIBLE);
-                                                tvGpsStatus.setVisibility(View.VISIBLE);
-                                            }
+                                            if ((status & 0x04) == 0x04)
+                                                tvFlashStatus.setVisibility(View.VISIBLE);
                                         }
                                         break;
                                     case KEY_PCBA_STATUS:

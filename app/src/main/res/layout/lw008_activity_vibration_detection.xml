@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lw008_grey_f2f2f2"
+    android:background="@color/lw008_white_ffffff"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/alarm_function"
+            android:text="@string/vibration_detection"
             android:textColor="@color/lw008_white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -50,38 +50,27 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:background="@color/lw008_white_ffffff"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tv_alarm_type"
-            android:layout_width="wrap_content"
+        <CheckBox
+            android:id="@+id/cb_vibration_detection"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/lw008_shape_radius_blue_btn_bg"
-            android:clickable="true"
-            android:gravity="center"
-            android:minWidth="70dp"
-            android:onClick="selectAlarmType"
-            android:padding="12dp"
-            android:text="NO"
-            android:textColor="@color/lw008_white_ffffff"
-            android:textSize="15sp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alarm Type"
+            android:button="@null"
+            android:checked="false"
+            android:drawableRight="@drawable/lw008_selector_cb_btn"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="@string/vibration_detection"
             android:textColor="@color/lw008_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/tv_alarm_type"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_alarm_type" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             style="@style/lw008_divider_line"
@@ -89,30 +78,29 @@
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_alarm_type" />
+            app:layout_constraintTop_toBottomOf="@id/cb_vibration_detection" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Exit Alarm Type"
+            android:text="Report Interval"
             android:textColor="@color/lw008_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/et_exit_alarm_duration"
+            app:layout_constraintBottom_toBottomOf="@id/et_vibration_report_interval"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/et_exit_alarm_duration" />
-
+            app:layout_constraintTop_toTopOf="@id/et_vibration_report_interval" />
 
         <EditText
-            android:id="@+id/et_exit_alarm_duration"
+            android:id="@+id/et_vibration_report_interval"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:hint="5~15"
+            android:hint="3~255"
             android:inputType="number"
-            android:maxLength="2"
+            android:maxLength="3"
             android:text=""
             android:textColor="@color/lw008_black_333333"
             android:textColorHint="@color/lw008_grey_ebebeb"
@@ -120,19 +108,8 @@
             app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_alarm_type"
+            app:layout_constraintTop_toBottomOf="@id/cb_vibration_detection"
             app:layout_constraintWidth_percent="0.2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="Long press"
-            android:textColor="@color/lw008_black_333333"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/et_exit_alarm_duration"
-            app:layout_constraintRight_toLeftOf="@id/et_exit_alarm_duration"
-            app:layout_constraintTop_toTopOf="@id/et_exit_alarm_duration" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -142,9 +119,9 @@
             android:textColor="@color/lw008_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/et_exit_alarm_duration"
-            app:layout_constraintLeft_toRightOf="@id/et_exit_alarm_duration"
-            app:layout_constraintTop_toTopOf="@id/et_exit_alarm_duration" />
+            app:layout_constraintBottom_toBottomOf="@id/et_vibration_report_interval"
+            app:layout_constraintLeft_toRightOf="@id/et_vibration_report_interval"
+            app:layout_constraintTop_toTopOf="@id/et_vibration_report_interval" />
 
         <View
             style="@style/lw008_divider_line"
@@ -152,24 +129,49 @@
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_exit_alarm_duration" />
+            app:layout_constraintTop_toBottomOf="@id/et_vibration_report_interval" />
 
         <TextView
-            android:id="@+id/alert_settings"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            android:drawableRight="@drawable/lw008_ic_arrow_right"
-            android:gravity="center_vertical"
-            android:onClick="onAlertSettings"
-            android:text="Alert Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shock Timeout"
             android:textColor="@color/lw008_black_333333"
             android:textSize="15sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/et_vibration_timeout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_vibration_timeout" />
+
+        <EditText
+            android:id="@+id/et_vibration_timeout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:hint="1~20"
+            android:inputType="number"
+            android:maxLength="2"
+            android:text=""
+            android:textColor="@color/lw008_black_333333"
+            android:textColorHint="@color/lw008_grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_exit_alarm_duration" />
+            app:layout_constraintTop_toBottomOf="@id/et_vibration_report_interval"
+            app:layout_constraintWidth_percent="0.2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="s"
+            android:textColor="@color/lw008_black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/et_vibration_timeout"
+            app:layout_constraintLeft_toRightOf="@id/et_vibration_timeout"
+            app:layout_constraintTop_toTopOf="@id/et_vibration_timeout" />
 
         <View
             style="@style/lw008_divider_line"
@@ -177,22 +179,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alert_settings" />
+            app:layout_constraintTop_toBottomOf="@id/et_vibration_timeout" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            android:drawableRight="@drawable/lw008_ic_arrow_right"
-            android:gravity="center_vertical"
-            android:onClick="onSOSSettings"
-            android:text="SOS Settings"
-            android:textColor="@color/lw008_black_333333"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alert_settings" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
