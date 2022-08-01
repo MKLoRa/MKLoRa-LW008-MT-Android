@@ -249,7 +249,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                         if (savedParamsError) {
                                             ToastUtils.showToast(DeviceInfoActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }
@@ -326,7 +326,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     private void showDisconnectDialog() {
-        if (disConnectType == 3) {
+        if (disConnectType == 2) {
             AlertMessageDialog dialog = new AlertMessageDialog();
             dialog.setTitle("Change Password");
             dialog.setMessage("Password changed successfully!Please reconnect the device.");
@@ -337,7 +337,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 finish();
             });
             dialog.show(getSupportFragmentManager());
-        } else if (disConnectType == 2) {
+        } else if (disConnectType == 3) {
             AlertMessageDialog dialog = new AlertMessageDialog();
             dialog.setMessage("No data communication for 3 minutes, the device is disconnected.");
             dialog.setConfirm("OK");

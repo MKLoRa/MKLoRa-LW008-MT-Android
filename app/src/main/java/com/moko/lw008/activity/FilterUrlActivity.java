@@ -55,7 +55,7 @@ public class FilterUrlActivity extends BaseActivity {
 
             return null;
         };
-        etUrl.setFilters(new InputFilter[]{new InputFilter.LengthFilter(29), inputFilter});
+        etUrl.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100), inputFilter});
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrlEnable());
@@ -119,7 +119,7 @@ public class FilterUrlActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(FilterUrlActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }

@@ -112,7 +112,7 @@ public class DeviceModeActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(DeviceModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }
@@ -123,7 +123,7 @@ public class DeviceModeActivity extends BaseActivity {
                                     case KEY_DEVICE_MODE:
                                         if (length > 0) {
                                             int mode = value[4] & 0xFF;
-                                            mSelected = mode;
+                                            mSelected = mode - 1;
                                             tvDeviceMode.setText(mValues.get(mSelected));
                                         }
                                         break;
@@ -207,7 +207,7 @@ public class DeviceModeActivity extends BaseActivity {
             tvDeviceMode.setText(mValues.get(value));
             savedParamsError = false;
             showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDeviceMode(mSelected));
+            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setDeviceMode(value + 1));
         });
         dialog.show(getSupportFragmentManager());
     }

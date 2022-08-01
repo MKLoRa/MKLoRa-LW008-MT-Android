@@ -120,11 +120,7 @@ public class IndicatorSettingsActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(IndicatorSettingsActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            AlertMessageDialog dialog = new AlertMessageDialog();
-                                            dialog.setMessage("Saved Successfully！");
-                                            dialog.setConfirm("OK");
-                                            dialog.setCancelGone();
-                                            dialog.show(getSupportFragmentManager());
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }

@@ -130,11 +130,7 @@ public class PosWifiFixActivity extends BaseActivity {
                                             savedParamsError = false;
                                             ToastUtils.showToast(PosWifiFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            AlertMessageDialog dialog = new AlertMessageDialog();
-                                            dialog.setMessage("Saved Successfully！");
-                                            dialog.setConfirm("OK");
-                                            dialog.setCancelGone();
-                                            dialog.show(getSupportFragmentManager());
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }
@@ -188,7 +184,7 @@ public class PosWifiFixActivity extends BaseActivity {
             showSyncingProgressDialog();
             saveParams();
         } else {
-            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+            ToastUtils.showToast(this, "Para error!");
         }
     }
 
@@ -197,7 +193,7 @@ public class PosWifiFixActivity extends BaseActivity {
         if (TextUtils.isEmpty(posTimeoutStr))
             return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        if (posTimeout < 1 || posTimeout > 5) {
+        if (posTimeout < 1 || posTimeout > 4) {
             return false;
         }
         final String numberStr = etBssidNumber.getText().toString();

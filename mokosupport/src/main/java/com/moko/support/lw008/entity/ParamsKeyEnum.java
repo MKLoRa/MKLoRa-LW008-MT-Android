@@ -213,7 +213,7 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_LORA_ADR_ACK_LIMIT(0xA0),
     KEY_LORA_ADR_ACK_DELAY(0xA1),
     // 数据的最大传输次数
-    KEY_LORA_MAX_RETRANSMISSION_TIMES(0xA3),
+    KEY_LORA_MAX_RETRANSMISSION_TIMES(0xA2),
 
     //// 辅助功能参数
     // 下行请求定位策略

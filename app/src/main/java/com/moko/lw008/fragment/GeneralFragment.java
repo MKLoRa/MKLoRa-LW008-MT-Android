@@ -53,7 +53,7 @@ public class GeneralFragment extends Fragment {
         if (TextUtils.isEmpty(intervalStr))
             return false;
         final int interval = Integer.parseInt(intervalStr);
-        if (interval < 1 || interval > 14400) {
+        if (interval < 300 || interval > 86400) {
             return false;
         }
         return true;

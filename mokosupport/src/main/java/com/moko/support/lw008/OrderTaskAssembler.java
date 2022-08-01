@@ -1210,7 +1210,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setGPSPosTimeout(@IntRange(from = 60, to = 600) int timeout) {
+    public static OrderTask setGPSPosTimeout(@IntRange(from = 1, to = 5) int timeout) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setGPSPosTimeout(timeout);
         return task;

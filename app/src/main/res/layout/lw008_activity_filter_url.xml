@@ -105,7 +105,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="12dp"
-                android:hint="0~29 Characters"
+                android:hint="0~100 Characters"
                 android:textColor="@color/lw008_black_333333"
                 android:textColorHint="@color/lw008_grey_ebebeb"
                 android:textSize="15sp"

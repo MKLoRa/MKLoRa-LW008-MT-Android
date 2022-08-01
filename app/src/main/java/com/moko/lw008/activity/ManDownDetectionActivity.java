@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -22,7 +21,6 @@ import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
 import com.moko.lw008.dialog.AlertMessageDialog;
-import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -124,11 +122,7 @@ public class ManDownDetectionActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(ManDownDetectionActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            AlertMessageDialog dialog = new AlertMessageDialog();
-                                            dialog.setMessage("Saved Successfully！");
-                                            dialog.setConfirm("OK");
-                                            dialog.setCancelGone();
-                                            dialog.show(getSupportFragmentManager());
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }
@@ -226,7 +220,7 @@ public class ManDownDetectionActivity extends BaseActivity {
             showSyncingProgressDialog();
             saveParams();
         } else {
-            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+            ToastUtils.showToast(this, "Para error!");
         }
     }
 

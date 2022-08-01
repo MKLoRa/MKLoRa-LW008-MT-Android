@@ -116,7 +116,7 @@ public class FilterUIDActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(FilterUIDActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }

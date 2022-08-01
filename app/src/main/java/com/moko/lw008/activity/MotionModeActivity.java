@@ -172,7 +172,7 @@ public class MotionModeActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(MotionModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            ToastUtils.showToast(this, "Saved Successfully！");
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }
@@ -183,12 +183,12 @@ public class MotionModeActivity extends BaseActivity {
                                     case KEY_MOTION_MODE_EVENT:
                                         if (length > 0) {
                                             int modeEvent = value[4] & 0xFF;
-                                            cbFixOnStart.setChecked((modeEvent & 1) == 1);
-                                            cbFixInTrip.setChecked((modeEvent & 2) == 2);
-                                            cbFixOnEnd.setChecked((modeEvent & 4) == 4);
-                                            cbNotifyOnStart.setChecked((modeEvent & 8) == 8);
-                                            cbNotifyInTrip.setChecked((modeEvent & 16) == 16);
-                                            cbNotifyOnEnd.setChecked((modeEvent & 32) == 32);
+                                            cbNotifyOnStart.setChecked((modeEvent & 1) == 1);
+                                            cbFixOnStart.setChecked((modeEvent & 2) == 2);
+                                            cbNotifyInTrip.setChecked((modeEvent & 4) == 4);
+                                            cbFixInTrip.setChecked((modeEvent & 8) == 8);
+                                            cbNotifyOnEnd.setChecked((modeEvent & 16) == 16);
+                                            cbFixOnEnd.setChecked((modeEvent & 32) == 32);
                                         }
                                         break;
                                     case KEY_MOTION_MODE_START_NUMBER:
@@ -382,12 +382,12 @@ public class MotionModeActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setMotionEndNumber(endNumber));
         orderTasks.add(OrderTaskAssembler.setMotionEndInterval(endInterval));
         orderTasks.add(OrderTaskAssembler.setMotionEndPosStrategy(mEndSelected));
-        int motionMode = (cbFixOnStart.isChecked() ? 1 : 0)
-                | (cbFixInTrip.isChecked() ? 2 : 0)
-                | (cbFixOnEnd.isChecked() ? 4 : 0)
-                | (cbNotifyOnStart.isChecked() ? 8 : 0)
-                | (cbNotifyInTrip.isChecked() ? 16 : 0)
-                | (cbNotifyOnEnd.isChecked() ? 32 : 0);
+        int motionMode = (cbNotifyOnStart.isChecked() ? 1 : 0)
+                | (cbFixOnStart.isChecked() ? 2 : 0)
+                | (cbNotifyInTrip.isChecked() ? 4 : 0)
+                | (cbFixInTrip.isChecked() ? 8 : 0)
+                | (cbNotifyOnEnd.isChecked() ? 16 : 0)
+                | (cbFixOnEnd.isChecked() ? 32 : 0);
         orderTasks.add(OrderTaskAssembler.setMotionModeEvent(motionMode));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }

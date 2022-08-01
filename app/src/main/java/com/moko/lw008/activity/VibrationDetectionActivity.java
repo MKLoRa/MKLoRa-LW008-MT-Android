@@ -123,11 +123,7 @@ public class VibrationDetectionActivity extends BaseActivity {
                                         if (savedParamsError) {
                                             ToastUtils.showToast(VibrationDetectionActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
-                                            AlertMessageDialog dialog = new AlertMessageDialog();
-                                            dialog.setMessage("Saved Successfully！");
-                                            dialog.setConfirm("OK");
-                                            dialog.setCancelGone();
-                                            dialog.show(getSupportFragmentManager());
+                                            ToastUtils.showToast(this, "Save Successfully！");
                                         }
                                         break;
                                 }
@@ -230,7 +226,7 @@ public class VibrationDetectionActivity extends BaseActivity {
             showSyncingProgressDialog();
             saveParams();
         } else {
-            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+            ToastUtils.showToast(this, "Para error!");
         }
     }
 

@@ -150,6 +150,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.moko.lw008.activity.PosGpsLR1110FixActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity

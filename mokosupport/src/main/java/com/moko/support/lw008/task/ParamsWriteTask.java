@@ -113,14 +113,16 @@ public class ParamsWriteTask extends OrderTask {
     }
 
     public void setHeartBeatInterval(@IntRange(from = 300, to = 86400) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
+        byte[] intervalBytes = MokoUtils.toByteArray(interval, 4);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_HEARTBEAT_INTERVAL.getParamsKey(),
-                (byte) 0x02,
+                (byte) 0x04,
                 intervalBytes[0],
-                intervalBytes[1]
+                intervalBytes[1],
+                intervalBytes[2],
+                intervalBytes[3],
         };
         response.responseValue = data;
     }
@@ -258,14 +260,16 @@ public class ParamsWriteTask extends OrderTask {
 
 
     public void setPeriodicReportInterval(@IntRange(from = 30, to = 86400) int interval) {
-        byte[] intervalBytes = MokoUtils.toByteArray(interval, 2);
+        byte[] intervalBytes = MokoUtils.toByteArray(interval, 4);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_PERIODIC_MODE_REPORT_INTERVAL.getParamsKey(),
-                (byte) 0x02,
+                (byte) 0x04,
                 intervalBytes[0],
-                intervalBytes[1]
+                intervalBytes[1],
+                intervalBytes[2],
+                intervalBytes[3],
         };
         response.responseValue = data;
     }
@@ -1026,15 +1030,13 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setGPSPosTimeout(@IntRange(from = 60, to = 600) int timeout) {
-        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 2);
+    public void setGPSPosTimeout(@IntRange(from = 1, to = 5) int timeout) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_GPS_POS_TIMEOUT.getParamsKey(),
-                (byte) 0x02,
-                timeoutBytes[0],
-                timeoutBytes[1]
+                (byte) 0x01,
+                (byte) timeout
         };
         response.responseValue = data;
     }
@@ -1454,12 +1456,16 @@ public class ParamsWriteTask extends OrderTask {
     }
 
     public void setActiveStateTimeout(@IntRange(from = 1, to = 86400) int timeout) {
+        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 4);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_ACTIVE_STATE_TIMEOUT.getParamsKey(),
-                (byte) 0x01,
-                (byte) timeout
+                (byte) 0x04,
+                timeoutBytes[0],
+                timeoutBytes[1],
+                timeoutBytes[2],
+                timeoutBytes[3],
         };
         response.responseValue = data;
     }
