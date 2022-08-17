@@ -65,11 +65,13 @@ public class FilterOtherActivity extends BaseActivity {
 
         filterOther = new ArrayList<>();
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterOtherEnable());
-        orderTasks.add(OrderTaskAssembler.getFilterOtherRelationship());
-        orderTasks.add(OrderTaskAssembler.getFilterOtherRules());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbOther.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterOtherEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterOtherRelationship());
+            orderTasks.add(OrderTaskAssembler.getFilterOtherRules());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
 

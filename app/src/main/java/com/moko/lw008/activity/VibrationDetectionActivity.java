@@ -19,7 +19,6 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
 import com.moko.lw008.R2;
-import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -60,11 +59,13 @@ public class VibrationDetectionActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getShockDetectionEnable());
-        orderTasks.add(OrderTaskAssembler.getShockReportInterval());
-        orderTasks.add(OrderTaskAssembler.getShockReportTimeout());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbVibrationDetection.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getShockDetectionEnable());
+            orderTasks.add(OrderTaskAssembler.getShockReportInterval());
+            orderTasks.add(OrderTaskAssembler.getShockReportTimeout());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)

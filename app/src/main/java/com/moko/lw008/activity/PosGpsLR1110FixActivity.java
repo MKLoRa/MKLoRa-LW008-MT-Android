@@ -84,16 +84,18 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
             clAutonomousParams.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         });
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getGPSPosTimeout());
-        orderTasks.add(OrderTaskAssembler.getGPSPosSatelliteThreshold());
-        orderTasks.add(OrderTaskAssembler.getGPSPosDataType());
-        orderTasks.add(OrderTaskAssembler.getGPSPosSystem());
-        orderTasks.add(OrderTaskAssembler.getGPSPosAutoEnable());
-        orderTasks.add(OrderTaskAssembler.getGPSPosAuxiliaryLatLon());
-        orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisStartNotifyEnable());
-        orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisEndNotifyEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        etPosTimeout.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getGPSPosTimeout());
+            orderTasks.add(OrderTaskAssembler.getGPSPosSatelliteThreshold());
+            orderTasks.add(OrderTaskAssembler.getGPSPosDataType());
+            orderTasks.add(OrderTaskAssembler.getGPSPosSystem());
+            orderTasks.add(OrderTaskAssembler.getGPSPosAutoEnable());
+            orderTasks.add(OrderTaskAssembler.getGPSPosAuxiliaryLatLon());
+            orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisStartNotifyEnable());
+            orderTasks.add(OrderTaskAssembler.getGPSPosEphemerisEndNotifyEnable());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)

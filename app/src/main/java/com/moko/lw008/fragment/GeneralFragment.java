@@ -44,6 +44,7 @@ public class GeneralFragment extends Fragment {
         activity = (DeviceInfoActivity) getActivity();
         return view;
     }
+
     public void setHeartbeatInterval(int interval) {
         etHeartbeatInterval.setText(String.valueOf(interval));
     }

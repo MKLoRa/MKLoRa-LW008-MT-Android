@@ -59,7 +59,9 @@ public class DeviceModeActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getDeviceMode());
+        tvDeviceMode.postDelayed(() -> {
+            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getDeviceMode());
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)

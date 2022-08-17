@@ -97,17 +97,19 @@ public class MotionModeActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getMotionModeEvent());
-        orderTasks.add(OrderTaskAssembler.getMotionModeStartNumber());
-        orderTasks.add(OrderTaskAssembler.getMotionStartPosStrategy());
-        orderTasks.add(OrderTaskAssembler.getMotionTripInterval());
-        orderTasks.add(OrderTaskAssembler.getMotionTripPosStrategy());
-        orderTasks.add(OrderTaskAssembler.getMotionEndTimeout());
-        orderTasks.add(OrderTaskAssembler.getMotionEndNumber());
-        orderTasks.add(OrderTaskAssembler.getMotionEndInterval());
-        orderTasks.add(OrderTaskAssembler.getMotionEndPosStrategy());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbFixOnStart.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getMotionModeEvent());
+            orderTasks.add(OrderTaskAssembler.getMotionModeStartNumber());
+            orderTasks.add(OrderTaskAssembler.getMotionStartPosStrategy());
+            orderTasks.add(OrderTaskAssembler.getMotionTripInterval());
+            orderTasks.add(OrderTaskAssembler.getMotionTripPosStrategy());
+            orderTasks.add(OrderTaskAssembler.getMotionEndTimeout());
+            orderTasks.add(OrderTaskAssembler.getMotionEndNumber());
+            orderTasks.add(OrderTaskAssembler.getMotionEndInterval());
+            orderTasks.add(OrderTaskAssembler.getMotionEndPosStrategy());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)

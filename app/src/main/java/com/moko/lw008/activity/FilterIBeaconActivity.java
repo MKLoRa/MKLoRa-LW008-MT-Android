@@ -57,12 +57,14 @@ public class FilterIBeaconActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterIBeaconEnable());
-        orderTasks.add(OrderTaskAssembler.getFilterIBeaconUUID());
-        orderTasks.add(OrderTaskAssembler.getFilterIBeaconMajorRange());
-        orderTasks.add(OrderTaskAssembler.getFilterIBeaconMinorRange());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbIbeacon.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterIBeaconEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterIBeaconUUID());
+            orderTasks.add(OrderTaskAssembler.getFilterIBeaconMajorRange());
+            orderTasks.add(OrderTaskAssembler.getFilterIBeaconMinorRange());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
 

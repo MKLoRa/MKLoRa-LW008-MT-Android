@@ -48,10 +48,12 @@ public class SelfTestActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
-        orderTasks.add(OrderTaskAssembler.getPCBAStatus());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        tvSelftestStatus.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
+            orderTasks.add(OrderTaskAssembler.getPCBAStatus());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -99,8 +101,7 @@ public class SelfTestActivity extends BaseActivity {
                                     case KEY_SELFTEST_STATUS:
                                         if (length > 0) {
                                             int status = value[4] & 0xFF;
-                                            if (status == 0)
-                                                tvSelftestStatus.setVisibility(View.VISIBLE);
+                                            tvSelftestStatus.setVisibility(status == 0 ? View.VISIBLE : View.GONE);
                                             if ((status & 0x01) == 0x01)
                                                 tvGpsStatus.setVisibility(View.VISIBLE);
                                             if ((status & 0x02) == 0x02)

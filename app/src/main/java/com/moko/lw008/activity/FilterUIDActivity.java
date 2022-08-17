@@ -52,11 +52,13 @@ public class FilterUIDActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneUidEnable());
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneUidNamespace());
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneUidInstance());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbUid.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneUidEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneUidNamespace());
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneUidInstance());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
 

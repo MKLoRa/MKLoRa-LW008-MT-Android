@@ -44,7 +44,7 @@ public class LoadingMessageDialog extends MokoBaseDialog {
             message = getString(messageId);
         }
         if (TextUtils.isEmpty(message)) {
-            message  = getString(R.string.setting_syncing);
+            message = getString(R.string.setting_syncing);
         }
         tvLoadingMessage.setText(message);
         tvLoadingMessage.postDelayed(new Runnable() {
@@ -103,7 +103,6 @@ public class LoadingMessageDialog extends MokoBaseDialog {
         super.onDestroyView();
         ((ProgressDrawable) ivLoading.getDrawable()).stop();
     }
-
 
 
     public void setMessage(String message) {

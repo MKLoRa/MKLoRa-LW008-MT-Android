@@ -123,14 +123,16 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             LoRaLW008MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
-            List<OrderTask> orderTasks = new ArrayList<>();
-            // sync time after connect success;
-            orderTasks.add(OrderTaskAssembler.setTime());
-            // get lora params
-            orderTasks.add(OrderTaskAssembler.getLoraRegion());
-            orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
-            orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            frameContainer.postDelayed(() -> {
+                List<OrderTask> orderTasks = new ArrayList<>();
+                // sync time after connect success;
+                orderTasks.add(OrderTaskAssembler.setTime());
+                // get lora params
+                orderTasks.add(OrderTaskAssembler.getLoraRegion());
+                orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
+                orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
+                LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            }, 500);
         }
     }
 
@@ -709,6 +711,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             return;
         deviceFragment.changeShutdownPayload();
     }
+
     public void onLowPowerPayload(View view) {
         if (isWindowLocked())
             return;

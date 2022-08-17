@@ -86,7 +86,7 @@
             android:drawableTop="@drawable/lw008_selector_empty_enable"
             android:enabled="false"
             android:onClick="onEmpty"
-            android:text="Empty"
+            android:text="Delete"
             android:textColor="@color/lw008_black_333333"
             android:textSize="15sp" />
 

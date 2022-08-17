@@ -57,10 +57,12 @@ public class FilterUrlActivity extends BaseActivity {
         };
         etUrl.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100), inputFilter});
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrlEnable());
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrl());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbUrl.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrlEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrl());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
 

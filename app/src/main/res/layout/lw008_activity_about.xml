@@ -59,7 +59,7 @@
         android:layout_below="@id/app_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="APP Version:V1.0.0"
+        android:text="APP Version:V1.0.1"
         android:textColor="@color/lw008_grey_a8a8a8"
         android:textSize="17sp" />
 

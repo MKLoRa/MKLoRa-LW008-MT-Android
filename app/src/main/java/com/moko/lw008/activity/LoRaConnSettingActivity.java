@@ -143,7 +143,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
         mMessageTypeList.add("Unconfirmed");
         mMessageTypeList.add("Confirmed");
         mMaxRetransmissionTimesList = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             mMaxRetransmissionTimesList.add(String.valueOf(i));
         }
         cbAdvanceSetting.setOnCheckedChangeListener(this);
@@ -158,24 +158,26 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             LoRaLW008MokoSupport.getInstance().enableBluetooth();
         } else {
             showSyncingProgressDialog();
-            List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
-            orderTasks.add(OrderTaskAssembler.getLoraDevEUI());
-            orderTasks.add(OrderTaskAssembler.getLoraAppEUI());
-            orderTasks.add(OrderTaskAssembler.getLoraAppKey());
-            orderTasks.add(OrderTaskAssembler.getLoraDevAddr());
-            orderTasks.add(OrderTaskAssembler.getLoraAppSKey());
-            orderTasks.add(OrderTaskAssembler.getLoraNwkSKey());
-            orderTasks.add(OrderTaskAssembler.getLoraRegion());
-            orderTasks.add(OrderTaskAssembler.getLoraMessageType());
-            orderTasks.add(OrderTaskAssembler.getLoraCH());
-            orderTasks.add(OrderTaskAssembler.getLoraDutyCycleEnable());
-            orderTasks.add(OrderTaskAssembler.getLoraDR());
-            orderTasks.add(OrderTaskAssembler.getLoraMaxRetransmissionTimes());
-            orderTasks.add(OrderTaskAssembler.getLoraAdrAckLimit());
-            orderTasks.add(OrderTaskAssembler.getLoraAdrAckDelay());
-            orderTasks.add(OrderTaskAssembler.getLoraUplinkStrategy());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            etDevEui.postDelayed(() -> {
+                List<OrderTask> orderTasks = new ArrayList<>();
+                orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
+                orderTasks.add(OrderTaskAssembler.getLoraDevEUI());
+                orderTasks.add(OrderTaskAssembler.getLoraAppEUI());
+                orderTasks.add(OrderTaskAssembler.getLoraAppKey());
+                orderTasks.add(OrderTaskAssembler.getLoraDevAddr());
+                orderTasks.add(OrderTaskAssembler.getLoraAppSKey());
+                orderTasks.add(OrderTaskAssembler.getLoraNwkSKey());
+                orderTasks.add(OrderTaskAssembler.getLoraRegion());
+                orderTasks.add(OrderTaskAssembler.getLoraMessageType());
+                orderTasks.add(OrderTaskAssembler.getLoraCH());
+                orderTasks.add(OrderTaskAssembler.getLoraDutyCycleEnable());
+                orderTasks.add(OrderTaskAssembler.getLoraDR());
+                orderTasks.add(OrderTaskAssembler.getLoraMaxRetransmissionTimes());
+                orderTasks.add(OrderTaskAssembler.getLoraAdrAckLimit());
+                orderTasks.add(OrderTaskAssembler.getLoraAdrAckDelay());
+                orderTasks.add(OrderTaskAssembler.getLoraUplinkStrategy());
+                LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            }, 500);
         }
     }
 
@@ -737,7 +739,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             return;
         }
         int adrAckLimit = Integer.parseInt(adrAckLimitStr);
-        if (adrAckLimit < 1 || adrAckLimit > 100) {
+        if (adrAckLimit < 1 || adrAckLimit > 255) {
             ToastUtils.showToast(this, "Para error!");
             return;
         }
@@ -746,7 +748,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
             return;
         }
         int adrAckDelay = Integer.parseInt(adrAckDelayStr);
-        if (adrAckDelay < 1 || adrAckDelay > 100) {
+        if (adrAckDelay < 1 || adrAckDelay > 255) {
             ToastUtils.showToast(this, "Para error!");
             return;
         }

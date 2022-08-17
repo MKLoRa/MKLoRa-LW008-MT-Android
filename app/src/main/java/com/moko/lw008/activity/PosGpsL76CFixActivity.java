@@ -53,11 +53,13 @@ public class PosGpsL76CFixActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getGPSPosTimeoutL76());
-        orderTasks.add(OrderTaskAssembler.getGPSPDOPLimitL76());
-        orderTasks.add(OrderTaskAssembler.getGPSExtremeModeL76());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        etPdopLimit.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getGPSPosTimeoutL76());
+            orderTasks.add(OrderTaskAssembler.getGPSPDOPLimitL76());
+            orderTasks.add(OrderTaskAssembler.getGPSExtremeModeL76());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)

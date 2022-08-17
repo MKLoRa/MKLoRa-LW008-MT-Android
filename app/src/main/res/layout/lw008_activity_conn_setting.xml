@@ -704,6 +704,7 @@
                         android:gravity="center"
                         android:hint="1-255"
                         android:inputType="number"
+                        android:maxLength="3"
                         android:text=""
                         android:textColor="@color/lw008_black_333333"
                         android:textSize="15sp" />
@@ -734,6 +735,7 @@
                         android:gravity="center"
                         android:hint="1-255"
                         android:inputType="number"
+                        android:maxLength="3"
                         android:text=""
                         android:textColor="@color/lw008_black_333333"
                         android:textSize="15sp" />

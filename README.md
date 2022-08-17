@@ -10,16 +10,18 @@ Please read the part of this document which you need.
 
 * will explain notes in your developing progress.
 
-
 ## Design instructions
 
-We divide the communications between SDK and devices into three stages: Scanning stage, Connection stage, Communication stage. For ease of understanding, let's take a look at the related classes and the relationships between them.
+We divide the communications between SDK and devices into three stages: Scanning stage, Connection
+stage, Communication stage. For ease of understanding, let's take a look at the related classes and
+the relationships between them.
 
 ### 1.Scanning stage
 
 **`com.moko.support.LW008.MokoBleScanner`**
 
-Scanning processing class, support to open scan, close scan and get the raw data of the scanned device.
+Scanning processing class, support to open scan, close scan and get the raw data of the scanned
+device.
 
 **`com.moko.support.lw008.callback.MokoScanDeviceCallback`**
 
@@ -27,27 +29,35 @@ Scanning callback interface,this interface can be used to obtain the scan status
 
 **`com.moko.support.lw008.service.DeviceInfoParseable`**
 
-Parsed data interface,this interface can parsed the device broadcast frame, get the specific data. the implementation can refer to `BeaconInfoParseableImpl` in the project,the `DeviceInfo` will be parsed to `BeaconInfo`.
+Parsed data interface,this interface can parsed the device broadcast frame, get the specific data.
+the implementation can refer to `BeaconInfoParseableImpl` in the project,the `DeviceInfo` will be
+parsed to `BeaconInfo`.
 
 ### 2.Connection stage
 
 **`com.moko.support.lw008.LoRaLW008MokoSupport`**
 
-BLE operation core class, extends from `Mokoblelib`.It can connect the device, disconnect the device, send the device connection status, turn on Bluetooth, turn off Bluetooth, judge whether Bluetooth is on or not, receive data from the device and send data to the device, notify the page data update, turn on and off characteristic notification.
+BLE operation core class, extends from `Mokoblelib`.It can connect the device, disconnect the
+device, send the device connection status, turn on Bluetooth, turn off Bluetooth, judge whether
+Bluetooth is on or not, receive data from the device and send data to the device, notify the page
+data update, turn on and off characteristic notification.
 
 ### 3.Communication stage
 
 **`com.moko.support.lw008.OrderTaskAssembler`**
 
-We assemble read data and write data to `OrderTask`, send the task to the device through `LoRaLW008MokoSupport `, and receive the resopnse.
+We assemble read data and write data to `OrderTask`, send the task to the device
+through `LoRaLW008MokoSupport `, and receive the resopnse.
 
 **`com.moko.ble.lib.event.ConnectStatusEvent`**
 
-The connection status is notified by `EventBus`, the device connection status and disconnection status are obtained from this event.
+The connection status is notified by `EventBus`, the device connection status and disconnection
+status are obtained from this event.
 
 **`com.moko.ble.lib.event.OrderTaskResponseEvent`**
 
-The response is notified by `EventBus`, we can get result when we send task to device from this event,distinguish between function via `OrderTaskResponse`.
+The response is notified by `EventBus`, we can get result when we send task to device from this
+event,distinguish between function via `OrderTaskResponse`.
 
 ## Get Started
 
@@ -61,7 +71,8 @@ The response is notified by `EventBus`, we can get result when we send task to d
 
 **Import to Project**
 
-Copy the module mokosupport into the project root directory and add dependencies in build.gradle. As shown below:
+Copy the module mokosupport into the project root directory and add dependencies in build.gradle. As
+shown below:
 
 ```
 dependencies {
@@ -88,7 +99,8 @@ LoRaLW008MokoSupport.getInstance().init(getApplicationContext());
 
 **Scan devices**
 
-Before operating the Bluetooth scanning device, we need to apply for permission, which we have added in LoRaLW008MokoSupport `AndroidManifest.xml`
+Before operating the Bluetooth scanning device, we need to apply for permission, which we have added
+in LoRaLW008MokoSupport `AndroidManifest.xml`
 
 ```
 ...
@@ -101,7 +113,8 @@ Before operating the Bluetooth scanning device, we need to apply for permission,
 ...
 ```
 
-Start scanning task to find devices around you, then you can get their advertisement content, connect to device and change parameters.
+Start scanning task to find devices around you, then you can get their advertisement content,
+connect to device and change parameters.
 
 ```
 MokoBleScanner mokoBleScanner = new MokoBleScanner(this);
@@ -126,7 +139,8 @@ at the sometime, you can stop the scanning task in this way:
 mokoBleScanner.stopScanDevice();
 ```
 
-You can use BeaconInfoParseableImpl to parsed advertisement data to the frame data, such as deviceType,battery,T&H and etc...
+You can use BeaconInfoParseableImpl to parsed advertisement data to the frame data, such as
+deviceType,battery,T&H and etc...
 
 ```
 int battery = 0;
@@ -154,7 +168,8 @@ humiStr = MokoUtils.getDecimalFormat("#.##").format(MokoUtils.toInt(humiBytes) *
 
 **Connect to devices**
 
-Connect to the device in order to do more operations(change parameter, OTA),the only parameter required is the MAC address.
+Connect to the device in order to do more operations(change parameter, OTA),the only parameter
+required is the MAC address.
 
 ```
 LoRaLW008MokoSupport.getInstance().connDevice(beaconXInfo.mac);
@@ -228,8 +243,9 @@ public void onOrderTaskResponseEvent(OrderTaskResponseEvent event) {
 
 **Communication with the device**
 
-All the read data and write data is encapsulated into `OrderTask` in `OrderTaskAssembler`, and sent to the device in a **QUEUE** way.
-SDK gets task status from task callback `OrderTaskResponse` after sending tasks successfully.
+All the read data and write data is encapsulated into `OrderTask` in `OrderTaskAssembler`, and sent
+to the device in a **QUEUE** way. SDK gets task status from task callback `OrderTaskResponse` after
+sending tasks successfully.
 
 For example, if you want to get the lora region, please refer to the code example below.
 
@@ -285,9 +301,11 @@ orderTasks.add(OrderTaskAssembler.getManufacturer());
 LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
 
 ```
+
 How to parse the returned results, please refer to the code of the sample project and documentation.
 
-The current data of storage are sent to APP by notification. we have on the notification function of characteristic after connected device.
+The current data of storage are sent to APP by notification. we have on the notification function of
+characteristic after connected device.
 
 **OTA**
 
@@ -299,7 +317,8 @@ dependencies {
 }
 ```
 
-The OTA requires three important parameters:the path of firmware file,the adv name of device and the mac address of device.You can use it like this:
+The OTA requires three important parameters:the path of firmware file,the adv name of device and the
+mac address of device.You can use it like this:
 
 ```
 DfuServiceInitiator starter = new DfuServiceInitiator(deviceMac)
@@ -309,13 +328,17 @@ DfuServiceInitiator starter = new DfuServiceInitiator(deviceMac)
 starter.setZip(null, firmwareFilePath);
 starter.start(this, DfuService.class);
 ```
-you can get progress of OTA through `DfuProgressListener`,the examples can be referred to demo project.
 
-At the end of this part, you can refer all code above to develop. If there is something new, we will update this document.
+you can get progress of OTA through `DfuProgressListener`,the examples can be referred to demo
+project.
+
+At the end of this part, you can refer all code above to develop. If there is something new, we will
+update this document.
 
 ## Notes
 
-1.In Android-6.0 or later, Bluetooth scanning requires dynamic application for location permissions, as follows:
+1.In Android-6.0 or later, Bluetooth scanning requires dynamic application for location permissions,
+as follows:
 
 ```
 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -325,7 +348,8 @@ ActivityCompat.requestPermissions(this,
 } 
 ```
 
-2.`EventBus` is used in the SDK and can be modified in `LoRaLW008MokoSupport` if you want to use other communication methods.
+2.`EventBus` is used in the SDK and can be modified in `LoRaLW008MokoSupport` if you want to use
+other communication methods.
 
 ```
 @Override
@@ -361,10 +385,12 @@ public boolean orderNotify(BluetoothGattCharacteristic characteristic, byte[] va
     ...
 }
 ```
-3.In order to record log files, `XLog` is used in the SDK, and the permission `WRITE_EXTERNAL_STORAGE` is applied. If you do not want to use it, you can modify it in `BaseApplication`, and only keep `XLog.init(config)`.
 
+3.In order to record log files, `XLog` is used in the SDK, and the
+permission `WRITE_EXTERNAL_STORAGE` is applied. If you do not want to use it, you can modify it
+in `BaseApplication`, and only keep `XLog.init(config)`.
 
 ## Change log
 
 * 2021.03.11 mokosupport version:1.0
-	* First commit
+    * First commit

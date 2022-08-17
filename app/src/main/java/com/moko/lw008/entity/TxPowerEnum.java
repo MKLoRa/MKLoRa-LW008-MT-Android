@@ -32,6 +32,7 @@ public enum TxPowerEnum implements Serializable {
         }
         return null;
     }
+
     public static TxPowerEnum fromTxPower(int txPower) {
         for (TxPowerEnum txPowerEnum : TxPowerEnum.values()) {
             if (txPowerEnum.getTxPower() == txPower) {

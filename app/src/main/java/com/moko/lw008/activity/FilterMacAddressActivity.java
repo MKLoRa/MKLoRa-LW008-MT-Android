@@ -58,11 +58,13 @@ public class FilterMacAddressActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         filterMacAddress = new ArrayList<>();
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterMacPrecise());
-        orderTasks.add(OrderTaskAssembler.getFilterMacReverse());
-        orderTasks.add(OrderTaskAssembler.getFilterMacRules());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbPreciseMatch.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterMacPrecise());
+            orderTasks.add(OrderTaskAssembler.getFilterMacReverse());
+            orderTasks.add(OrderTaskAssembler.getFilterMacRules());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)

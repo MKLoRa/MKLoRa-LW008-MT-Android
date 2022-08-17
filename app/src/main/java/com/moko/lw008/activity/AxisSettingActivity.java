@@ -63,11 +63,13 @@ public class AxisSettingActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        ArrayList<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getAccWakeupCondition());
-        orderTasks.add(OrderTaskAssembler.getAccMotionCondition());
-        orderTasks.add(OrderTaskAssembler.getAccShockThreshold());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        etWakeupDuration.postDelayed(() -> {
+            ArrayList<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getAccWakeupCondition());
+            orderTasks.add(OrderTaskAssembler.getAccMotionCondition());
+            orderTasks.add(OrderTaskAssembler.getAccShockThreshold());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)

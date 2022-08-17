@@ -56,10 +56,12 @@ public class FilterTLMActivity extends BaseActivity {
         mValues.add("version 0");
         mValues.add("version 1");
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmVersion());
-        orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        tvTlmVersion.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmVersion());
+            orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmEnable());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
 

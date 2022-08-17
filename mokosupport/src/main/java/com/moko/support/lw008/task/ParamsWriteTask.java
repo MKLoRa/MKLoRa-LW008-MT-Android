@@ -482,6 +482,17 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
+    public void setFilterBleScanPhy(@IntRange(from = 0, to = 4) int type) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_FILTER_BLE_SCAN_PHY.getParamsKey(),
+                (byte) 0x01,
+                (byte) type
+        };
+        response.responseValue = data;
+    }
+
     public void setFilterRelationship(@IntRange(from = 0, to = 6) int relationship) {
         data = new byte[]{
                 (byte) 0xED,
@@ -1423,13 +1434,15 @@ public class ParamsWriteTask extends OrderTask {
     }
 
 
-    public void setManDownDetectionTimeout(@IntRange(from = 1, to = 120) int timeout) {
+    public void setManDownDetectionTimeout(@IntRange(from = 1, to = 8760) int timeout) {
+        byte[] timeoutBytes = MokoUtils.toByteArray(timeout, 2);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_MAN_DOWN_DETECTION_TIMEOUT.getParamsKey(),
-                (byte) 0x01,
-                (byte) timeout
+                (byte) 0x02,
+                timeoutBytes[0],
+                timeoutBytes[1]
         };
         response.responseValue = data;
     }

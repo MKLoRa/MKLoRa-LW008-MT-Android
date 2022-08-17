@@ -74,12 +74,14 @@ public class BleSettingsActivity extends BaseActivity implements SeekBar.OnSeekB
         etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16), inputFilter});
         sbTxPower.setOnSeekBarChangeListener(this);
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getAdvName());
-        orderTasks.add(OrderTaskAssembler.getAdvTxPower());
-        orderTasks.add(OrderTaskAssembler.getAdvTimeout());
-        orderTasks.add(OrderTaskAssembler.getPasswordVerifyEnable());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        etAdvName.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getAdvName());
+            orderTasks.add(OrderTaskAssembler.getAdvTxPower());
+            orderTasks.add(OrderTaskAssembler.getAdvTimeout());
+            orderTasks.add(OrderTaskAssembler.getPasswordVerifyEnable());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)

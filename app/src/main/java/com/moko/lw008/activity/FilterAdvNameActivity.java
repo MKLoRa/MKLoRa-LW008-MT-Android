@@ -71,11 +71,13 @@ public class FilterAdvNameActivity extends BaseActivity {
             }
         };
         showSyncingProgressDialog();
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.getFilterNamePrecise());
-        orderTasks.add(OrderTaskAssembler.getFilterNameReverse());
-        orderTasks.add(OrderTaskAssembler.getFilterNameRules());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        cbPreciseMatch.postDelayed(() -> {
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.getFilterNamePrecise());
+            orderTasks.add(OrderTaskAssembler.getFilterNameReverse());
+            orderTasks.add(OrderTaskAssembler.getFilterNameRules());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        }, 500);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)

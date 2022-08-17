@@ -981,6 +981,12 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask setFilterBleScanPhy(@IntRange(from = 0, to = 3) int type) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterBleScanPhy(type);
+        return task;
+    }
+
     public static OrderTask setFilterRelationship(@IntRange(from = 0, to = 6) int relationship) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setFilterRelationship(relationship);
@@ -1424,7 +1430,7 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setManDownDetectionTimeout(@IntRange(from = 1, to = 120) int timeout) {
+    public static OrderTask setManDownDetectionTimeout(@IntRange(from = 1, to = 8760) int timeout) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setManDownDetectionTimeout(timeout);
         return task;
