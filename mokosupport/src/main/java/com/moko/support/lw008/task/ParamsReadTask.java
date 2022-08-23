@@ -76,14 +76,14 @@ public class ParamsReadTask extends OrderTask {
             case KEY_FILTER_IBEACON_MAJOR_RANGE:
             case KEY_FILTER_IBEACON_MINOR_RANGE:
             case KEY_FILTER_IBEACON_UUID:
-            case KEY_FILTER_MKIBEACON_ENABLE:
-            case KEY_FILTER_MKIBEACON_MAJOR_RANGE:
-            case KEY_FILTER_MKIBEACON_MINOR_RANGE:
-            case KEY_FILTER_MKIBEACON_UUID:
-            case KEY_FILTER_MKIBEACON_ACC_ENABLE:
-            case KEY_FILTER_MKIBEACON_ACC_MAJOR_RANGE:
-            case KEY_FILTER_MKIBEACON_ACC_MINOR_RANGE:
-            case KEY_FILTER_MKIBEACON_ACC_UUID:
+            case KEY_FILTER_BXP_IBEACON_ENABLE:
+            case KEY_FILTER_BXP_IBEACON_MAJOR_RANGE:
+            case KEY_FILTER_BXP_IBEACON_MINOR_RANGE:
+            case KEY_FILTER_BXP_IBEACON_UUID:
+            case KEY_FILTER_BXP_TAG_ENABLE:
+            case KEY_FILTER_BXP_TAG_PRECISE:
+            case KEY_FILTER_BXP_TAG_REVERSE:
+            case KEY_FILTER_BXP_TAG_RULES:
             case KEY_FILTER_EDDYSTONE_UID_ENABLE:
             case KEY_FILTER_EDDYSTONE_UID_NAMESPACE:
             case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
@@ -93,6 +93,7 @@ public class ParamsReadTask extends OrderTask {
             case KEY_FILTER_EDDYSTONE_TLM_VERSION:
             case KEY_FILTER_BXP_ACC:
             case KEY_FILTER_BXP_TH:
+            case KEY_FILTER_BXP_DEVICE:
             case KEY_FILTER_OTHER_ENABLE:
             case KEY_FILTER_OTHER_RELATIONSHIP:
             case KEY_FILTER_OTHER_RULES:
@@ -107,6 +108,9 @@ public class ParamsReadTask extends OrderTask {
             case KEY_GPS_POS_AUXILIARY_LAT_LON:
             case KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE:
             case KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE:
+            case KEY_FILTER_BXP_BUTTON_ENABLE:
+            case KEY_FILTER_BXP_BUTTON_RULES:
+            case KEY_BLE_POS_MECHANISM:
 
             case KEY_LORA_NETWORK_STATUS:
             case KEY_LORA_REGION:

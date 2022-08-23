@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -507,17 +506,16 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     private void back() {
-        LoRaLW008MokoSupport.getInstance().disConnectBle();
-//        mIsClose = false;
+        frameContainer.postDelayed(() -> {
+            LoRaLW008MokoSupport.getInstance().disConnectBle();
+        }, 500);
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            back();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        if (isWindowLocked())
+            return;
+        back();
     }
 
     @Override

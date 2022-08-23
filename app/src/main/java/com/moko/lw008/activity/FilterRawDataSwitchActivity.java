@@ -44,18 +44,23 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
     TextView tvFilterByUrl;
     @BindView(R2.id.tv_filter_by_tlm)
     TextView tvFilterByTlm;
-    @BindView(R2.id.tv_filter_by_mkibeacon)
-    TextView tvFilterByMkibeacon;
-    @BindView(R2.id.tv_filter_by_mkibeacon_acc)
-    TextView tvFilterByMkibeaconAcc;
+    @BindView(R2.id.tv_filter_by_bxp_ibeacon)
+    TextView tvFilterByBXPibeacon;
+    @BindView(R2.id.iv_filter_by_bxp_device)
+    ImageView ivFilterByBxpDevice;
     @BindView(R2.id.iv_filter_by_bxp_acc)
     ImageView ivFilterByBxpAcc;
     @BindView(R2.id.iv_filter_by_bxp_th)
     ImageView ivFilterByBxpTh;
+    @BindView(R2.id.tv_filter_by_bxp_button)
+    TextView tvFilterByBXPButton;
+    @BindView(R2.id.tv_filter_by_bxp_tag)
+    TextView tvFilterByBXPTag;
     @BindView(R2.id.tv_filter_by_other)
     TextView tvFilterByOther;
     private boolean savedParamsError;
 
+    private boolean isBXPDeviceOpen;
     private boolean isBXPAccOpen;
     private boolean isBXPTHOpen;
 
@@ -118,6 +123,7 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
                                 switch (configKeyEnum) {
                                     case KEY_FILTER_BXP_ACC:
                                     case KEY_FILTER_BXP_TH:
+                                    case KEY_FILTER_BXP_DEVICE:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
@@ -133,18 +139,22 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
                                 // read
                                 switch (configKeyEnum) {
                                     case KEY_FILTER_RAW_DATA:
-                                        if (length == 9) {
-                                            tvFilterByOther.setText(value[4] == 1 ? "ON" : "OFF");
-                                            tvFilterByIbeacon.setText(value[5] == 1 ? "ON" : "OFF");
-                                            tvFilterByUid.setText(value[6] == 1 ? "ON" : "OFF");
-                                            tvFilterByUrl.setText(value[7] == 1 ? "ON" : "OFF");
-                                            tvFilterByTlm.setText(value[8] == 1 ? "ON" : "OFF");
-                                            ivFilterByBxpAcc.setImageResource(value[9] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
-                                            ivFilterByBxpTh.setImageResource(value[10] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
-                                            tvFilterByMkibeacon.setText(value[11] == 1 ? "ON" : "OFF");
-                                            tvFilterByMkibeaconAcc.setText(value[12] == 1 ? "ON" : "OFF");
-                                            isBXPAccOpen = value[9] == 1;
-                                            isBXPTHOpen = value[10] == 1;
+                                        if (length == 11) {
+                                            dismissSyncProgressDialog();
+                                            tvFilterByIbeacon.setText(value[4] == 1 ? "ON" : "OFF");
+                                            tvFilterByUid.setText(value[5] == 1 ? "ON" : "OFF");
+                                            tvFilterByUrl.setText(value[6] == 1 ? "ON" : "OFF");
+                                            tvFilterByTlm.setText(value[7] == 1 ? "ON" : "OFF");
+                                            tvFilterByBXPibeacon.setText(value[8] == 1 ? "ON" : "OFF");
+                                            ivFilterByBxpDevice.setImageResource(value[9] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            ivFilterByBxpAcc.setImageResource(value[10] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            ivFilterByBxpTh.setImageResource(value[11] == 1 ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            tvFilterByBXPButton.setText(value[12] == 1 ? "ON" : "OFF");
+                                            tvFilterByBXPTag.setText(value[13] == 1 ? "ON" : "OFF");
+                                            tvFilterByOther.setText(value[14] == 1 ? "ON" : "OFF");
+                                            isBXPDeviceOpen = value[9] == 1;
+                                            isBXPAccOpen = value[10] == 1;
+                                            isBXPTHOpen = value[11] == 1;
                                         }
                                         break;
 
@@ -193,28 +203,6 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         finish();
     }
 
-    public void onFilterByBXPAcc(View view) {
-        if (isWindowLocked())
-            return;
-        isBXPAccOpen = !isBXPAccOpen;
-        savedParamsError = false;
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setFilterBXPAccEnable(isBXPAccOpen ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.getFilterRawData());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-    }
-
-    public void onFilterByBXPTH(View view) {
-        if (isWindowLocked())
-            return;
-        isBXPTHOpen = !isBXPTHOpen;
-        savedParamsError = false;
-        List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setFilterBXPTHEnable(isBXPTHOpen ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.getFilterRawData());
-        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-    }
-
     public void onFilterByIBeacon(View view) {
         if (isWindowLocked())
             return;
@@ -243,17 +231,62 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
-    public void onFilterByMKiBeacon(View view) {
+
+    public void onFilterByBXPiBeacon(View view) {
         if (isWindowLocked())
             return;
-        Intent i = new Intent(this, FilterMKIBeaconActivity.class);
+        Intent i = new Intent(this, FilterBXPIBeaconActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
-    public void onFilterByMKiBeaconAcc(View view) {
+    public void onFilterByBXPDevice(View view) {
         if (isWindowLocked())
             return;
-        Intent i = new Intent(this, FilterMKIBeaconAccActivity.class);
+        showSyncingProgressDialog();
+        isBXPDeviceOpen = !isBXPDeviceOpen;
+        savedParamsError = false;
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setFilterBXPDeviceEnable(isBXPDeviceOpen ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.getFilterRawData());
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    public void onFilterByBXPAcc(View view) {
+        if (isWindowLocked())
+            return;
+        showSyncingProgressDialog();
+        isBXPAccOpen = !isBXPAccOpen;
+        savedParamsError = false;
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setFilterBXPAccEnable(isBXPAccOpen ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.getFilterRawData());
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    public void onFilterByBXPTH(View view) {
+        if (isWindowLocked())
+            return;
+        showSyncingProgressDialog();
+        isBXPTHOpen = !isBXPTHOpen;
+        savedParamsError = false;
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTHEnable(isBXPTHOpen ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.getFilterRawData());
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+
+    public void onFilterByBXPButton(View view) {
+        if (isWindowLocked())
+            return;
+        Intent i = new Intent(this, FilterBXPButtonActivity.class);
+        startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
+    }
+
+    public void onFilterByBXPTag(View view) {
+        if (isWindowLocked())
+            return;
+        Intent i = new Intent(this, FilterBXPTagIdActivity.class);
         startActivityForResult(i, AppConstants.REQUEST_CODE_FILTER_RAW_DATA);
     }
 
@@ -276,4 +309,5 @@ public class FilterRawDataSwitchActivity extends BaseActivity {
             }, 1000);
         }
     }
+
 }

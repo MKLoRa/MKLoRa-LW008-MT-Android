@@ -55,12 +55,16 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
     TextView tvScanningType;
     @BindView(R2.id.tv_filter_relationship)
     TextView tvFilterRelationship;
+    @BindView(R2.id.tv_ble_fix_mechanism)
+    TextView tvBleFixMechanism;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mRelationshipValues;
     private int mRelationshipSelected;
     private ArrayList<String> mScanningTypeValues;
     private int mScanningTypeSelected;
+    private ArrayList<String> mBleFixMechanismValues;
+    private int mBleFixMechanismSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,9 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         mScanningTypeValues.add("1M PHY(BLE 5)");
         mScanningTypeValues.add("1M PHY(BLE 4.x + BLE 5)");
         mScanningTypeValues.add("Coded PHY(BLE 5)");
+        mBleFixMechanismValues = new ArrayList<>();
+        mBleFixMechanismValues.add("Time Priority");
+        mBleFixMechanismValues.add("RSSI Priority");
         sbRssiFilter.setOnSeekBarChangeListener(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -93,6 +100,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getBlePosTimeout());
             orderTasks.add(OrderTaskAssembler.getBlePosNumber());
+            orderTasks.add(OrderTaskAssembler.getBlePosMechanism());
             orderTasks.add(OrderTaskAssembler.getFilterRSSI());
             orderTasks.add(OrderTaskAssembler.getFilterBleScanPhy());
             orderTasks.add(OrderTaskAssembler.getFilterRelationship());
@@ -146,6 +154,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
                                     case KEY_BLE_POS_TIMEOUT:
                                     case KEY_BLE_POS_MAC_NUMBER:
                                     case KEY_FILTER_BLE_SCAN_PHY:
+                                    case KEY_BLE_POS_MECHANISM:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
@@ -175,6 +184,13 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
                                             etMacNumber.setText(String.valueOf(number));
+                                        }
+                                        break;
+                                    case KEY_BLE_POS_MECHANISM:
+                                        if (length > 0) {
+                                            int mechanism = value[4] & 0xFF;
+                                            mBleFixMechanismSelected = mechanism;
+                                            tvBleFixMechanism.setText(mBleFixMechanismValues.get(mechanism));
                                         }
                                         break;
                                     case KEY_FILTER_RSSI:
@@ -248,6 +264,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setBlePosTimeout(posTimeout));
         orderTasks.add(OrderTaskAssembler.setBlePosNumber(number));
+        orderTasks.add(OrderTaskAssembler.setBlePosMechanism(mBleFixMechanismSelected));
         orderTasks.add(OrderTaskAssembler.setFilterRSSI(sbRssiFilter.getProgress() - 127));
         orderTasks.add(OrderTaskAssembler.setFilterBleScanPhy(mScanningTypeSelected));
         orderTasks.add(OrderTaskAssembler.setFilterRelationship(mRelationshipSelected));
@@ -315,6 +332,17 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         finish();
     }
 
+    public void onBleFixMechanism(View view) {
+        if (isWindowLocked())
+            return;
+        BottomDialog dialog = new BottomDialog();
+        dialog.setDatas(mBleFixMechanismValues, mBleFixMechanismSelected);
+        dialog.setListener(value -> {
+            mBleFixMechanismSelected = value;
+            tvBleFixMechanism.setText(mBleFixMechanismValues.get(value));
+        });
+        dialog.show(getSupportFragmentManager());
+    }
 
     public void onScanningType(View view) {
         if (isWindowLocked())

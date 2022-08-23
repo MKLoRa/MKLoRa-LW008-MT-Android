@@ -370,51 +370,69 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconEnable() {
+    public static OrderTask getFilterBXPIBeaconEnable() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_ENABLE);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_ENABLE);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconMajorRange() {
+    public static OrderTask getFilterBXPIBeaconMajorRange() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_MAJOR_RANGE);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_MAJOR_RANGE);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconMinorRange() {
+    public static OrderTask getFilterBXPIBeaconMinorRange() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_MINOR_RANGE);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_MINOR_RANGE);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconUUID() {
+    public static OrderTask getFilterBXPIBeaconUUID() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_UUID);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_UUID);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconAccEnable() {
+    public static OrderTask getFilterBXPTagEnable() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_ENABLE);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_TAG_ENABLE);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconAccMajorRange() {
+    public static OrderTask getFilterBXPTagPrecise() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_MAJOR_RANGE);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_TAG_PRECISE);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconAccMinorRange() {
+    public static OrderTask getFilterBXPTagReverse() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_MINOR_RANGE);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_TAG_REVERSE);
         return task;
     }
 
-    public static OrderTask getFilterMKIBeaconAccUUID() {
+    public static OrderTask getFilterBXPTagRules() {
         ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_UUID);
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_TAG_RULES);
+        return task;
+    }
+
+    public static OrderTask getFilterBXPButtonEnable() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_BUTTON_ENABLE);
+        return task;
+    }
+
+    public static OrderTask getFilterBXPButtonRules() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_BUTTON_RULES);
+        return task;
+    }
+
+    public static OrderTask getBlePosMechanism() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_BLE_POS_MECHANISM);
         return task;
     }
 
@@ -469,6 +487,12 @@ public class OrderTaskAssembler {
     public static OrderTask getFilterBXPTH() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_FILTER_BXP_TH);
+        return task;
+    }
+
+    public static OrderTask getFilterBXPDevice() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_FILTER_BXP_DEVICE);
         return task;
     }
 
@@ -1065,7 +1089,7 @@ public class OrderTaskAssembler {
 
     public static OrderTask setFilterMKIBeaconEnable(@IntRange(from = 0, to = 1) int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconEnable(enable);
+        task.setFilterBXPIBeaconEnable(enable);
         return task;
     }
 
@@ -1073,7 +1097,7 @@ public class OrderTaskAssembler {
                                                          @IntRange(from = 0, to = 65535) int min,
                                                          @IntRange(from = 0, to = 65535) int max) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconMajorRange(enable, min, max);
+        task.setFilterBXPIBeaconMajorRange(enable, min, max);
         return task;
     }
 
@@ -1081,41 +1105,52 @@ public class OrderTaskAssembler {
                                                          @IntRange(from = 0, to = 65535) int min,
                                                          @IntRange(from = 0, to = 65535) int max) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconMinorRange(enable, min, max);
+        task.setFilterBXPIBeaconMinorRange(enable, min, max);
         return task;
     }
 
     public static OrderTask setFilterMKIBeaconUUID(String uuid) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconUUID(uuid);
+        task.setFilterBXPIBeaconUUID(uuid);
         return task;
     }
 
-    public static OrderTask setFilterMKIBeaconAccEnable(@IntRange(from = 0, to = 1) int enable) {
+    public static OrderTask setFilterBXPTagEnable(@IntRange(from = 0, to = 1) int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconAccEnable(enable);
+        task.setFilterBXPTagEnable(enable);
         return task;
     }
 
-    public static OrderTask setFilterMKIBeaconAccMajorRange(@IntRange(from = 0, to = 1) int enable,
-                                                            @IntRange(from = 0, to = 65535) int min,
-                                                            @IntRange(from = 0, to = 65535) int max) {
+    public static OrderTask setFilterBXPTagPrecise(@IntRange(from = 0, to = 1) int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconAccMajorRange(enable, min, max);
+        task.setFilterBXPTagPrecise(enable);
         return task;
     }
 
-    public static OrderTask setFilterMKIBeaconAccMinorRange(@IntRange(from = 0, to = 1) int enable,
-                                                            @IntRange(from = 0, to = 65535) int min,
-                                                            @IntRange(from = 0, to = 65535) int max) {
+    public static OrderTask setFilterBXPTagReverse(@IntRange(from = 0, to = 1) int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconAccMinorRange(enable, min, max);
+        task.setFilterBXPTagReverse(enable);
         return task;
     }
 
-    public static OrderTask setFilterMKIBeaconAccUUID(String uuid) {
+    public static OrderTask setFilterBXPTagRules(ArrayList<String> filterBXPTagRules) {
         ParamsWriteTask task = new ParamsWriteTask();
-        task.setFilterMKIBeaconAccUUID(uuid);
+        task.setFilterBXPTagRules(filterBXPTagRules);
+        return task;
+    }
+
+    public static OrderTask setFilterBXPButtonEnable(@IntRange(from = 0, to = 1) int enable) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterBXPButtonEnable(enable);
+        return task;
+    }
+
+    public static OrderTask setFilterBXPButtonRules(@IntRange(from = 0, to = 1) int singleEnable,
+                                                    @IntRange(from = 0, to = 1) int doubleEnable,
+                                                    @IntRange(from = 0, to = 1) int longEnable,
+                                                    @IntRange(from = 0, to = 1) int abnormalEnable) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterBXPButtonRules(singleEnable, doubleEnable, longEnable, abnormalEnable);
         return task;
     }
 
@@ -1158,6 +1193,12 @@ public class OrderTaskAssembler {
     public static OrderTask setFilterEddystoneTlmVersion(@IntRange(from = 0, to = 2) int version) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setFilterEddystoneTlmVersion(version);
+        return task;
+    }
+
+    public static OrderTask setFilterBXPDeviceEnable(@IntRange(from = 0, to = 1) int enable) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setFilterBXPDeviceEnable(enable);
         return task;
     }
 
@@ -1261,6 +1302,12 @@ public class OrderTaskAssembler {
     public static OrderTask setGPSPosEphemerisEndNotifyEnable(@IntRange(from = 0, to = 1) int enable) {
         ParamsWriteTask task = new ParamsWriteTask();
         task.setGPSPosEphemerisEndNotifyEnable(enable);
+        return task;
+    }
+
+    public static OrderTask setBlePosMechanism(@IntRange(from = 0, to = 1) int mechanism) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setBlePosMechanism(mechanism);
         return task;
     }
 

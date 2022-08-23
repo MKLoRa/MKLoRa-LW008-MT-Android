@@ -33,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FilterMKIBeaconActivity extends BaseActivity {
+public class FilterBXPIBeaconActivity extends BaseActivity {
 
     @BindView(R2.id.cb_ibeacon)
     CheckBox cbIbeacon;
@@ -52,17 +52,17 @@ public class FilterMKIBeaconActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_mkibeacon);
+        setContentView(R.layout.lw008_activity_filter_bxp_ibeacon);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
         showSyncingProgressDialog();
         cbIbeacon.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconEnable());
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconUUID());
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconMajorRange());
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconMinorRange());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPIBeaconEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPIBeaconUUID());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPIBeaconMajorRange());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPIBeaconMinorRange());
             LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
@@ -111,19 +111,19 @@ public class FilterMKIBeaconActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_FILTER_MKIBEACON_UUID:
-                                    case KEY_FILTER_MKIBEACON_MAJOR_RANGE:
-                                    case KEY_FILTER_MKIBEACON_MINOR_RANGE:
+                                    case KEY_FILTER_BXP_IBEACON_UUID:
+                                    case KEY_FILTER_BXP_IBEACON_MAJOR_RANGE:
+                                    case KEY_FILTER_BXP_IBEACON_MINOR_RANGE:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         break;
-                                    case KEY_FILTER_MKIBEACON_ENABLE:
+                                    case KEY_FILTER_BXP_IBEACON_ENABLE:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(FilterMKIBeaconActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            ToastUtils.showToast(FilterBXPIBeaconActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
                                             ToastUtils.showToast(this, "Save Successfully！");
                                         }
@@ -133,13 +133,13 @@ public class FilterMKIBeaconActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_FILTER_MKIBEACON_UUID:
+                                    case KEY_FILTER_BXP_IBEACON_UUID:
                                         if (length > 0) {
                                             String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
                                             etIbeaconUuid.setText(String.valueOf(uuid));
                                         }
                                         break;
-                                    case KEY_FILTER_MKIBEACON_MAJOR_RANGE:
+                                    case KEY_FILTER_BXP_IBEACON_MAJOR_RANGE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
                                             if (enable == 1) {
@@ -150,7 +150,7 @@ public class FilterMKIBeaconActivity extends BaseActivity {
                                             }
                                         }
                                         break;
-                                    case KEY_FILTER_MKIBEACON_MINOR_RANGE:
+                                    case KEY_FILTER_BXP_IBEACON_MINOR_RANGE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
                                             if (enable == 1) {
@@ -161,7 +161,7 @@ public class FilterMKIBeaconActivity extends BaseActivity {
                                             }
                                         }
                                         break;
-                                    case KEY_FILTER_MKIBEACON_ENABLE:
+                                    case KEY_FILTER_BXP_IBEACON_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
                                             cbIbeacon.setChecked(enable == 1);

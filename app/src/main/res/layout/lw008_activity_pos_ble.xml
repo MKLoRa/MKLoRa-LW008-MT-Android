@@ -159,6 +159,42 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/et_mac_number" />
 
+                <View
+                    style="@style/lw008_divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_mac_number" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Bluetooth Fix Mechanism"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_ble_fix_mechanism"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/tv_ble_fix_mechanism"
+                    app:layout_constraintTop_toTopOf="@id/tv_ble_fix_mechanism" />
+
+                <TextView
+                    android:id="@+id/tv_ble_fix_mechanism"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:minWidth="150dp"
+                    android:onClick="onBleFixMechanism"
+                    android:padding="10dp"
+                    android:text="Time Priority"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_mac_number" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout

@@ -55,9 +55,5 @@
     <string name="local_data_sync">Local Data Sync</string>
     <string name="indicator_settings">Indicator Settings</string>
     <string name="low_power_prompt_tips">*When the battery is less than or equal to %s, the green LED will flash once every 10 seconds.</string>
-    <string name="mkibeacon_acc"><![CDATA[MKiBeacon&ACC]]></string>
-    <string name="mkibeacon_acc_uuid"><![CDATA[MKiBeacon&ACC UUID]]></string>
-    <string name="mkibeacon_acc_major"><![CDATA[MKiBeacon&ACC Major]]></string>
-    <string name="mkibeacon_acc_minor"><![CDATA[MKiBeacon&ACC Minor]]></string>
-    <string name="beaconx_pro_t_h"><![CDATA[BeaconX Pro - T&H]]></string>
+    <string name="bxp_t_h"><![CDATA[BXP - T&H]]></string>
 </resources>

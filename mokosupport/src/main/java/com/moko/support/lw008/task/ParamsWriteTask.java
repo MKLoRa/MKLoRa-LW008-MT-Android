@@ -675,26 +675,26 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setFilterBXPIBeaconEnable(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_ENABLE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_ENABLE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
         };
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconMajorRange(@IntRange(from = 0, to = 1) int enable,
-                                             @IntRange(from = 0, to = 65535) int min,
-                                             @IntRange(from = 0, to = 65535) int max) {
+    public void setFilterBXPIBeaconMajorRange(@IntRange(from = 0, to = 1) int enable,
+                                              @IntRange(from = 0, to = 65535) int min,
+                                              @IntRange(from = 0, to = 65535) int max) {
         byte[] minBytes = MokoUtils.toByteArray(min, 2);
         byte[] maxBytes = MokoUtils.toByteArray(max, 2);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_MAJOR_RANGE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_MAJOR_RANGE.getParamsKey(),
                 (byte) 0x05,
                 (byte) enable,
                 minBytes[0],
@@ -705,15 +705,15 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconMinorRange(@IntRange(from = 0, to = 1) int enable,
-                                             @IntRange(from = 0, to = 65535) int min,
-                                             @IntRange(from = 0, to = 65535) int max) {
+    public void setFilterBXPIBeaconMinorRange(@IntRange(from = 0, to = 1) int enable,
+                                              @IntRange(from = 0, to = 65535) int min,
+                                              @IntRange(from = 0, to = 65535) int max) {
         byte[] minBytes = MokoUtils.toByteArray(min, 2);
         byte[] maxBytes = MokoUtils.toByteArray(max, 2);
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_MINOR_RANGE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_MINOR_RANGE.getParamsKey(),
                 (byte) 0x05,
                 (byte) enable,
                 minBytes[0],
@@ -724,12 +724,12 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconUUID(String uuid) {
+    public void setFilterBXPIBeaconUUID(String uuid) {
         if (TextUtils.isEmpty(uuid)) {
             data = new byte[4];
             data[0] = (byte) 0xED;
             data[1] = (byte) 0x01;
-            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_UUID.getParamsKey();
+            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_UUID.getParamsKey();
             data[3] = (byte) 0x00;
         } else {
             byte[] uuidBytes = MokoUtils.hex2bytes(uuid);
@@ -737,7 +737,7 @@ public class ParamsWriteTask extends OrderTask {
             data = new byte[length + 4];
             data[0] = (byte) 0xED;
             data[1] = (byte) 0x01;
-            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_UUID.getParamsKey();
+            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_BXP_IBEACON_UUID.getParamsKey();
             data[3] = (byte) length;
             for (int i = 0; i < uuidBytes.length; i++) {
                 data[i + 4] = uuidBytes[i];
@@ -746,74 +746,98 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconAccEnable(@IntRange(from = 0, to = 1) int enable) {
+    public void setFilterBXPTagEnable(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_ENABLE.getParamsKey(),
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_TAG_ENABLE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
         };
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconAccMajorRange(@IntRange(from = 0, to = 1) int enable,
-                                                @IntRange(from = 0, to = 65535) int min,
-                                                @IntRange(from = 0, to = 65535) int max) {
-        byte[] minBytes = MokoUtils.toByteArray(min, 2);
-        byte[] maxBytes = MokoUtils.toByteArray(max, 2);
+    public void setFilterBXPTagPrecise(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_MAJOR_RANGE.getParamsKey(),
-                (byte) 0x05,
-                (byte) enable,
-                minBytes[0],
-                minBytes[1],
-                maxBytes[0],
-                maxBytes[1]
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_TAG_PRECISE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
         };
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconAccMinorRange(@IntRange(from = 0, to = 1) int enable,
-                                                @IntRange(from = 0, to = 65535) int min,
-                                                @IntRange(from = 0, to = 65535) int max) {
-        byte[] minBytes = MokoUtils.toByteArray(min, 2);
-        byte[] maxBytes = MokoUtils.toByteArray(max, 2);
+    public void setFilterBXPTagReverse(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_MINOR_RANGE.getParamsKey(),
-                (byte) 0x05,
-                (byte) enable,
-                minBytes[0],
-                minBytes[1],
-                maxBytes[0],
-                maxBytes[1]
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_TAG_REVERSE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
         };
         response.responseValue = data;
     }
 
-    public void setFilterMKIBeaconAccUUID(String uuid) {
-        if (TextUtils.isEmpty(uuid)) {
-            data = new byte[4];
-            data[0] = (byte) 0xED;
-            data[1] = (byte) 0x01;
-            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_UUID.getParamsKey();
-            data[3] = (byte) 0x00;
+    public void setFilterBXPTagRules(ArrayList<String> filterBXPTagRules) {
+        if (filterBXPTagRules == null || filterBXPTagRules.size() == 0) {
+            data = new byte[]{
+                    (byte) 0xED,
+                    (byte) 0x01,
+                    (byte) ParamsKeyEnum.KEY_FILTER_BXP_TAG_RULES.getParamsKey(),
+                    (byte) 0x00
+            };
         } else {
-            byte[] uuidBytes = MokoUtils.hex2bytes(uuid);
-            int length = uuidBytes.length;
-            data = new byte[length + 4];
+            int length = 0;
+            for (String mac : filterBXPTagRules) {
+                length += 1;
+                length += mac.length() / 2;
+            }
+            data = new byte[4 + length];
             data[0] = (byte) 0xED;
             data[1] = (byte) 0x01;
-            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_MKIBEACON_ACC_UUID.getParamsKey();
+            data[2] = (byte) ParamsKeyEnum.KEY_FILTER_BXP_TAG_RULES.getParamsKey();
             data[3] = (byte) length;
-            for (int i = 0; i < uuidBytes.length; i++) {
-                data[i + 4] = uuidBytes[i];
+            int index = 0;
+            for (int i = 0, size = filterBXPTagRules.size(); i < size; i++) {
+                String mac = filterBXPTagRules.get(i);
+                byte[] macBytes = MokoUtils.hex2bytes(mac);
+                int l = macBytes.length;
+                data[4 + index] = (byte) l;
+                index++;
+                for (int j = 0; j < l; j++, index++) {
+                    data[4 + index] = macBytes[j];
+                }
             }
         }
+        response.responseValue = data;
+    }
+
+    public void setFilterBXPButtonEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_BUTTON_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setFilterBXPButtonRules(@IntRange(from = 0, to = 1) int singleEnable,
+                                        @IntRange(from = 0, to = 1) int doubleEnable,
+                                        @IntRange(from = 0, to = 1) int longEnable,
+                                        @IntRange(from = 0, to = 1) int abnormalEnable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_BUTTON_RULES.getParamsKey(),
+                (byte) 0x04,
+                (byte) singleEnable,
+                (byte) doubleEnable,
+                (byte) longEnable,
+                (byte) abnormalEnable,
+        };
         response.responseValue = data;
     }
 
@@ -943,6 +967,17 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_FILTER_BXP_TH.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setFilterBXPDeviceEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_FILTER_BXP_DEVICE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
         };
@@ -1134,6 +1169,17 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) ParamsKeyEnum.KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
+        };
+        response.responseValue = data;
+    }
+
+    public void setBlePosMechanism(@IntRange(from = 0, to = 1) int mechanism) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_BLE_POS_MECHANISM.getParamsKey(),
+                (byte) 0x01,
+                (byte) mechanism
         };
         response.responseValue = data;
     }

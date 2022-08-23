@@ -189,7 +189,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:clickable="true"
-                android:onClick="onFilterByMKiBeacon">
+                android:onClick="onFilterByBXPiBeacon">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -197,13 +197,13 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:text="MKiBeacon"
+                    android:text="BXP - iBeacon"
                     android:textColor="@color/lw008_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_filter_by_mkibeacon"
+                    android:id="@+id/tv_filter_by_bxp_ibeacon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -220,12 +220,11 @@
             </RelativeLayout>
 
             <View style="@style/lw008_divider_line" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:clickable="true"
-                android:onClick="onFilterByMKiBeaconAcc">
+                android:onClick="onFilterByBXPDevice">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -233,26 +232,20 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:text="@string/mkibeacon_acc"
+                    android:text="BXP - Device Info"
                     android:textColor="@color/lw008_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_filter_by_mkibeacon_acc"
+                <ImageView
+                    android:id="@+id/iv_filter_by_bxp_device"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:drawableRight="@drawable/lw008_ic_arrow_right"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:text="ON"
-                    android:textColor="@color/lw008_black_333333"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:src="@drawable/lw008_ic_unchecked" />
             </RelativeLayout>
 
             <View style="@style/lw008_divider_line" />
@@ -269,7 +262,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:text="BeaconX Pro – ACC"
+                    android:text="BXP – ACC"
                     android:textColor="@color/lw008_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -299,7 +292,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:text="@string/beaconx_pro_t_h"
+                    android:text="@string/bxp_t_h"
                     android:textColor="@color/lw008_black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -313,6 +306,76 @@
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
                     android:src="@drawable/lw008_ic_unchecked" />
+            </RelativeLayout>
+
+            <View style="@style/lw008_divider_line" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:onClick="onFilterByBXPButton">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:text="BXP - Button"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_filter_by_bxp_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:drawableRight="@drawable/lw008_ic_arrow_right"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="ON"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <View style="@style/lw008_divider_line" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:onClick="onFilterByBXPTag">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:text="BXP - Tag"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_filter_by_bxp_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:drawableRight="@drawable/lw008_ic_arrow_right"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="ON"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View style="@style/lw008_divider_line" />

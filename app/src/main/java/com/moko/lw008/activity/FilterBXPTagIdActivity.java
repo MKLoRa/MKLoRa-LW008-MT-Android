@@ -3,9 +3,12 @@ package com.moko.lw008.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -33,40 +36,38 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FilterMKIBeaconAccActivity extends BaseActivity {
+public class FilterBXPTagIdActivity extends BaseActivity {
 
-    @BindView(R2.id.cb_ibeacon)
-    CheckBox cbIbeacon;
-    @BindView(R2.id.et_ibeacon_uuid)
-    EditText etIbeaconUuid;
-    @BindView(R2.id.et_ibeacon_major_min)
-    EditText etIbeaconMajorMin;
-    @BindView(R2.id.et_ibeacon_major_max)
-    EditText etIbeaconMajorMax;
-    @BindView(R2.id.et_ibeacon_minor_min)
-    EditText etIbeaconMinorMin;
-    @BindView(R2.id.et_ibeacon_minor_max)
-    EditText etIbeaconMinorMax;
+    @BindView(R2.id.cb_enable)
+    CheckBox cbEnable;
+    @BindView(R2.id.cb_precise_match)
+    CheckBox cbPreciseMatch;
+    @BindView(R2.id.cb_reverse_filter)
+    CheckBox cbReverseFilter;
+    @BindView(R2.id.ll_tag_id)
+    LinearLayout llTadId;
+
     private boolean savedParamsError;
+
+    private ArrayList<String> filterTagId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_mkibeacon_acc);
+        setContentView(R.layout.lw008_activity_filter_bxp_tag_id);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-
+        filterTagId = new ArrayList<>();
         showSyncingProgressDialog();
-        cbIbeacon.postDelayed(() -> {
+        cbPreciseMatch.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconAccEnable());
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconAccUUID());
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconAccMajorRange());
-            orderTasks.add(OrderTaskAssembler.getFilterMKIBeaconAccMinorRange());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPTagEnable());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPTagPrecise());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPTagReverse());
+            orderTasks.add(OrderTaskAssembler.getFilterBXPTagRules());
             LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
-
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 400)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
@@ -111,19 +112,19 @@ public class FilterMKIBeaconAccActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
-                                    case KEY_FILTER_MKIBEACON_ACC_UUID:
-                                    case KEY_FILTER_MKIBEACON_ACC_MAJOR_RANGE:
-                                    case KEY_FILTER_MKIBEACON_ACC_MINOR_RANGE:
+                                    case KEY_FILTER_BXP_TAG_ENABLE:
+                                    case KEY_FILTER_BXP_TAG_PRECISE:
+                                    case KEY_FILTER_BXP_TAG_REVERSE:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         break;
-                                    case KEY_FILTER_MKIBEACON_ACC_ENABLE:
+                                    case KEY_FILTER_BXP_TAG_RULES:
                                         if (result != 1) {
                                             savedParamsError = true;
                                         }
                                         if (savedParamsError) {
-                                            ToastUtils.showToast(FilterMKIBeaconAccActivity.this, "Opps！Save failed. Please check the input characters and try again.");
+                                            ToastUtils.showToast(FilterBXPTagIdActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
                                             ToastUtils.showToast(this, "Save Successfully！");
                                         }
@@ -133,38 +134,43 @@ public class FilterMKIBeaconAccActivity extends BaseActivity {
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
-                                    case KEY_FILTER_MKIBEACON_ACC_UUID:
-                                        if (length > 0) {
-                                            String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
-                                            etIbeaconUuid.setText(String.valueOf(uuid));
-                                        }
-                                        break;
-                                    case KEY_FILTER_MKIBEACON_ACC_MAJOR_RANGE:
+                                    case KEY_FILTER_BXP_TAG_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            if (enable == 1) {
-                                                int majorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 5, 7));
-                                                int majorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 7, 9));
-                                                etIbeaconMajorMin.setText(String.valueOf(majorMin));
-                                                etIbeaconMajorMax.setText(String.valueOf(majorMax));
+                                            cbEnable.setChecked(enable == 1);
+                                        }
+                                        break;
+                                    case KEY_FILTER_BXP_TAG_PRECISE:
+                                        if (length > 0) {
+                                            int enable = value[4] & 0xFF;
+                                            cbPreciseMatch.setChecked(enable == 1);
+                                        }
+                                        break;
+                                    case KEY_FILTER_BXP_TAG_REVERSE:
+                                        if (length > 0) {
+                                            int enable = value[4] & 0xFF;
+                                            cbReverseFilter.setChecked(enable == 1);
+                                        }
+                                        break;
+                                    case KEY_FILTER_BXP_TAG_RULES:
+                                        if (length > 0) {
+                                            filterTagId.clear();
+                                            byte[] tagIdBytes = Arrays.copyOfRange(value, 4, 4 + length);
+                                            for (int i = 0, l = tagIdBytes.length; i < l; ) {
+                                                int idLength = tagIdBytes[i] & 0xFF;
+                                                i++;
+                                                filterTagId.add(MokoUtils.bytesToHexString(Arrays.copyOfRange(tagIdBytes, i, i + idLength)));
+                                                i += idLength;
                                             }
-                                        }
-                                        break;
-                                    case KEY_FILTER_MKIBEACON_ACC_MINOR_RANGE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            if (enable == 1) {
-                                                int minorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 5, 7));
-                                                int minorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 7, 9));
-                                                etIbeaconMinorMin.setText(String.valueOf(minorMin));
-                                                etIbeaconMinorMax.setText(String.valueOf(minorMax));
+                                            for (int i = 0, l = filterTagId.size(); i < l; i++) {
+                                                String macAddress = filterTagId.get(i);
+                                                View v = LayoutInflater.from(FilterBXPTagIdActivity.this).inflate(R.layout.lw008_item_tag_id_filter, llTadId, false);
+                                                TextView title = v.findViewById(R.id.tv_tag_id_title);
+                                                EditText etMacAddress = v.findViewById(R.id.et_tag_id);
+                                                title.setText(String.format("Tag ID %d", i + 1));
+                                                etMacAddress.setText(macAddress);
+                                                llTadId.addView(v);
                                             }
-                                        }
-                                        break;
-                                    case KEY_FILTER_MKIBEACON_ACC_ENABLE:
-                                        if (length > 0) {
-                                            int enable = value[4] & 0xFF;
-                                            cbIbeacon.setChecked(enable == 1);
                                         }
                                         break;
                                 }
@@ -187,77 +193,64 @@ public class FilterMKIBeaconAccActivity extends BaseActivity {
         }
     }
 
-    private boolean isValid() {
-        final String uuid = etIbeaconUuid.getText().toString();
-        final String majorMin = etIbeaconMajorMin.getText().toString();
-        final String majorMax = etIbeaconMajorMax.getText().toString();
-        final String minorMin = etIbeaconMinorMin.getText().toString();
-        final String minorMax = etIbeaconMinorMax.getText().toString();
-        if (!TextUtils.isEmpty(uuid)) {
-            int length = uuid.length();
-            if (length % 2 != 0) {
-                return false;
-            }
+    public void onAdd(View view) {
+        if (isWindowLocked())
+            return;
+        int count = llTadId.getChildCount();
+        if (count > 9) {
+            ToastUtils.showToast(this, "You can set up to 10 filters!");
+            return;
         }
-        if (!TextUtils.isEmpty(majorMin) && !TextUtils.isEmpty(majorMax)) {
-            if (Integer.parseInt(majorMin) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(majorMax) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(majorMax) < Integer.parseInt(majorMin)) {
-                return false;
-            }
-        } else if (!TextUtils.isEmpty(majorMin) && TextUtils.isEmpty(majorMax)) {
-            return false;
-        } else if (TextUtils.isEmpty(majorMin) && !TextUtils.isEmpty(majorMax)) {
-            return false;
+        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_tag_id_filter, llTadId, false);
+        TextView title = v.findViewById(R.id.tv_tag_id_title);
+        title.setText(String.format("Tag ID %d", count + 1));
+        llTadId.addView(v);
+    }
+
+    public void onDel(View view) {
+        if (isWindowLocked())
+            return;
+        final int c = llTadId.getChildCount();
+        if (c == 0) {
+            ToastUtils.showToast(this, "There are currently no filters to delete");
+            return;
         }
-        if (!TextUtils.isEmpty(minorMin) && !TextUtils.isEmpty(minorMax)) {
-            if (Integer.parseInt(minorMin) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(minorMax) > 65535) {
-                return false;
-            }
-            if (Integer.parseInt(minorMax) < Integer.parseInt(minorMin)) {
-                return false;
-            }
-        } else if (!TextUtils.isEmpty(minorMin) && TextUtils.isEmpty(minorMax)) {
-            return false;
-        } else if (TextUtils.isEmpty(minorMin) && !TextUtils.isEmpty(minorMax)) {
-            return false;
+        int count = llTadId.getChildCount();
+        if (count > 0) {
+            llTadId.removeViewAt(count - 1);
         }
-        return true;
     }
 
 
     private void saveParams() {
-        final String uuid = etIbeaconUuid.getText().toString();
-        final String majorMinStr = etIbeaconMajorMin.getText().toString();
-        final String majorMaxStr = etIbeaconMajorMax.getText().toString();
-        final String minorMinStr = etIbeaconMinorMin.getText().toString();
-        final String minorMaxStr = etIbeaconMinorMax.getText().toString();
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setFilterMKIBeaconAccUUID(uuid));
-        if (TextUtils.isEmpty(majorMinStr) && TextUtils.isEmpty(majorMaxStr))
-            orderTasks.add(OrderTaskAssembler.setFilterMKIBeaconAccMajorRange(0, 0, 0));
-        else {
-            final int majorMin = Integer.parseInt(majorMinStr);
-            final int majorMax = Integer.parseInt(majorMaxStr);
-            orderTasks.add(OrderTaskAssembler.setFilterMKIBeaconAccMajorRange(1, majorMin, majorMax));
-        }
-        if (TextUtils.isEmpty(minorMinStr) && TextUtils.isEmpty(minorMaxStr))
-            orderTasks.add(OrderTaskAssembler.setFilterMKIBeaconAccMinorRange(0, 0, 0));
-        else {
-            final int minorMin = Integer.parseInt(minorMinStr);
-            final int minorMax = Integer.parseInt(minorMaxStr);
-            orderTasks.add(OrderTaskAssembler.setFilterMKIBeaconAccMinorRange(1, minorMin, minorMax));
-        }
-        orderTasks.add(OrderTaskAssembler.setFilterMKIBeaconAccEnable(cbIbeacon.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagEnable(cbEnable.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagPrecise(cbPreciseMatch.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagReverse(cbReverseFilter.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagRules(filterTagId));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    private boolean isValid() {
+        final int c = llTadId.getChildCount();
+        filterTagId.clear();
+        if (c > 0) {
+            for (int i = 0; i < c; i++) {
+                View v = llTadId.getChildAt(i);
+                EditText etTagId= v.findViewById(R.id.et_tag_id);
+                final String macAddress = etTagId.getText().toString();
+                if (TextUtils.isEmpty(macAddress)) {
+                    return false;
+                }
+                int length = macAddress.length();
+                if (length % 2 != 0 || length > 12) {
+                    return false;
+                }
+                filterTagId.add(macAddress);
+            }
+        }
+        return true;
     }
 
 

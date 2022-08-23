@@ -53,6 +53,7 @@
         android:background="@color/lw008_grey_f2f2f2"
         android:orientation="vertical">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +71,7 @@
                 android:button="@null"
                 android:checked="false"
                 android:drawableRight="@drawable/lw008_selector_cb_btn"
-                android:text="@string/mkibeacon_acc"
+                android:text="BXP-iBeacon"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -91,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/mkibeacon_acc_uuid"
+                android:text="BXP-iBeacon UUID"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -129,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/mkibeacon_acc_major"
+                android:text="BXP-iBeacon Major"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -211,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/mkibeacon_acc_minor"
+                android:text="BXP-iBeacon Minor"
                 android:textColor="@color/lw008_black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"

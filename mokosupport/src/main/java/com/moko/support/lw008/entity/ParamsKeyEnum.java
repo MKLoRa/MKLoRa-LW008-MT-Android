@@ -120,22 +120,22 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_FILTER_IBEACON_MINOR_RANGE(0x61),
     // iBeacon类型UUID
     KEY_FILTER_IBEACON_UUID(0x62),
-    // MkiBeacon类型过滤开关
-    KEY_FILTER_MKIBEACON_ENABLE(0x63),
-    // MkiBeacon类型Major范围
-    KEY_FILTER_MKIBEACON_MAJOR_RANGE(0x64),
-    // MkiBeacon类型Minor范围
-    KEY_FILTER_MKIBEACON_MINOR_RANGE(0x65),
-    // MkiBeacon类型UUID
-    KEY_FILTER_MKIBEACON_UUID(0x66),
-    // MKiBeacon&ACC类型过滤开关
-    KEY_FILTER_MKIBEACON_ACC_ENABLE(0x67),
-    // MKiBeacon&ACC类型Major范围
-    KEY_FILTER_MKIBEACON_ACC_MAJOR_RANGE(0x68),
-    // MKiBeacon&ACC类型Minor范围
-    KEY_FILTER_MKIBEACON_ACC_MINOR_RANGE(0x69),
-    // MKiBeacon&ACC类型UUID
-    KEY_FILTER_MKIBEACON_ACC_UUID(0x6A),
+    // BXP-iBeacon类型过滤开关
+    KEY_FILTER_BXP_IBEACON_ENABLE(0x63),
+    // BXP-iBeacon类型Major范围
+    KEY_FILTER_BXP_IBEACON_MAJOR_RANGE(0x64),
+    // BXP-iBeacon类型Minor范围
+    KEY_FILTER_BXP_IBEACON_MINOR_RANGE(0x65),
+    // BXP-iBeacon类型UUID
+    KEY_FILTER_BXP_IBEACON_UUID(0x66),
+    // BXP-Tag开关类型过滤开关
+    KEY_FILTER_BXP_TAG_ENABLE(0x67),
+    // 精准过滤BXP-Tag开关
+    KEY_FILTER_BXP_TAG_PRECISE(0x68),
+    // 反向过滤BXP-Tag开关
+    KEY_FILTER_BXP_TAG_REVERSE(0x69),
+    // BXP-Tag过滤规则
+    KEY_FILTER_BXP_TAG_RULES(0x6A),
     // eddystone-UID类型过滤开关
     KEY_FILTER_EDDYSTONE_UID_ENABLE(0x6B),
     // eddystone-UID类型Namespace
@@ -182,6 +182,14 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE(0x80),
     // 星历更新结束事件开关
     KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE(0x81),
+    // BXP-Device类型过滤开关
+    KEY_FILTER_BXP_DEVICE(0x82),
+    // BXP-Button类型过滤开关
+    KEY_FILTER_BXP_BUTTON_ENABLE(0x83),
+    // BXP-Button类型过滤规则
+    KEY_FILTER_BXP_BUTTON_RULES(0x84),
+    // 蓝牙定位机制选择
+    KEY_BLE_POS_MECHANISM(0x85),
 
     //// LoRaWAN参数
     // LoRaWAN网络状态
