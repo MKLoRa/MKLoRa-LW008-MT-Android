@@ -194,7 +194,11 @@ public class FilterOtherActivity extends BaseActivity {
                                                 } else {
                                                     tvCondition.setText("Condition C");
                                                 }
-                                                etDataType.setText(other.substring(0, 2));
+                                                String dataTypeStr = other.substring(0, 2);
+                                                if ("00".equals(dataTypeStr))
+                                                    etDataType.setText("");
+                                                else
+                                                    etDataType.setText(dataTypeStr);
                                                 etMin.setText(String.valueOf(Integer.parseInt(other.substring(2, 4), 16)));
                                                 etMax.setText(String.valueOf(Integer.parseInt(other.substring(4, 6), 16)));
                                                 etRawData.setText(other.substring(6));
@@ -247,10 +251,7 @@ public class FilterOtherActivity extends BaseActivity {
                 final String maxStr = etMax.getText().toString();
                 final String rawDataStr = etRawData.getText().toString();
 
-                if (TextUtils.isEmpty(dataTypeStr)) {
-                    return false;
-                }
-                final int dataType = Integer.parseInt(dataTypeStr, 16);
+                final int dataType = TextUtils.isEmpty(dataTypeStr) ? 0 : Integer.parseInt(dataTypeStr, 16);
 //                final DataTypeEnum dataTypeEnum = DataTypeEnum.fromDataType(dataType);
                 if (dataType < 0 || dataType > 0xFF)
                     return false;
@@ -262,28 +263,33 @@ public class FilterOtherActivity extends BaseActivity {
                     return false;
                 }
                 int min = 0;
-                if (!TextUtils.isEmpty(minStr))
-                    min = Integer.parseInt(minStr);
                 int max = 0;
-                if (!TextUtils.isEmpty(maxStr))
-                    max = Integer.parseInt(maxStr);
-                if (min == 0 && max != 0) {
-                    return false;
-                }
-                if (min > 29) {
-                    return false;
-                }
-                if (max > 29) {
-                    return false;
-                }
-                if (max < min) {
-                    return false;
-                }
-                if (min > 0) {
-                    int interval = max - min;
-                    if (length != ((interval + 1) * 2)) {
+                if (dataType != 0) {
+                    if (!TextUtils.isEmpty(minStr))
+                        min = Integer.parseInt(minStr);
+                    if (!TextUtils.isEmpty(maxStr))
+                        max = Integer.parseInt(maxStr);
+                    if (min == 0 && max != 0) {
                         return false;
                     }
+                    if (min > 29) {
+                        return false;
+                    }
+                    if (max > 29) {
+                        return false;
+                    }
+                    if (max < min) {
+                        return false;
+                    }
+                    if (min > 0) {
+                        int interval = max - min;
+                        if (length != ((interval + 1) * 2)) {
+                            return false;
+                        }
+                    }
+                } else {
+                    etMin.setText("0");
+                    etMax.setText("0");
                 }
                 StringBuffer sb = new StringBuffer();
                 sb.append(MokoUtils.int2HexString(dataType));

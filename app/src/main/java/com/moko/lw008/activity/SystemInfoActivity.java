@@ -99,6 +99,7 @@ public class SystemInfoActivity extends BaseActivity {
             orderTasks.add(OrderTaskAssembler.getManufacturer());
             LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
+        DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 200)
@@ -241,6 +242,7 @@ public class SystemInfoActivity extends BaseActivity {
             unregisterReceiver(mReceiver);
         }
         EventBus.getDefault().unregister(this);
+        DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
     }
 
     private LoadingMessageDialog mLoadingMessageDialog;
@@ -280,7 +282,7 @@ public class SystemInfoActivity extends BaseActivity {
         intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
-            startActivityForResult(Intent.createChooser(intent, "select file first!"), REQUEST_CODE_SELECT_FIRMWARE);
+            startActivityForResult(intent, REQUEST_CODE_SELECT_FIRMWARE);
         } catch (ActivityNotFoundException ex) {
             ToastUtils.showToast(this, "install file manager app");
         }
@@ -307,18 +309,6 @@ public class SystemInfoActivity extends BaseActivity {
         }
         setResult(RESULT_FIRST_USER);
         finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
     }
 
     private boolean isUpgrade;
@@ -379,6 +369,7 @@ public class SystemInfoActivity extends BaseActivity {
 
         @Override
         public void onProgressChanged(String deviceAddress, int percent, float speed, float avgSpeed, int currentPart, int partsTotal) {
+            XLog.i("Progress:" + percent + "%");
             mDFUDialog.setMessage("Progress:" + percent + "%");
         }
 
