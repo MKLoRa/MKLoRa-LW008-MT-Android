@@ -70,7 +70,6 @@ public class AdvInfoAnalysisImpl implements DeviceInfoParseable<AdvInfo> {
             advInfo.lowPower = lowPower;
             advInfo.deviceType = deviceType;
             advInfo.scanTime = SystemClock.elapsedRealtime();
-            advInfo.deviceType = deviceType;
             advInfo.txPower = txPower;
             advInfo.verifyEnable = verifyEnable;
             advInfo.connectable = result.isConnectable();

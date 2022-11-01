@@ -156,15 +156,7 @@ public class FilterOtherActivity extends BaseActivity {
                                                 mValues.add("A & B & C");
                                                 mValues.add("(A & B) | C");
                                                 mValues.add("A | B | C");
-                                                if (relationship == 3) {
-                                                    mSelected = 2;
-                                                }
-                                                if (relationship == 4) {
-                                                    mSelected = 0;
-                                                }
-                                                if (relationship == 5) {
-                                                    mSelected = 1;
-                                                }
+                                                mSelected = relationship - 3;
                                             }
                                             tvOtherRelationship.setText(mValues.get(mSelected));
                                         }
@@ -317,15 +309,7 @@ public class FilterOtherActivity extends BaseActivity {
             relationship = mSelected + 1;
         }
         if (filterOther.size() == 3) {
-            if (mSelected == 0) {
-                relationship = 4;
-            }
-            if (mSelected == 1) {
-                relationship = 5;
-            }
-            if (mSelected == 2) {
-                relationship = 3;
-            }
+            relationship = mSelected + 3;
         }
         orderTasks.add(OrderTaskAssembler.setFilterOtherRelationship(relationship));
         orderTasks.add(OrderTaskAssembler.setFilterOtherEnable(cbOther.isChecked() ? 1 : 0));
