@@ -28,7 +28,7 @@ public class AdvInfoAnalysisImpl implements DeviceInfoParseable<AdvInfo> {
         Map<ParcelUuid, byte[]> map = record.getServiceData();
         if (map == null || map.isEmpty())
             return null;
-        // 0:LR1110,1:L76
+        // 0x00:LR1110,0x10:L76
         int deviceType = -1;
         int txPower = -1;
         boolean lowPower = false;

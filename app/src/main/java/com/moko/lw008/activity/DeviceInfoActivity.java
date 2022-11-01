@@ -82,7 +82,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private int mSelectUploadMode;
     private boolean mReceiverTag = false;
     private int disConnectType;
-    // 0:LR1110,1:L76C
+    // 0x00:LR1110,0x10:L76
     private int mDeviceType;
 
     private boolean savedParamsError;
@@ -645,7 +645,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         if (isWindowLocked())
             return;
         Intent intent;
-        if (mDeviceType == 1)
+        if (mDeviceType == 0x10)
             intent = new Intent(this, PosGpsL76CFixActivity.class);
         else
             intent = new Intent(this, PosGpsLR1110FixActivity.class);
