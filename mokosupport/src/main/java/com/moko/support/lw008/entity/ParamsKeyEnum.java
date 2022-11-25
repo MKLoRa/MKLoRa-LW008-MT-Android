@@ -28,7 +28,7 @@ public enum ParamsKeyEnum implements Serializable {
     // 低电触发心跳开关
     KEY_LOW_POWER_PAYLOAD_ENABLE(0x1B),
     // 低电百分比
-    KEY_LOW_POWER_PERCENT(0x1C),
+//    KEY_LOW_POWER_PERCENT(0x1C),
     // 芯片温度
     KEY_CHIP_TEMP(0x1D),
     // 读取当前系统时区时间
@@ -43,6 +43,10 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_PCBA_STATUS(0x22),
     // 自检状态
     KEY_SELFTEST_STATUS(0x23),
+    // 电池信息信息
+    KEY_BATTERY_INFO(0x25),
+    // 电池信息清除
+    KEY_BATTERY_RESET(0x26),
 
 
     //// 蓝牙相关参数

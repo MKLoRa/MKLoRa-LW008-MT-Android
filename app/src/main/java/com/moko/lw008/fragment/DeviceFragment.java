@@ -28,17 +28,17 @@ public class DeviceFragment extends Fragment {
     TextView tvTimeZone;
     @BindView(R2.id.iv_shutdown_payload)
     ImageView ivShutdownPayload;
-    @BindView(R2.id.tv_low_power_prompt)
-    TextView tvLowPowerPrompt;
-    @BindView(R2.id.tv_low_power_prompt_tips)
-    TextView tvLowPowerPromptTips;
+//    @BindView(R2.id.tv_low_power_prompt)
+//    TextView tvLowPowerPrompt;
+//    @BindView(R2.id.tv_low_power_prompt_tips)
+//    TextView tvLowPowerPromptTips;
     @BindView(R2.id.iv_low_power_payload)
     ImageView ivLowPowerPayload;
 
     private ArrayList<String> mTimeZones;
     private int mSelectedTimeZone;
-    private ArrayList<String> mLowPowerPrompts;
-    private int mSelectedLowPowerPrompt;
+//    private ArrayList<String> mLowPowerPrompts;
+//    private int mSelectedLowPowerPrompt;
     private boolean mLowPowerPayloadEnable;
     private boolean mShutdownPayloadEnable;
 
@@ -79,9 +79,9 @@ public class DeviceFragment extends Fragment {
                 }
             }
         }
-        mLowPowerPrompts = new ArrayList<>();
-        mLowPowerPrompts.add("5%");
-        mLowPowerPrompts.add("10%");
+//        mLowPowerPrompts = new ArrayList<>();
+//        mLowPowerPrompts.add("5%");
+//        mLowPowerPrompts.add("10%");
         return view;
     }
 
@@ -116,11 +116,11 @@ public class DeviceFragment extends Fragment {
         ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
     }
 
-    public void setLowPower(int lowPower) {
-        mSelectedLowPowerPrompt = lowPower;
-        tvLowPowerPrompt.setText(mLowPowerPrompts.get(mSelectedLowPowerPrompt));
-        tvLowPowerPromptTips.setText(getString(R.string.low_power_prompt_tips, mLowPowerPrompts.get(mSelectedLowPowerPrompt)));
-    }
+//    public void setLowPower(int lowPower) {
+//        mSelectedLowPowerPrompt = lowPower;
+//        tvLowPowerPrompt.setText(mLowPowerPrompts.get(mSelectedLowPowerPrompt));
+//        tvLowPowerPromptTips.setText(getString(R.string.low_power_prompt_tips, mLowPowerPrompts.get(mSelectedLowPowerPrompt)));
+//    }
 
     public void changeShutdownPayload() {
         mShutdownPayloadEnable = !mShutdownPayloadEnable;
@@ -140,21 +140,21 @@ public class DeviceFragment extends Fragment {
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
-    public void showLowPowerDialog() {
-        BottomDialog dialog = new BottomDialog();
-        dialog.setDatas(mLowPowerPrompts, mSelectedLowPowerPrompt);
-        dialog.setListener(value -> {
-            mSelectedLowPowerPrompt = value;
-            tvLowPowerPrompt.setText(mLowPowerPrompts.get(value));
-            tvLowPowerPromptTips.setText(getString(R.string.low_power_prompt_tips, mLowPowerPrompts.get(value)));
-            activity.showSyncingProgressDialog();
-            ArrayList<OrderTask> orderTasks = new ArrayList<>();
-            orderTasks.add(OrderTaskAssembler.setLowPowerPercent(value));
-            orderTasks.add(OrderTaskAssembler.getLowPowerPercent());
-            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-        });
-        dialog.show(activity.getSupportFragmentManager());
-
-    }
+//    public void showLowPowerDialog() {
+//        BottomDialog dialog = new BottomDialog();
+//        dialog.setDatas(mLowPowerPrompts, mSelectedLowPowerPrompt);
+//        dialog.setListener(value -> {
+//            mSelectedLowPowerPrompt = value;
+//            tvLowPowerPrompt.setText(mLowPowerPrompts.get(value));
+//            tvLowPowerPromptTips.setText(getString(R.string.low_power_prompt_tips, mLowPowerPrompts.get(value)));
+//            activity.showSyncingProgressDialog();
+//            ArrayList<OrderTask> orderTasks = new ArrayList<>();
+//            orderTasks.add(OrderTaskAssembler.setLowPowerPercent(value));
+//            orderTasks.add(OrderTaskAssembler.getLowPowerPercent());
+//            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+//        });
+//        dialog.show(activity.getSupportFragmentManager());
+//
+//    }
 
 }

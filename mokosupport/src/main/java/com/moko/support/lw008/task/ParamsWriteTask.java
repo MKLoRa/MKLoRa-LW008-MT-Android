@@ -175,16 +175,16 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-    public void setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
-        data = new byte[]{
-                (byte) 0xED,
-                (byte) 0x01,
-                (byte) ParamsKeyEnum.KEY_LOW_POWER_PERCENT.getParamsKey(),
-                (byte) 0x01,
-                (byte) percent
-        };
-        response.responseValue = data;
-    }
+//    public void setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
+//        data = new byte[]{
+//                (byte) 0xED,
+//                (byte) 0x01,
+//                (byte) ParamsKeyEnum.KEY_LOW_POWER_PERCENT.getParamsKey(),
+//                (byte) 0x01,
+//                (byte) percent
+//        };
+//        response.responseValue = data;
+//    }
 
     public void setPasswordVerifyEnable(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[]{
@@ -1557,6 +1557,17 @@ public class ParamsWriteTask extends OrderTask {
                 (byte) ParamsKeyEnum.KEY_SYNC_ENABLE.getParamsKey(),
                 (byte) 0x01,
                 (byte) enable
+        };
+    }
+
+
+
+    public void setBatteryReset() {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_BATTERY_RESET.getParamsKey(),
+                (byte) 0x00
         };
     }
 

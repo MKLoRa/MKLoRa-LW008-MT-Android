@@ -107,9 +107,16 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask getLowPowerPercent() {
-        ParamsReadTask task = new ParamsReadTask();
-        task.setData(ParamsKeyEnum.KEY_LOW_POWER_PERCENT);
+//    public static OrderTask getLowPowerPercent() {
+//        ParamsReadTask task = new ParamsReadTask();
+//        task.setData(ParamsKeyEnum.KEY_LOW_POWER_PERCENT);
+//        return task;
+//    }
+
+
+    public static OrderTask setBatteryReset() {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setBatteryReset();
         return task;
     }
 
@@ -149,6 +156,11 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask getBatteryInfo() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_BATTERY_INFO);
+        return task;
+    }
 
     public static OrderTask getPasswordVerifyEnable() {
         ParamsReadTask task = new ParamsReadTask();
@@ -850,11 +862,11 @@ public class OrderTaskAssembler {
         return task;
     }
 
-    public static OrderTask setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
-        ParamsWriteTask task = new ParamsWriteTask();
-        task.setLowPowerPercent(percent);
-        return task;
-    }
+//    public static OrderTask setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
+//        ParamsWriteTask task = new ParamsWriteTask();
+//        task.setLowPowerPercent(percent);
+//        return task;
+//    }
 
 
     public static OrderTask setPasswordVerifyEnable(@IntRange(from = 0, to = 1) int enable) {

@@ -63,8 +63,8 @@ public class SystemInfoActivity extends BaseActivity {
     TextView tvFirmwareVersion;
     @BindView(R2.id.tv_hardware_version)
     TextView tvHardwareVersion;
-    @BindView(R2.id.tv_battery_voltage)
-    TextView tvBatteryVoltage;
+//    @BindView(R2.id.tv_battery_voltage)
+//    TextView tvBatteryVoltage;
     @BindView(R2.id.tv_mac_address)
     TextView tvMacAddress;
     @BindView(R2.id.tv_product_model)
@@ -91,7 +91,7 @@ public class SystemInfoActivity extends BaseActivity {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getAdvName());
             orderTasks.add(OrderTaskAssembler.getMacAddress());
-            orderTasks.add(OrderTaskAssembler.getBattery());
+//            orderTasks.add(OrderTaskAssembler.getBattery());
             orderTasks.add(OrderTaskAssembler.getDeviceModel());
             orderTasks.add(OrderTaskAssembler.getSoftwareVersion());
             orderTasks.add(OrderTaskAssembler.getFirmwareVersion());
@@ -174,14 +174,14 @@ public class SystemInfoActivity extends BaseActivity {
                                             mDeviceName = new String(rawDataBytes);
                                         }
                                         break;
-                                    case KEY_BATTERY_POWER:
-                                        if (length > 0) {
-                                            byte[] batteryBytes = Arrays.copyOfRange(value, 4, 4 + length);
-                                            int battery = MokoUtils.toInt(batteryBytes);
-                                            String batteryStr = MokoUtils.getDecimalFormat("0.000").format(battery * 0.001);
-                                            tvBatteryVoltage.setText(String.format("%sV", batteryStr));
-                                        }
-                                        break;
+//                                    case KEY_BATTERY_POWER:
+//                                        if (length > 0) {
+//                                            byte[] batteryBytes = Arrays.copyOfRange(value, 4, 4 + length);
+//                                            int battery = MokoUtils.toInt(batteryBytes);
+//                                            String batteryStr = MokoUtils.getDecimalFormat("0.000").format(battery * 0.001);
+//                                            tvBatteryVoltage.setText(String.format("%sV", batteryStr));
+//                                        }
+//                                        break;
                                     case KEY_CHIP_MAC:
                                         if (length > 0) {
                                             byte[] macBytes = Arrays.copyOfRange(value, 4, 4 + length);
@@ -396,7 +396,6 @@ public class SystemInfoActivity extends BaseActivity {
                     final DfuServiceInitiator starter = new DfuServiceInitiator(mDeviceMac)
                             .setDeviceName(mDeviceName)
                             .setKeepBond(false)
-                            .setForeground(false)
                             .setDisableNotification(true);
                     starter.setZip(null, firmwareFilePath);
                     starter.start(this, DfuService.class);

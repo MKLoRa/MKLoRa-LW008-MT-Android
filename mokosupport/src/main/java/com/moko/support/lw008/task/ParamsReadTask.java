@@ -29,13 +29,14 @@ public class ParamsReadTask extends OrderTask {
             case KEY_SHUTDOWN_PAYLOAD_ENABLE:
             case KEY_OFFLINE_LOCATION_ENABLE:
             case KEY_LOW_POWER_PAYLOAD_ENABLE:
-            case KEY_LOW_POWER_PERCENT:
+//            case KEY_LOW_POWER_PERCENT:
             case KEY_CHIP_TEMP:
             case KEY_SYSTEM_TIME:
             case KEY_DEMAND_VERSION:
             case KEY_BATTERY_POWER:
             case KEY_CHIP_MAC:
             case KEY_SELFTEST_STATUS:
+            case KEY_BATTERY_INFO:
             case KEY_PCBA_STATUS:
 
             case KEY_PASSWORD_VERIFY_ENABLE:

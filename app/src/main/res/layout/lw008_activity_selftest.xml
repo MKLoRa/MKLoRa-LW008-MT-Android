@@ -40,21 +40,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="10dp">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_selftest_status"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/lw008_white_ffffff"
-                android:padding="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/selftest_status"
@@ -124,14 +122,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/lw008_white_ffffff"
-                android:padding="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_selftest_status">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/pcba_status"
@@ -159,6 +154,115 @@
                     app:layout_constraintLeft_toRightOf="@id/pcba_status" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/battery_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Battery information:"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_runtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_adv_times"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_flash_times"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_axis_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_ble_fix_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_wifi_fix_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_gps_fix_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_lora_transmission_times"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_lora_power"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_battery_consume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>
