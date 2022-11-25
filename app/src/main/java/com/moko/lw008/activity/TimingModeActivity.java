@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
@@ -20,8 +19,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
 import com.moko.lw008.adapter.TimePointAdapter;
+import com.moko.lw008.databinding.Lw008ActivityTimingModeBinding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.entity.TimePoint;
@@ -41,15 +40,10 @@ import java.util.List;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
 
-    @BindView(R2.id.tv_timing_pos_strategy)
-    TextView tvTimingPosStrategy;
-    @BindView(R2.id.rv_time_point)
-    RecyclerView rvTimePoint;
+    private Lw008ActivityTimingModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -62,8 +56,8 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_timing_mode);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityTimingModeBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         mValues = new ArrayList<>();
         mValues.add("WIFI");
         mValues.add("BLE");
@@ -84,15 +78,15 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         mAdapter = new TimePointAdapter(mTimePoints);
         ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
-        itemTouchHelper.attachToRecyclerView(rvTimePoint);
+        itemTouchHelper.attachToRecyclerView(mBind.rvTimePoint);
 
         // 开启滑动删除
         mAdapter.enableSwipeItem();
         mAdapter.setOnItemSwipeListener(onItemSwipeListener);
         mAdapter.setOnItemChildClickListener(this);
         mAdapter.openLoadAnimation();
-        rvTimePoint.setLayoutManager(new LinearLayoutManager(this));
-        rvTimePoint.setAdapter(mAdapter);
+        mBind.rvTimePoint.setLayoutManager(new LinearLayoutManager(this));
+        mBind.rvTimePoint.setAdapter(mAdapter);
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -100,7 +94,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        tvTimingPosStrategy.postDelayed(() -> {
+        mBind.tvTimingPosStrategy.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getTimePosStrategy());
             orderTasks.add(OrderTaskAssembler.getTimePosReportPoints());
@@ -202,7 +196,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
                                         if (length > 0) {
                                             int strategy = value[4] & 0xFF;
                                             mSelected = strategy;
-                                            tvTimingPosStrategy.setText(mValues.get(mSelected));
+                                            mBind.tvTimingPosStrategy.setText(mValues.get(mSelected));
                                         }
                                         break;
                                     case KEY_TIME_MODE_REPORT_TIME_POINT:
@@ -329,7 +323,7 @@ public class TimingModeActivity extends BaseActivity implements BaseQuickAdapter
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
             mSelected = value;
-            tvTimingPosStrategy.setText(mValues.get(value));
+            mBind.tvTimingPosStrategy.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }

@@ -3,7 +3,6 @@ package com.moko.lw008.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -11,8 +10,7 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivitySelftestBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
@@ -27,50 +25,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class SelfTestActivity extends BaseActivity {
 
-    @BindView(R2.id.tv_selftest_status)
-    TextView tvSelftestStatus;
-    @BindView(R2.id.tv_flash_status)
-    TextView tvFlashStatus;
-    @BindView(R2.id.tv_axis_status)
-    TextView tvAxisStatus;
-    @BindView(R2.id.tv_gps_status)
-    TextView tvGpsStatus;
-    @BindView(R2.id.tv_pcba_status)
-    TextView tvPcbaStatus;
-    @BindView(R2.id.tv_runtime)
-    TextView tvRuntime;
-    @BindView(R2.id.tv_adv_times)
-    TextView tvAdvTimes;
-    @BindView(R2.id.tv_flash_times)
-    TextView tvFlashTimes;
-    @BindView(R2.id.tv_axis_duration)
-    TextView tvAxisDuration;
-    @BindView(R2.id.tv_ble_fix_duration)
-    TextView tvBleFixDuration;
-    @BindView(R2.id.tv_wifi_fix_duration)
-    TextView tvWifiFixDuration;
-    @BindView(R2.id.tv_gps_fix_duration)
-    TextView tvGpsFixDuration;
-    @BindView(R2.id.tv_lora_transmission_times)
-    TextView tvLoraTransmissionTimes;
-    @BindView(R2.id.tv_lora_power)
-    TextView tvLoraPower;
-    @BindView(R2.id.tv_battery_consume)
-    TextView tvBatteryConsume;
+    private Lw008ActivitySelftestBinding mBind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_selftest);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivitySelftestBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        tvSelftestStatus.postDelayed(() -> {
+        mBind.tvSelftestStatus.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
             orderTasks.add(OrderTaskAssembler.getPCBAStatus());
@@ -124,42 +90,42 @@ public class SelfTestActivity extends BaseActivity {
                                     case KEY_SELFTEST_STATUS:
                                         if (length > 0) {
                                             int status = value[4] & 0xFF;
-                                            tvSelftestStatus.setVisibility(status == 0 ? View.VISIBLE : View.GONE);
+                                            mBind.tvSelftestStatus.setVisibility(status == 0 ? View.VISIBLE : View.GONE);
                                             if ((status & 0x01) == 0x01)
-                                                tvGpsStatus.setVisibility(View.VISIBLE);
+                                                mBind.tvGpsStatus.setVisibility(View.VISIBLE);
                                             if ((status & 0x02) == 0x02)
-                                                tvAxisStatus.setVisibility(View.VISIBLE);
+                                                mBind.tvAxisStatus.setVisibility(View.VISIBLE);
                                             if ((status & 0x04) == 0x04)
-                                                tvFlashStatus.setVisibility(View.VISIBLE);
+                                                mBind.tvFlashStatus.setVisibility(View.VISIBLE);
                                         }
                                         break;
                                     case KEY_PCBA_STATUS:
                                         if (length > 0) {
-                                            tvPcbaStatus.setText(String.valueOf(value[4] & 0xFF));
+                                            mBind.tvPcbaStatus.setText(String.valueOf(value[4] & 0xFF));
                                         }
                                         break;
                                     case KEY_BATTERY_INFO:
                                         if (length == 40) {
                                             int runtime = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 8));
-                                            tvRuntime.setText(String.format("%d s", runtime));
+                                            mBind.tvRuntime.setText(String.format("%d s", runtime));
                                             int advTimes = MokoUtils.toInt(Arrays.copyOfRange(value, 8, 12));
-                                            tvAdvTimes.setText(String.format("%d times", advTimes));
+                                            mBind.tvAdvTimes.setText(String.format("%d times", advTimes));
                                             int flashTimes = MokoUtils.toInt(Arrays.copyOfRange(value, 12, 16));
-                                            tvFlashTimes.setText(String.format("%d times", flashTimes));
+                                            mBind.tvFlashTimes.setText(String.format("%d times", flashTimes));
                                             int axisDuration = MokoUtils.toInt(Arrays.copyOfRange(value, 16, 20));
-                                            tvAxisDuration.setText(String.format("%d ms", axisDuration));
+                                            mBind.tvAxisDuration.setText(String.format("%d ms", axisDuration));
                                             int bleFixDuration = MokoUtils.toInt(Arrays.copyOfRange(value, 20, 24));
-                                            tvBleFixDuration.setText(String.format("%d ms", bleFixDuration));
+                                            mBind.tvBleFixDuration.setText(String.format("%d ms", bleFixDuration));
                                             int wifiFixDuration = MokoUtils.toInt(Arrays.copyOfRange(value, 24, 28));
-                                            tvWifiFixDuration.setText(String.format("%d ms", wifiFixDuration));
+                                            mBind.tvWifiFixDuration.setText(String.format("%d ms", wifiFixDuration));
                                             int gpsFixDuration = MokoUtils.toInt(Arrays.copyOfRange(value, 28, 32));
-                                            tvGpsFixDuration.setText(String.format("%d ms", gpsFixDuration));
+                                            mBind.tvGpsFixDuration.setText(String.format("%d ms", gpsFixDuration));
                                             int loraTransmissionTimes = MokoUtils.toInt(Arrays.copyOfRange(value, 32, 36));
-                                            tvLoraTransmissionTimes.setText(String.format("%d times", loraTransmissionTimes));
+                                            mBind.tvLoraTransmissionTimes.setText(String.format("%d times", loraTransmissionTimes));
                                             int loraPower = MokoUtils.toInt(Arrays.copyOfRange(value, 36, 40));
-                                            tvLoraPower.setText(String.format("%d mAS", loraPower));
+                                            mBind.tvLoraPower.setText(String.format("%d mAS", loraPower));
                                             String batteryConsumeStr = MokoUtils.getDecimalFormat("0.###").format(MokoUtils.toInt(Arrays.copyOfRange(value, 40, 44)) * 0.001f);
-                                            tvBatteryConsume.setText(String.format("%s mAH", batteryConsumeStr));
+                                            mBind.tvBatteryConsume.setText(String.format("%s mAH", batteryConsumeStr));
                                         }
                                         break;
                                 }

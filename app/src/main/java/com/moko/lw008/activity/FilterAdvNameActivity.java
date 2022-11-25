@@ -7,9 +7,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
@@ -18,7 +16,7 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityFilterAdvNameBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -34,19 +32,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FilterAdvNameActivity extends BaseActivity {
 
     private final String FILTER_ASCII = "[ -~]*";
 
-    @BindView(R2.id.cb_precise_match)
-    CheckBox cbPreciseMatch;
-    @BindView(R2.id.cb_reverse_filter)
-    CheckBox cbReverseFilter;
-    @BindView(R2.id.ll_dav_name)
-    LinearLayout llDavName;
+    private Lw008ActivityFilterAdvNameBinding mBind;
 
     private boolean savedParamsError;
 
@@ -56,8 +46,8 @@ public class FilterAdvNameActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_adv_name);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityFilterAdvNameBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         filterAdvName = new ArrayList<>();
         filter = new InputFilter() {
@@ -71,7 +61,7 @@ public class FilterAdvNameActivity extends BaseActivity {
             }
         };
         showSyncingProgressDialog();
-        cbPreciseMatch.postDelayed(() -> {
+        mBind.cbPreciseMatch.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterNamePrecise());
             orderTasks.add(OrderTaskAssembler.getFilterNameReverse());
@@ -145,13 +135,13 @@ public class FilterAdvNameActivity extends BaseActivity {
                                     case KEY_FILTER_NAME_PRECISE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbPreciseMatch.setChecked(enable == 1);
+                                            mBind.cbPreciseMatch.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_FILTER_NAME_REVERSE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbReverseFilter.setChecked(enable == 1);
+                                            mBind.cbReverseFilter.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_FILTER_NAME_RULES:
@@ -166,13 +156,13 @@ public class FilterAdvNameActivity extends BaseActivity {
                                             }
                                             for (int i = 0, l = filterAdvName.size(); i < l; i++) {
                                                 String advName = filterAdvName.get(i);
-                                                View v = LayoutInflater.from(FilterAdvNameActivity.this).inflate(R.layout.lw008_item_adv_name_filter, llDavName, false);
+                                                View v = LayoutInflater.from(FilterAdvNameActivity.this).inflate(R.layout.lw008_item_adv_name_filter, mBind.llDavName, false);
                                                 TextView title = v.findViewById(R.id.tv_adv_name_title);
                                                 EditText etAdvName = v.findViewById(R.id.et_adv_name);
                                                 etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20), filter});
                                                 title.setText(String.format("ADV Name%d", i + 1));
                                                 etAdvName.setText(advName);
-                                                llDavName.addView(v);
+                                                mBind.llDavName.addView(v);
                                             }
                                         }
                                         break;
@@ -199,30 +189,30 @@ public class FilterAdvNameActivity extends BaseActivity {
     public void onAdd(View view) {
         if (isWindowLocked())
             return;
-        int count = llDavName.getChildCount();
+        int count = mBind.llDavName.getChildCount();
         if (count > 9) {
             ToastUtils.showToast(this, "You can set up to 10 filters!");
             return;
         }
-        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_adv_name_filter, llDavName, false);
+        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_adv_name_filter, mBind.llDavName, false);
         TextView title = v.findViewById(R.id.tv_adv_name_title);
         title.setText(String.format("ADV Name%d", count + 1));
         EditText etAdvName = v.findViewById(R.id.et_adv_name);
         etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20), filter});
-        llDavName.addView(v);
+        mBind.llDavName.addView(v);
     }
 
     public void onDel(View view) {
         if (isWindowLocked())
             return;
-        final int c = llDavName.getChildCount();
+        final int c = mBind.llDavName.getChildCount();
         if (c == 0) {
             ToastUtils.showToast(this, "There are currently no filters to delete");
             return;
         }
-        int count = llDavName.getChildCount();
+        int count = mBind.llDavName.getChildCount();
         if (count > 0) {
-            llDavName.removeViewAt(count - 1);
+            mBind.llDavName.removeViewAt(count - 1);
         }
     }
 
@@ -230,18 +220,18 @@ public class FilterAdvNameActivity extends BaseActivity {
     private void saveParams() {
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setFilterNamePrecise(cbPreciseMatch.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setFilterNameReverse(cbReverseFilter.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterNamePrecise(mBind.cbPreciseMatch.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterNameReverse(mBind.cbReverseFilter.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterNameRules(filterAdvName));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     private boolean isValid() {
-        final int c = llDavName.getChildCount();
+        final int c = mBind.llDavName.getChildCount();
         if (c > 0) {
             filterAdvName.clear();
             for (int i = 0; i < c; i++) {
-                View v = llDavName.getChildAt(i);
+                View v = mBind.llDavName.getChildAt(i);
                 EditText etAdvName = v.findViewById(R.id.et_adv_name);
                 final String advName = etAdvName.getText().toString();
                 if (TextUtils.isEmpty(advName)) {

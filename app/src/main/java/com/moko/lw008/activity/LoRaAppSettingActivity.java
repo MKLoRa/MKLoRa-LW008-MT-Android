@@ -16,8 +16,8 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityAppSettingBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -32,14 +32,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class LoRaAppSettingActivity extends BaseActivity {
 
-    @BindView(R2.id.et_sync_interval)
-    EditText etSyncInterval;
-    @BindView(R2.id.et_network_check_interval)
+    private Lw008ActivityAppSettingBinding mBind;
     EditText etNetworkCheckInterval;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
@@ -47,8 +42,8 @@ public class LoRaAppSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_app_setting);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityAppSettingBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -56,7 +51,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        etSyncInterval.postDelayed(() -> {
+        mBind.etSyncInterval.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getLoraTimeSyncInterval());
             orderTasks.add(OrderTaskAssembler.getLoraNetworkCheckInterval());
@@ -130,7 +125,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
                                     case KEY_LORA_TIME_SYNC_INTERVAL:
                                         if (length > 0) {
                                             int interval = value[4] & 0xFF;
-                                            etSyncInterval.setText(String.valueOf(interval));
+                                            mBind.etSyncInterval.setText(String.valueOf(interval));
                                         }
                                         break;
                                     case KEY_LORA_NETWORK_CHECK_INTERVAL:
@@ -160,7 +155,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String syncIntervalStr = etSyncInterval.getText().toString();
+        final String syncIntervalStr = mBind.etSyncInterval.getText().toString();
         if (TextUtils.isEmpty(syncIntervalStr))
             return false;
         final int syncInterval = Integer.parseInt(syncIntervalStr);
@@ -180,7 +175,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
 
 
     private void saveParams() {
-        final String syncIntervalStr = etSyncInterval.getText().toString();
+        final String syncIntervalStr = mBind.etSyncInterval.getText().toString();
         final String networkCheckIntervalStr = etNetworkCheckInterval.getText().toString();
         final int syncInterval = Integer.parseInt(syncIntervalStr);
         final int networkCheckInterval = Integer.parseInt(networkCheckIntervalStr);

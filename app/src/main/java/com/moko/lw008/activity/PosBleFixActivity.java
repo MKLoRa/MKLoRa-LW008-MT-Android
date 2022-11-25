@@ -9,9 +9,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -19,7 +17,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityPosBleBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -35,28 +34,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
 
-    @BindView(R2.id.et_pos_timeout)
-    EditText etPosTimeout;
-    @BindView(R2.id.et_mac_number)
-    EditText etMacNumber;
-    @BindView(R2.id.sb_rssi_filter)
-    SeekBar sbRssiFilter;
-    @BindView(R2.id.tv_rssi_filter_value)
-    TextView tvRssiFilterValue;
-    @BindView(R2.id.tv_rssi_filter_tips)
-    TextView tvRssiFilterTips;
-    @BindView(R2.id.tv_scanning_type)
-    TextView tvScanningType;
-    @BindView(R2.id.tv_filter_relationship)
-    TextView tvFilterRelationship;
-    @BindView(R2.id.tv_ble_fix_mechanism)
-    TextView tvBleFixMechanism;
+    private Lw008ActivityPosBleBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mRelationshipValues;
@@ -69,8 +50,8 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_pos_ble);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityPosBleBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
 
         mRelationshipValues = new ArrayList<>();
@@ -89,14 +70,14 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         mBleFixMechanismValues = new ArrayList<>();
         mBleFixMechanismValues.add("Time Priority");
         mBleFixMechanismValues.add("RSSI Priority");
-        sbRssiFilter.setOnSeekBarChangeListener(this);
+        mBind.sbRssiFilter.setOnSeekBarChangeListener(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        etPosTimeout.postDelayed(() -> {
+        mBind.etPosTimeout.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getBlePosTimeout());
             orderTasks.add(OrderTaskAssembler.getBlePosNumber());
@@ -177,42 +158,42 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
                                     case KEY_BLE_POS_TIMEOUT:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
-                                            etPosTimeout.setText(String.valueOf(number));
+                                            mBind.etPosTimeout.setText(String.valueOf(number));
                                         }
                                         break;
                                     case KEY_BLE_POS_MAC_NUMBER:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
-                                            etMacNumber.setText(String.valueOf(number));
+                                            mBind.etMacNumber.setText(String.valueOf(number));
                                         }
                                         break;
                                     case KEY_BLE_POS_MECHANISM:
                                         if (length > 0) {
                                             int mechanism = value[4] & 0xFF;
                                             mBleFixMechanismSelected = mechanism;
-                                            tvBleFixMechanism.setText(mBleFixMechanismValues.get(mechanism));
+                                            mBind.tvBleFixMechanism.setText(mBleFixMechanismValues.get(mechanism));
                                         }
                                         break;
                                     case KEY_FILTER_RSSI:
                                         if (length > 0) {
                                             final int rssi = value[4];
                                             int progress = rssi + 127;
-                                            sbRssiFilter.setProgress(progress);
-                                            tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
+                                            mBind.sbRssiFilter.setProgress(progress);
+                                            mBind.tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
                                         }
                                         break;
                                     case KEY_FILTER_BLE_SCAN_PHY:
                                         if (length > 0) {
                                             int type = value[4] & 0xFF;
                                             mScanningTypeSelected = type;
-                                            tvScanningType.setText(mScanningTypeValues.get(type));
+                                            mBind.tvScanningType.setText(mScanningTypeValues.get(type));
                                         }
                                         break;
                                     case KEY_FILTER_RELATIONSHIP:
                                         if (length > 0) {
                                             int relationship = value[4] & 0xFF;
                                             mRelationshipSelected = relationship;
-                                            tvFilterRelationship.setText(mRelationshipValues.get(relationship));
+                                            mBind.tvFilterRelationship.setText(mRelationshipValues.get(relationship));
                                         }
                                         break;
                                 }
@@ -236,14 +217,14 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
     }
 
     private boolean isValid() {
-        final String posTimeoutStr = etPosTimeout.getText().toString();
+        final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
         if (TextUtils.isEmpty(posTimeoutStr))
             return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         if (posTimeout < 1 || posTimeout > 10) {
             return false;
         }
-        final String numberStr = etMacNumber.getText().toString();
+        final String numberStr = mBind.etMacNumber.getText().toString();
         if (TextUtils.isEmpty(numberStr))
             return false;
         final int number = Integer.parseInt(numberStr);
@@ -256,8 +237,8 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
 
 
     private void saveParams() {
-        final String posTimeoutStr = etPosTimeout.getText().toString();
-        final String numberStr = etMacNumber.getText().toString();
+        final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
+        final String numberStr = mBind.etMacNumber.getText().toString();
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         final int number = Integer.parseInt(numberStr);
         savedParamsError = false;
@@ -265,7 +246,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         orderTasks.add(OrderTaskAssembler.setBlePosTimeout(posTimeout));
         orderTasks.add(OrderTaskAssembler.setBlePosNumber(number));
         orderTasks.add(OrderTaskAssembler.setBlePosMechanism(mBleFixMechanismSelected));
-        orderTasks.add(OrderTaskAssembler.setFilterRSSI(sbRssiFilter.getProgress() - 127));
+        orderTasks.add(OrderTaskAssembler.setFilterRSSI(mBind.sbRssiFilter.getProgress() - 127));
         orderTasks.add(OrderTaskAssembler.setFilterBleScanPhy(mScanningTypeSelected));
         orderTasks.add(OrderTaskAssembler.setFilterRelationship(mRelationshipSelected));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
@@ -339,7 +320,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         dialog.setDatas(mBleFixMechanismValues, mBleFixMechanismSelected);
         dialog.setListener(value -> {
             mBleFixMechanismSelected = value;
-            tvBleFixMechanism.setText(mBleFixMechanismValues.get(value));
+            mBind.tvBleFixMechanism.setText(mBleFixMechanismValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -351,7 +332,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         dialog.setDatas(mScanningTypeValues, mScanningTypeSelected);
         dialog.setListener(value -> {
             mScanningTypeSelected = value;
-            tvScanningType.setText(mScanningTypeValues.get(value));
+            mBind.tvScanningType.setText(mScanningTypeValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -363,7 +344,7 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
         dialog.setDatas(mRelationshipValues, mRelationshipSelected);
         dialog.setListener(value -> {
             mRelationshipSelected = value;
-            tvFilterRelationship.setText(mRelationshipValues.get(value));
+            mBind.tvFilterRelationship.setText(mRelationshipValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -392,8 +373,8 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
         int rssi = progress - 127;
-        tvRssiFilterValue.setText(String.format("%ddBm", rssi));
-        tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
+        mBind.tvRssiFilterValue.setText(String.format("%ddBm", rssi));
+        mBind.tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
     }
 
     @Override

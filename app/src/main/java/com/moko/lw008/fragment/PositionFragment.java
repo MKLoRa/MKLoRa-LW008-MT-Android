@@ -6,24 +6,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
 import com.moko.lw008.activity.DeviceInfoActivity;
+import com.moko.lw008.databinding.Lw008FragmentLoraBinding;
+import com.moko.lw008.databinding.Lw008FragmentPosBinding;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PositionFragment extends Fragment {
     private static final String TAG = PositionFragment.class.getSimpleName();
-    @BindView(R2.id.iv_offline_fix)
-    ImageView ivOfflineLocationEnable;
+    private Lw008FragmentPosBinding mBind;
     private boolean mOfflineLocationEnable;
     private DeviceInfoActivity activity;
 
@@ -40,15 +36,14 @@ public class PositionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
-        View view = inflater.inflate(R.layout.lw008_fragment_pos, container, false);
-        ButterKnife.bind(this, view);
+        mBind = Lw008FragmentPosBinding.inflate(inflater, container, false);
         activity = (DeviceInfoActivity) getActivity();
-        return view;
+        return mBind.getRoot();
     }
 
     public void setOfflineLocationEnable(int enable) {
         mOfflineLocationEnable = enable == 1;
-        ivOfflineLocationEnable.setImageResource(mOfflineLocationEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivOfflineFix.setImageResource(mOfflineLocationEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
     }
 
 

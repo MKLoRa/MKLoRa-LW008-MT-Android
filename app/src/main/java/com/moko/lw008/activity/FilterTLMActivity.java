@@ -3,8 +3,6 @@ package com.moko.lw008.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -12,7 +10,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityFilterTlmBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -28,16 +27,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FilterTLMActivity extends BaseActivity {
 
 
-    @BindView(R2.id.tv_tlm_version)
-    TextView tvTlmVersion;
-    @BindView(R2.id.iv_tlm_enable)
-    ImageView ivTlmEnable;
+    private Lw008ActivityFilterTlmBinding mBind;
 
     private boolean savedParamsError;
 
@@ -48,15 +41,15 @@ public class FilterTLMActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_tlm);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityFilterTlmBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         mValues = new ArrayList<>();
         mValues.add("Null");
         mValues.add("version 0");
         mValues.add("version 1");
         showSyncingProgressDialog();
-        tvTlmVersion.postDelayed(() -> {
+        mBind.tvTlmVersion.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmVersion());
             orderTasks.add(OrderTaskAssembler.getFilterEddystoneTlmEnable());
@@ -127,13 +120,13 @@ public class FilterTLMActivity extends BaseActivity {
                                     case KEY_FILTER_EDDYSTONE_TLM_VERSION:
                                         if (length > 0) {
                                             mSelected = value[4] & 0xFF;
-                                            tvTlmVersion.setText(mValues.get(mSelected));
+                                            mBind.tvTlmVersion.setText(mValues.get(mSelected));
                                         }
                                         break;
                                     case KEY_FILTER_EDDYSTONE_TLM_ENABLE:
                                         if (length > 0) {
                                             mTLMEnable = value[4] == 1;
-                                            ivTlmEnable.setImageResource(mTLMEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            mBind.ivTlmEnable.setImageResource(mTLMEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
                                         }
                                         break;
                                 }
@@ -188,7 +181,7 @@ public class FilterTLMActivity extends BaseActivity {
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
             mSelected = value;
-            tvTlmVersion.setText(mValues.get(mSelected));
+            mBind.tvTlmVersion.setText(mValues.get(mSelected));
             showSyncingProgressDialog();
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.setFilterEddystoneTlmVersion(mSelected));

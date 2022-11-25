@@ -9,8 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -18,8 +16,7 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityActiveStateCountBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -35,23 +32,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class ActiveStateCountActivity extends BaseActivity {
 
-    @BindView(R2.id.cb_active_state_count)
-    CheckBox cbActiveStateCount;
-    @BindView(R2.id.et_active_state_timeout)
-    EditText etActiveStateTimeout;
+    private Lw008ActivityActiveStateCountBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_active_state_count);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityActiveStateCountBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
@@ -59,7 +50,7 @@ public class ActiveStateCountActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        cbActiveStateCount.postDelayed(() -> {
+        mBind.cbActiveStateCount.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getActiveStateCountEnable());
             orderTasks.add(OrderTaskAssembler.getActiveStateTimeout());
@@ -134,14 +125,14 @@ public class ActiveStateCountActivity extends BaseActivity {
                                     case KEY_ACTIVE_STATE_COUNT_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbActiveStateCount.setChecked(enable == 1);
+                                            mBind.cbActiveStateCount.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_ACTIVE_STATE_TIMEOUT:
                                         if (length > 0) {
                                             byte[] timeoutBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                             int timeout = MokoUtils.toInt(timeoutBytes);
-                                            etActiveStateTimeout.setText(String.valueOf(timeout));
+                                            mBind.etActiveStateTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
                                 }
@@ -215,7 +206,7 @@ public class ActiveStateCountActivity extends BaseActivity {
     }
 
     public void onSave(View view) {
-        final String timeoutStr = etActiveStateTimeout.getText().toString();
+        final String timeoutStr = mBind.etActiveStateTimeout.getText().toString();
         if (TextUtils.isEmpty(timeoutStr)) {
             ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
             return;
@@ -228,7 +219,7 @@ public class ActiveStateCountActivity extends BaseActivity {
         savedParamsError = false;
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setActiveStateCountEnable(cbActiveStateCount.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setActiveStateCountEnable(mBind.cbActiveStateCount.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setActiveStateTimeout(timeout));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }

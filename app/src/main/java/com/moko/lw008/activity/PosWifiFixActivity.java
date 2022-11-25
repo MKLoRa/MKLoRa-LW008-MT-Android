@@ -9,16 +9,13 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityPosWifiBinding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -34,17 +31,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PosWifiFixActivity extends BaseActivity {
 
-    @BindView(R2.id.et_pos_timeout)
-    EditText etPosTimeout;
-    @BindView(R2.id.et_bssid_number)
-    EditText etBssidNumber;
-    @BindView(R2.id.tv_wifi_data_type)
-    TextView tvWifiDataType;
+    private Lw008ActivityPosWifiBinding mBind;
     private ArrayList<String> mValues;
     private int mSelected;
     private boolean mReceiverTag = false;
@@ -53,8 +42,8 @@ public class PosWifiFixActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_pos_wifi);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityPosWifiBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         mValues = new ArrayList<>();
         mValues.add("DAS");
@@ -65,7 +54,7 @@ public class PosWifiFixActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        etPosTimeout.postDelayed(() -> {
+        mBind.etPosTimeout.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getWifiPosTimeout());
             orderTasks.add(OrderTaskAssembler.getWifiPosBSSIDNumber());
@@ -142,19 +131,19 @@ public class PosWifiFixActivity extends BaseActivity {
                                     case KEY_WIFI_POS_TIMEOUT:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
-                                            etPosTimeout.setText(String.valueOf(number));
+                                            mBind.etPosTimeout.setText(String.valueOf(number));
                                         }
                                         break;
                                     case KEY_WIFI_POS_BSSID_NUMBER:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
-                                            etBssidNumber.setText(String.valueOf(number));
+                                            mBind.etBssidNumber.setText(String.valueOf(number));
                                         }
                                         break;
                                     case KEY_WIFI_POS_DATA_TYPE:
                                         if (length > 0) {
                                             mSelected = value[4] & 0xFF;
-                                            tvWifiDataType.setText(mValues.get(mSelected));
+                                            mBind.tvWifiDataType.setText(mValues.get(mSelected));
                                         }
                                         break;
                                 }
@@ -173,7 +162,7 @@ public class PosWifiFixActivity extends BaseActivity {
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
             mSelected = value;
-            tvWifiDataType.setText(mValues.get(value));
+            mBind.tvWifiDataType.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -190,14 +179,14 @@ public class PosWifiFixActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String posTimeoutStr = etPosTimeout.getText().toString();
+        final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
         if (TextUtils.isEmpty(posTimeoutStr))
             return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         if (posTimeout < 1 || posTimeout > 4) {
             return false;
         }
-        final String numberStr = etBssidNumber.getText().toString();
+        final String numberStr = mBind.etBssidNumber.getText().toString();
         if (TextUtils.isEmpty(numberStr))
             return false;
         final int number = Integer.parseInt(numberStr);
@@ -210,8 +199,8 @@ public class PosWifiFixActivity extends BaseActivity {
 
 
     private void saveParams() {
-        final String posTimeoutStr = etPosTimeout.getText().toString();
-        final String numberStr = etBssidNumber.getText().toString();
+        final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
+        final String numberStr = mBind.etBssidNumber.getText().toString();
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         final int number = Integer.parseInt(numberStr);
         List<OrderTask> orderTasks = new ArrayList<>();

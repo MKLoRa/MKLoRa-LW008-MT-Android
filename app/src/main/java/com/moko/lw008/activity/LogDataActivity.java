@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.moko.ble.lib.MokoConstants;
@@ -16,8 +14,9 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.AppConstants;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
 import com.moko.lw008.adapter.LogDataListAdapter;
+import com.moko.lw008.databinding.Lw008ActivityLogDataBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.entity.LogData;
 import com.moko.lw008.utils.Utils;
@@ -38,23 +37,11 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.OnItemClickListener {
 
     public static String TAG = LogDataActivity.class.getSimpleName();
-    @BindView(R2.id.tv_sync_switch)
-    TextView tvSyncSwitch;
-    @BindView(R2.id.iv_sync)
-    ImageView ivSync;
-    @BindView(R2.id.tv_export)
-    TextView tvExport;
-    @BindView(R2.id.tv_empty)
-    TextView tvEmpty;
-    @BindView(R2.id.rv_export_data)
-    RecyclerView rvLogData;
+    private Lw008ActivityLogDataBinding mBind;
     private StringBuilder storeString;
     private ArrayList<LogData> LogDatas;
     private boolean isSync;
@@ -70,8 +57,8 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_log_data);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityLogDataBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         mDeviceMac = getIntent().getStringExtra(AppConstants.EXTRA_KEY_DEVICE_MAC).replaceAll(":", "");
         logDirPath = LoRaLW008MainActivity.PATH_LOGCAT + File.separator + mDeviceMac;
         LogDatas = new ArrayList<>();
@@ -79,8 +66,8 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
         adapter.openLoadAnimation();
         adapter.replaceData(LogDatas);
         adapter.setOnItemClickListener(this);
-        rvLogData.setLayoutManager(new LinearLayoutManager(this));
-        rvLogData.setAdapter(adapter);
+        mBind.rvExportData.setLayoutManager(new LinearLayoutManager(this));
+        mBind.rvExportData.setAdapter(adapter);
         EventBus.getDefault().register(this);
         File file = new File(logDirPath);
         if (file.exists()) {
@@ -123,7 +110,7 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
             if (MokoConstants.ACTION_DISCONNECTED.equals(action)) {
                 isDisconnected = true;
                 // 中途断开，要先保存数据
-                tvSyncSwitch.setEnabled(false);
+                mBind.tvSyncSwitch.setEnabled(false);
                 if (isSync)
                     stopSync();
             }
@@ -166,10 +153,10 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
         }
         if (animation == null) {
             storeString = new StringBuilder();
-            tvSyncSwitch.setText("Stop");
+            mBind.tvSyncSwitch.setText("Stop");
             isSync = true;
             animation = AnimationUtils.loadAnimation(this, R.anim.lw008_rotate_refresh);
-            ivSync.startAnimation(animation);
+            mBind.ivSync.startAnimation(animation);
             LoRaLW008MokoSupport.getInstance().enableLogNotify();
             Calendar calendar = Calendar.getInstance();
             syncTime = Utils.calendar2strDate(calendar, "yyyy-MM-dd HH-mm-ss");
@@ -214,11 +201,11 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
                 selectedCount--;
             }
             if (selectedCount > 0) {
-                tvEmpty.setEnabled(true);
-                tvExport.setEnabled(true);
+                mBind.tvEmpty.setEnabled(true);
+                mBind.tvExport.setEnabled(true);
             } else {
-                tvEmpty.setEnabled(false);
-                tvExport.setEnabled(false);
+                mBind.tvEmpty.setEnabled(false);
+                mBind.tvExport.setEnabled(false);
             }
             adapter.replaceData(LogDatas);
         });
@@ -267,10 +254,10 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
     }
 
     private void stopSync() {
-        tvSyncSwitch.setText("Start");
+        mBind.tvSyncSwitch.setText("Start");
         isSync = false;
         // 关闭通知
-        ivSync.clearAnimation();
+        mBind.ivSync.clearAnimation();
         animation = null;
         if (storeString.length() == 0) {
             AlertMessageDialog dialog = new AlertMessageDialog();
@@ -322,11 +309,11 @@ public class LogDataActivity extends BaseActivity implements BaseQuickAdapter.On
                 selectedCount--;
             }
             if (selectedCount > 0) {
-                tvEmpty.setEnabled(true);
-                tvExport.setEnabled(true);
+                mBind.tvEmpty.setEnabled(true);
+                mBind.tvExport.setEnabled(true);
             } else {
-                tvEmpty.setEnabled(false);
-                tvExport.setEnabled(false);
+                mBind.tvEmpty.setEnabled(false);
+                mBind.tvExport.setEnabled(false);
             }
             adapter.notifyItemChanged(position);
         }

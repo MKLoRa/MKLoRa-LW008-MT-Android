@@ -9,15 +9,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityAxisSettingBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -32,29 +31,17 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class AxisSettingActivity extends BaseActivity {
 
-    @BindView(R2.id.et_wakeup_threshold)
-    EditText etWakeupThreshold;
-    @BindView(R2.id.et_wakeup_duration)
-    EditText etWakeupDuration;
-    @BindView(R2.id.et_motion_threshold)
-    EditText etMotionThreshold;
-    @BindView(R2.id.et_motion_duration)
-    EditText etMotionDuration;
-    @BindView(R2.id.et_vibration_thresholds)
-    EditText etVibrationThresholds;
+    private Lw008ActivityAxisSettingBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_axis_setting);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityAxisSettingBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
 
         EventBus.getDefault().register(this);
         // 注册广播接收器
@@ -63,7 +50,7 @@ public class AxisSettingActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        etWakeupDuration.postDelayed(() -> {
+        mBind.etWakeupDuration.postDelayed(() -> {
             ArrayList<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getAccWakeupCondition());
             orderTasks.add(OrderTaskAssembler.getAccMotionCondition());
@@ -140,8 +127,8 @@ public class AxisSettingActivity extends BaseActivity {
                                         if (length == 2) {
                                             int threshold = value[4] & 0xFF;
                                             int duration = value[5] & 0xFF;
-                                            etWakeupThreshold.setText(String.valueOf(threshold));
-                                            etWakeupDuration.setText(String.valueOf(duration));
+                                            mBind.etWakeupThreshold.setText(String.valueOf(threshold));
+                                            mBind.etWakeupDuration.setText(String.valueOf(duration));
 
                                         }
                                         break;
@@ -149,14 +136,14 @@ public class AxisSettingActivity extends BaseActivity {
                                         if (length == 2) {
                                             int threshold = value[4] & 0xFF;
                                             int duration = value[5] & 0xFF;
-                                            etMotionThreshold.setText(String.valueOf(threshold));
-                                            etMotionDuration.setText(String.valueOf(duration));
+                                            mBind.etMotionThreshold.setText(String.valueOf(threshold));
+                                            mBind.etMotionDuration.setText(String.valueOf(duration));
                                         }
                                         break;
                                     case KEY_ACC_SHOCK_THRESHOLD:
                                         if (length > 0) {
                                             int threshold = value[4] & 0xFF;
-                                            etVibrationThresholds.setText(String.valueOf(threshold));
+                                            mBind.etVibrationThresholds.setText(String.valueOf(threshold));
                                         }
                                         break;
 
@@ -242,31 +229,31 @@ public class AxisSettingActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String wakeUpThresholdStr = etWakeupThreshold.getText().toString();
+        final String wakeUpThresholdStr = mBind.etWakeupThreshold.getText().toString();
         if (TextUtils.isEmpty(wakeUpThresholdStr))
             return false;
         final int wakeUpThreshold = Integer.parseInt(wakeUpThresholdStr);
         if (wakeUpThreshold < 1 || wakeUpThreshold > 20)
             return false;
-        final String wakeUpDurationStr = etWakeupDuration.getText().toString();
+        final String wakeUpDurationStr = mBind.etWakeupDuration.getText().toString();
         if (TextUtils.isEmpty(wakeUpDurationStr))
             return false;
         final int wakeUpDuration = Integer.parseInt(wakeUpDurationStr);
         if (wakeUpDuration < 1 || wakeUpDuration > 10)
             return false;
-        final String motionThresholdStr = etMotionThreshold.getText().toString();
+        final String motionThresholdStr = mBind.etMotionThreshold.getText().toString();
         if (TextUtils.isEmpty(motionThresholdStr))
             return false;
         final int motionThreshold = Integer.parseInt(motionThresholdStr);
         if (motionThreshold < 10 || motionThreshold > 250)
             return false;
-        final String motionDurationStr = etMotionDuration.getText().toString();
+        final String motionDurationStr = mBind.etMotionDuration.getText().toString();
         if (TextUtils.isEmpty(motionDurationStr))
             return false;
         final int motionDuration = Integer.parseInt(motionDurationStr);
         if (motionDuration < 1 || motionDuration > 50)
             return false;
-        final String vibrationThresholdStr = etVibrationThresholds.getText().toString();
+        final String vibrationThresholdStr = mBind.etVibrationThresholds.getText().toString();
         if (TextUtils.isEmpty(vibrationThresholdStr))
             return false;
         final int vibrationThreshold = Integer.parseInt(vibrationThresholdStr);
@@ -277,15 +264,15 @@ public class AxisSettingActivity extends BaseActivity {
     }
 
     private void saveParams() {
-        final String wakeUpThresholdStr = etWakeupThreshold.getText().toString();
+        final String wakeUpThresholdStr = mBind.etWakeupThreshold.getText().toString();
         final int wakeUpThreshold = Integer.parseInt(wakeUpThresholdStr);
-        final String wakeUpDurationStr = etWakeupDuration.getText().toString();
+        final String wakeUpDurationStr = mBind.etWakeupDuration.getText().toString();
         final int wakeUpDuration = Integer.parseInt(wakeUpDurationStr);
-        final String motionThresholdStr = etMotionThreshold.getText().toString();
+        final String motionThresholdStr = mBind.etMotionThreshold.getText().toString();
         final int motionThreshold = Integer.parseInt(motionThresholdStr);
-        final String motionDurationStr = etMotionDuration.getText().toString();
+        final String motionDurationStr = mBind.etMotionDuration.getText().toString();
         final int motionDuration = Integer.parseInt(motionDurationStr);
-        final String vibrationThresholdStr = etVibrationThresholds.getText().toString();
+        final String vibrationThresholdStr = mBind.etVibrationThresholds.getText().toString();
         final int vibrationThreshold = Integer.parseInt(vibrationThresholdStr);
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();

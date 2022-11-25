@@ -4,16 +4,14 @@ package com.moko.lw008.activity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityFilterUrlBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -29,24 +27,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FilterUrlActivity extends BaseActivity {
 
     private final String FILTER_ASCII = "[ -~]*";
 
-    @BindView(R2.id.cb_url)
-    CheckBox cbUrl;
-    @BindView(R2.id.et_url)
-    EditText etUrl;
+    private Lw008ActivityFilterUrlBinding mBind;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_url);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityFilterUrlBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         InputFilter inputFilter = (source, start, end, dest, dstart, dend) -> {
             if (!(source + "").matches(FILTER_ASCII)) {
@@ -55,9 +47,9 @@ public class FilterUrlActivity extends BaseActivity {
 
             return null;
         };
-        etUrl.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100), inputFilter});
+        mBind.etUrl.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100), inputFilter});
         showSyncingProgressDialog();
-        cbUrl.postDelayed(() -> {
+        mBind.cbUrl.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrlEnable());
             orderTasks.add(OrderTaskAssembler.getFilterEddystoneUrl());
@@ -132,13 +124,13 @@ public class FilterUrlActivity extends BaseActivity {
                                     case KEY_FILTER_EDDYSTONE_URL:
                                         if (length > 0) {
                                             String url = new String(Arrays.copyOfRange(value, 4, 4 + length));
-                                            etUrl.setText(String.valueOf(url));
+                                            mBind.etUrl.setText(String.valueOf(url));
                                         }
                                         break;
                                     case KEY_FILTER_EDDYSTONE_URL_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbUrl.setChecked(enable == 1);
+                                            mBind.cbUrl.setChecked(enable == 1);
                                         }
                                         break;
                                 }
@@ -165,11 +157,11 @@ public class FilterUrlActivity extends BaseActivity {
 
 
     private void saveParams() {
-        final String url = etUrl.getText().toString();
+        final String url = mBind.etUrl.getText().toString();
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setFilterEddystoneUrl(url));
-        orderTasks.add(OrderTaskAssembler.setFilterEddystoneUrlEnable(cbUrl.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterEddystoneUrlEnable(mBind.cbUrl.isChecked() ? 1 : 0));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

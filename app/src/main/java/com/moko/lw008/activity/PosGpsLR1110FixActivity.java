@@ -4,9 +4,6 @@ package com.moko.lw008.activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -14,8 +11,7 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityPosGpsLr1110Binding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -32,33 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PosGpsLR1110FixActivity extends BaseActivity {
 
 
-    @BindView(R2.id.et_pos_timeout)
-    EditText etPosTimeout;
-    @BindView(R2.id.et_satellite_threshold)
-    EditText etSatelliteThreshold;
-    @BindView(R2.id.tv_gps_data_type)
-    TextView tvGpsDataType;
-    @BindView(R2.id.tv_gps_pos_system)
-    TextView tvGpsPosSystem;
-    @BindView(R2.id.cb_autonomous_aiding)
-    CheckBox cbAutonomousAiding;
-    @BindView(R2.id.et_autonomous_lat)
-    EditText etAutonomousLat;
-    @BindView(R2.id.et_autonomous_lon)
-    EditText etAutonomousLon;
-    @BindView(R2.id.cb_ephemeris_start_notify)
-    CheckBox cbEphemerisStartNotify;
-    @BindView(R2.id.cb_ephemeris_end_notify)
-    CheckBox cbEphemerisEndNotify;
-    @BindView(R2.id.cl_autonomous_params)
-    ConstraintLayout clAutonomousParams;
+    private Lw008ActivityPosGpsLr1110Binding mBind;
     private boolean savedParamsError;
 
     private ArrayList<String> mValues;
@@ -70,8 +43,8 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_pos_gps_lr1110);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityPosGpsLr1110Binding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         mValues = new ArrayList<>();
         mValues.add("DAS");
@@ -80,11 +53,11 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         mGpsPosSystemValues.add("GPS");
         mGpsPosSystemValues.add("Beidou");
         mGpsPosSystemValues.add("GPS&Beidou");
-        cbAutonomousAiding.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            clAutonomousParams.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        mBind.cbAutonomousAiding.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mBind.clAutonomousParams.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         });
         showSyncingProgressDialog();
-        etPosTimeout.postDelayed(() -> {
+        mBind.etPosTimeout.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getGPSPosTimeout());
             orderTasks.add(OrderTaskAssembler.getGPSPosSatelliteThreshold());
@@ -170,32 +143,32 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
                                     case KEY_GPS_POS_TIMEOUT:
                                         if (length > 0) {
                                             int timeout = value[4] & 0xFF;
-                                            etPosTimeout.setText(String.valueOf(timeout));
+                                            mBind.etPosTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
                                     case KEY_GPS_POS_SATELLITE_THRESHOLD:
                                         if (length > 0) {
                                             int threshold = value[4] & 0xFF;
-                                            etSatelliteThreshold.setText(String.valueOf(threshold));
+                                            mBind.etSatelliteThreshold.setText(String.valueOf(threshold));
                                         }
                                         break;
                                     case KEY_GPS_POS_DATA_TYPE:
                                         if (length > 0) {
                                             mSelected = value[4] & 0xFF;
-                                            tvGpsDataType.setText(mValues.get(mSelected));
+                                            mBind.tvGpsDataType.setText(mValues.get(mSelected));
                                         }
                                         break;
                                     case KEY_GPS_POS_SYSTEM:
                                         if (length > 0) {
                                             mGpsPosSystemSelected = value[4] & 0xFF;
-                                            tvGpsPosSystem.setText(mGpsPosSystemValues.get(mGpsPosSystemSelected));
+                                            mBind.tvGpsPosSystem.setText(mGpsPosSystemValues.get(mGpsPosSystemSelected));
                                         }
                                         break;
                                     case KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbAutonomousAiding.setChecked(enable == 0);
-                                            clAutonomousParams.setVisibility(enable == 0 ? View.VISIBLE : View.GONE);
+                                            mBind.cbAutonomousAiding.setChecked(enable == 0);
+                                            mBind.clAutonomousParams.setVisibility(enable == 0 ? View.VISIBLE : View.GONE);
                                         }
                                         break;
                                     case KEY_GPS_POS_AUXILIARY_LAT_LON:
@@ -204,20 +177,20 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
                                             int lat = MokoUtils.toIntSigned(latBytes);
                                             byte[] lonBytes = Arrays.copyOfRange(value, 8, 12);
                                             int lon = MokoUtils.toIntSigned(lonBytes);
-                                            etAutonomousLat.setText(String.valueOf(lat));
-                                            etAutonomousLon.setText(String.valueOf(lon));
+                                            mBind.etAutonomousLat.setText(String.valueOf(lat));
+                                            mBind.etAutonomousLon.setText(String.valueOf(lon));
                                         }
                                         break;
                                     case KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbEphemerisStartNotify.setChecked(enable == 1);
+                                            mBind.cbEphemerisStartNotify.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbEphemerisEndNotify.setChecked(enable == 1);
+                                            mBind.cbEphemerisEndNotify.setChecked(enable == 1);
                                         }
                                         break;
                                 }
@@ -237,7 +210,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
             mSelected = value;
-            tvGpsDataType.setText(mValues.get(value));
+            mBind.tvGpsDataType.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -249,7 +222,7 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         dialog.setDatas(mGpsPosSystemValues, mGpsPosSystemSelected);
         dialog.setListener(value -> {
             mGpsPosSystemSelected = value;
-            tvGpsPosSystem.setText(mGpsPosSystemValues.get(value));
+            mBind.tvGpsPosSystem.setText(mGpsPosSystemValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -266,30 +239,30 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String posTimeoutStr = etPosTimeout.getText().toString();
+        final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
         if (TextUtils.isEmpty(posTimeoutStr))
             return false;
         final int posTimeout = Integer.parseInt(posTimeoutStr);
         if (posTimeout < 1 || posTimeout > 5) {
             return false;
         }
-        final String thresholdStr = etSatelliteThreshold.getText().toString();
+        final String thresholdStr = mBind.etSatelliteThreshold.getText().toString();
         if (TextUtils.isEmpty(thresholdStr))
             return false;
         final int threshold = Integer.parseInt(thresholdStr);
         if (threshold < 4 || threshold > 10) {
             return false;
         }
-        if (!cbAutonomousAiding.isChecked())
+        if (!mBind.cbAutonomousAiding.isChecked())
             return true;
-        final String latStr = etAutonomousLat.getText().toString();
+        final String latStr = mBind.etAutonomousLat.getText().toString();
         if (TextUtils.isEmpty(latStr))
             return false;
         final int lat = Integer.parseInt(latStr);
         if (lat < -9000000 || lat > 9000000) {
             return false;
         }
-        final String lonStr = etAutonomousLon.getText().toString();
+        final String lonStr = mBind.etAutonomousLon.getText().toString();
         if (TextUtils.isEmpty(lonStr))
             return false;
         final int lon = Integer.parseInt(lonStr);
@@ -302,13 +275,13 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
 
 
     private void saveParams() {
-        final String posTimeoutStr = etPosTimeout.getText().toString();
+        final String posTimeoutStr = mBind.etPosTimeout.getText().toString();
         final int posTimeout = Integer.parseInt(posTimeoutStr);
-        final String thresholdStr = etSatelliteThreshold.getText().toString();
+        final String thresholdStr = mBind.etSatelliteThreshold.getText().toString();
         final int threshold = Integer.parseInt(thresholdStr);
-        final String latStr = etAutonomousLat.getText().toString();
+        final String latStr = mBind.etAutonomousLat.getText().toString();
         final int lat = Integer.parseInt(latStr);
-        final String lonStr = etAutonomousLon.getText().toString();
+        final String lonStr = mBind.etAutonomousLon.getText().toString();
         final int lon = Integer.parseInt(lonStr);
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
@@ -316,10 +289,10 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setGPSPosSatelliteThreshold(threshold));
         orderTasks.add(OrderTaskAssembler.setGPSPosDataType(mSelected));
         orderTasks.add(OrderTaskAssembler.setGPSPosSystem(mGpsPosSystemSelected));
-        orderTasks.add(OrderTaskAssembler.setGPSPosAutonmousAidingEnable(cbAutonomousAiding.isChecked() ? 0 : 1));
+        orderTasks.add(OrderTaskAssembler.setGPSPosAutonmousAidingEnable(mBind.cbAutonomousAiding.isChecked() ? 0 : 1));
         orderTasks.add(OrderTaskAssembler.setGPSPosAuxiliaryLatLon(lat, lon));
-        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisStartNotifyEnable(cbEphemerisStartNotify.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisEndNotifyEnable(cbEphemerisEndNotify.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisStartNotifyEnable(mBind.cbEphemerisStartNotify.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setGPSPosEphemerisEndNotifyEnable(mBind.cbEphemerisEndNotify.isChecked() ? 1 : 0));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

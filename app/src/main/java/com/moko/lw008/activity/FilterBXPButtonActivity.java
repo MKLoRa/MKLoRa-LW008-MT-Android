@@ -3,15 +3,14 @@ package com.moko.lw008.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityFilterBxpButtonBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -26,32 +25,20 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FilterBXPButtonActivity extends BaseActivity {
 
 
-    @BindView(R2.id.cb_enable)
-    CheckBox cbEnable;
-    @BindView(R2.id.cb_single_press)
-    CheckBox cbSinglePress;
-    @BindView(R2.id.cb_double_press)
-    CheckBox cbDoublePress;
-    @BindView(R2.id.cb_long_press)
-    CheckBox cbLongPress;
-    @BindView(R2.id.cb_abnormal_inactivity)
-    CheckBox cbAbnormalInactivity;
+    private Lw008ActivityFilterBxpButtonBinding mBind;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_bxp_button);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityFilterBxpButtonBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         showSyncingProgressDialog();
-        cbEnable.postDelayed(() -> {
+        mBind.cbEnable.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterBXPButtonEnable());
             orderTasks.add(OrderTaskAssembler.getFilterBXPButtonRules());
@@ -125,16 +112,16 @@ public class FilterBXPButtonActivity extends BaseActivity {
                                 switch (configKeyEnum) {
                                     case KEY_FILTER_BXP_BUTTON_RULES:
                                         if (length > 0) {
-                                            cbSinglePress.setChecked(value[4] == 1);
-                                            cbDoublePress.setChecked(value[5] == 1);
-                                            cbLongPress.setChecked(value[6] == 1);
-                                            cbAbnormalInactivity.setChecked(value[7] == 1);
+                                            mBind.cbSinglePress.setChecked(value[4] == 1);
+                                            mBind.cbDoublePress.setChecked(value[5] == 1);
+                                            mBind.cbLongPress.setChecked(value[6] == 1);
+                                            mBind.cbAbnormalInactivity.setChecked(value[7] == 1);
                                         }
                                         break;
                                     case KEY_FILTER_BXP_BUTTON_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbEnable.setChecked(enable == 1);
+                                            mBind.cbEnable.setChecked(enable == 1);
                                         }
                                         break;
                                 }
@@ -163,11 +150,11 @@ public class FilterBXPButtonActivity extends BaseActivity {
     private void saveParams() {
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setFilterBXPButtonRules(cbSinglePress.isChecked() ? 1 : 0,
-                cbDoublePress.isChecked() ? 1 : 0,
-                cbLongPress.isChecked() ? 1 : 0,
-                cbAbnormalInactivity.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setFilterBXPButtonEnable(cbEnable.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPButtonRules(mBind.cbSinglePress.isChecked() ? 1 : 0,
+                mBind.cbDoublePress.isChecked() ? 1 : 0,
+                mBind.cbLongPress.isChecked() ? 1 : 0,
+                mBind.cbAbnormalInactivity.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPButtonEnable(mBind.cbEnable.isChecked() ? 1 : 0));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

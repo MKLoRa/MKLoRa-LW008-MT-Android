@@ -4,8 +4,6 @@ package com.moko.lw008.activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -13,8 +11,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityFilterIbeaconBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -30,34 +28,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FilterIBeaconActivity extends BaseActivity {
 
-    @BindView(R2.id.cb_ibeacon)
-    CheckBox cbIbeacon;
-    @BindView(R2.id.et_ibeacon_uuid)
-    EditText etIbeaconUuid;
-    @BindView(R2.id.et_ibeacon_major_min)
-    EditText etIbeaconMajorMin;
-    @BindView(R2.id.et_ibeacon_major_max)
-    EditText etIbeaconMajorMax;
-    @BindView(R2.id.et_ibeacon_minor_min)
-    EditText etIbeaconMinorMin;
-    @BindView(R2.id.et_ibeacon_minor_max)
-    EditText etIbeaconMinorMax;
+    private Lw008ActivityFilterIbeaconBinding mBind;
     private boolean savedParamsError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_ibeacon);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityFilterIbeaconBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
 
         showSyncingProgressDialog();
-        cbIbeacon.postDelayed(() -> {
+        mBind.cbIbeacon.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterIBeaconEnable());
             orderTasks.add(OrderTaskAssembler.getFilterIBeaconUUID());
@@ -136,7 +120,7 @@ public class FilterIBeaconActivity extends BaseActivity {
                                     case KEY_FILTER_IBEACON_UUID:
                                         if (length > 0) {
                                             String uuid = MokoUtils.bytesToHexString(Arrays.copyOfRange(value, 4, 4 + length));
-                                            etIbeaconUuid.setText(String.valueOf(uuid));
+                                            mBind.etIbeaconUuid.setText(String.valueOf(uuid));
                                         }
                                         break;
                                     case KEY_FILTER_IBEACON_MAJOR_RANGE:
@@ -145,8 +129,8 @@ public class FilterIBeaconActivity extends BaseActivity {
                                             if (enable == 1) {
                                                 int majorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 5, 7));
                                                 int majorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 7, 9));
-                                                etIbeaconMajorMin.setText(String.valueOf(majorMin));
-                                                etIbeaconMajorMax.setText(String.valueOf(majorMax));
+                                                mBind.etIbeaconMajorMin.setText(String.valueOf(majorMin));
+                                                mBind.etIbeaconMajorMax.setText(String.valueOf(majorMax));
                                             }
                                         }
                                         break;
@@ -156,15 +140,15 @@ public class FilterIBeaconActivity extends BaseActivity {
                                             if (enable == 1) {
                                                 int minorMin = MokoUtils.toInt(Arrays.copyOfRange(value, 5, 7));
                                                 int minorMax = MokoUtils.toInt(Arrays.copyOfRange(value, 7, 9));
-                                                etIbeaconMinorMin.setText(String.valueOf(minorMin));
-                                                etIbeaconMinorMax.setText(String.valueOf(minorMax));
+                                                mBind.etIbeaconMinorMin.setText(String.valueOf(minorMin));
+                                                mBind.etIbeaconMinorMax.setText(String.valueOf(minorMax));
                                             }
                                         }
                                         break;
                                     case KEY_FILTER_IBEACON_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbIbeacon.setChecked(enable == 1);
+                                            mBind.cbIbeacon.setChecked(enable == 1);
                                         }
                                         break;
                                 }
@@ -188,11 +172,11 @@ public class FilterIBeaconActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String uuid = etIbeaconUuid.getText().toString();
-        final String majorMin = etIbeaconMajorMin.getText().toString();
-        final String majorMax = etIbeaconMajorMax.getText().toString();
-        final String minorMin = etIbeaconMinorMin.getText().toString();
-        final String minorMax = etIbeaconMinorMax.getText().toString();
+        final String uuid = mBind.etIbeaconUuid.getText().toString();
+        final String majorMin = mBind.etIbeaconMajorMin.getText().toString();
+        final String majorMax = mBind.etIbeaconMajorMax.getText().toString();
+        final String minorMin = mBind.etIbeaconMinorMin.getText().toString();
+        final String minorMax = mBind.etIbeaconMinorMax.getText().toString();
         if (!TextUtils.isEmpty(uuid)) {
             int length = uuid.length();
             if (length % 2 != 0) {
@@ -234,11 +218,11 @@ public class FilterIBeaconActivity extends BaseActivity {
 
 
     private void saveParams() {
-        final String uuid = etIbeaconUuid.getText().toString();
-        final String majorMinStr = etIbeaconMajorMin.getText().toString();
-        final String majorMaxStr = etIbeaconMajorMax.getText().toString();
-        final String minorMinStr = etIbeaconMinorMin.getText().toString();
-        final String minorMaxStr = etIbeaconMinorMax.getText().toString();
+        final String uuid = mBind.etIbeaconUuid.getText().toString();
+        final String majorMinStr = mBind.etIbeaconMajorMin.getText().toString();
+        final String majorMaxStr = mBind.etIbeaconMajorMax.getText().toString();
+        final String minorMinStr = mBind.etIbeaconMinorMin.getText().toString();
+        final String minorMaxStr = mBind.etIbeaconMinorMax.getText().toString();
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setFilterIBeaconUUID(uuid));
@@ -256,7 +240,7 @@ public class FilterIBeaconActivity extends BaseActivity {
             final int minorMax = Integer.parseInt(minorMaxStr);
             orderTasks.add(OrderTaskAssembler.setFilterIBeaconMinorRange(1, minorMin, minorMax));
         }
-        orderTasks.add(OrderTaskAssembler.setFilterIBeaconEnable(cbIbeacon.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterIBeaconEnable(mBind.cbIbeacon.isChecked() ? 1 : 0));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

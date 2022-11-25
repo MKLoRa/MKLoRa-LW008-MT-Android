@@ -9,8 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -18,8 +16,8 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityPeriodicModeBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -36,15 +34,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PeriodicModeActivity extends BaseActivity {
 
-    @BindView(R2.id.tv_periodic_pos_strategy)
-    TextView tvPeriodicPosStrategy;
-    @BindView(R2.id.et_report_interval)
-    EditText etReportInterval;
+    private Lw008ActivityPeriodicModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -53,8 +45,8 @@ public class PeriodicModeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_periodic_mode);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityPeriodicModeBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         mValues = new ArrayList<>();
         mValues.add("WIFI");
         mValues.add("BLE");
@@ -70,7 +62,7 @@ public class PeriodicModeActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        tvPeriodicPosStrategy.postDelayed(() -> {
+        mBind.tvPeriodicPosStrategy.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getPeriodicPosStrategy());
             orderTasks.add(OrderTaskAssembler.getPeriodicReportInterval());
@@ -145,14 +137,14 @@ public class PeriodicModeActivity extends BaseActivity {
                                         if (length > 0) {
                                             int strategy = value[4] & 0xFF;
                                             mSelected = strategy;
-                                            tvPeriodicPosStrategy.setText(mValues.get(mSelected));
+                                            mBind.tvPeriodicPosStrategy.setText(mValues.get(mSelected));
                                         }
                                         break;
                                     case KEY_PERIODIC_MODE_REPORT_INTERVAL:
                                         if (length > 0) {
                                             byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                             int interval = MokoUtils.toInt(intervalBytes);
-                                            etReportInterval.setText(String.valueOf(interval));
+                                            mBind.etReportInterval.setText(String.valueOf(interval));
                                         }
                                         break;
                                 }
@@ -232,13 +224,13 @@ public class PeriodicModeActivity extends BaseActivity {
         dialog.setDatas(mValues, mSelected);
         dialog.setListener(value -> {
             mSelected = value;
-            tvPeriodicPosStrategy.setText(mValues.get(value));
+            mBind.tvPeriodicPosStrategy.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
 
     public void onSave(View view) {
-        final String intervalStr = etReportInterval.getText().toString();
+        final String intervalStr = mBind.etReportInterval.getText().toString();
         if (TextUtils.isEmpty(intervalStr)) {
             ToastUtils.showToast(this, "Para error!");
             return;

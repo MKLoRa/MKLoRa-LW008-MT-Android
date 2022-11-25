@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
@@ -17,7 +15,8 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityFilterBxpTagIdBinding;
+import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -33,19 +32,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FilterBXPTagIdActivity extends BaseActivity {
 
-    @BindView(R2.id.cb_enable)
-    CheckBox cbEnable;
-    @BindView(R2.id.cb_precise_match)
-    CheckBox cbPreciseMatch;
-    @BindView(R2.id.cb_reverse_filter)
-    CheckBox cbReverseFilter;
-    @BindView(R2.id.ll_tag_id)
-    LinearLayout llTadId;
+    private Lw008ActivityFilterBxpTagIdBinding mBind;
 
     private boolean savedParamsError;
 
@@ -54,12 +43,12 @@ public class FilterBXPTagIdActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_filter_bxp_tag_id);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityFilterBxpTagIdBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
         filterTagId = new ArrayList<>();
         showSyncingProgressDialog();
-        cbPreciseMatch.postDelayed(() -> {
+        mBind.cbPreciseMatch.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getFilterBXPTagEnable());
             orderTasks.add(OrderTaskAssembler.getFilterBXPTagPrecise());
@@ -137,19 +126,19 @@ public class FilterBXPTagIdActivity extends BaseActivity {
                                     case KEY_FILTER_BXP_TAG_ENABLE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbEnable.setChecked(enable == 1);
+                                            mBind.cbEnable.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_FILTER_BXP_TAG_PRECISE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbPreciseMatch.setChecked(enable == 1);
+                                            mBind.cbPreciseMatch.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_FILTER_BXP_TAG_REVERSE:
                                         if (length > 0) {
                                             int enable = value[4] & 0xFF;
-                                            cbReverseFilter.setChecked(enable == 1);
+                                            mBind.cbReverseFilter.setChecked(enable == 1);
                                         }
                                         break;
                                     case KEY_FILTER_BXP_TAG_RULES:
@@ -164,12 +153,12 @@ public class FilterBXPTagIdActivity extends BaseActivity {
                                             }
                                             for (int i = 0, l = filterTagId.size(); i < l; i++) {
                                                 String macAddress = filterTagId.get(i);
-                                                View v = LayoutInflater.from(FilterBXPTagIdActivity.this).inflate(R.layout.lw008_item_tag_id_filter, llTadId, false);
+                                                View v = LayoutInflater.from(FilterBXPTagIdActivity.this).inflate(R.layout.lw008_item_tag_id_filter, mBind.llTagId, false);
                                                 TextView title = v.findViewById(R.id.tv_tag_id_title);
                                                 EditText etMacAddress = v.findViewById(R.id.et_tag_id);
                                                 title.setText(String.format("Tag ID %d", i + 1));
                                                 etMacAddress.setText(macAddress);
-                                                llTadId.addView(v);
+                                                mBind.llTagId.addView(v);
                                             }
                                         }
                                         break;
@@ -196,28 +185,28 @@ public class FilterBXPTagIdActivity extends BaseActivity {
     public void onAdd(View view) {
         if (isWindowLocked())
             return;
-        int count = llTadId.getChildCount();
+        int count = mBind.llTagId.getChildCount();
         if (count > 9) {
             ToastUtils.showToast(this, "You can set up to 10 filters!");
             return;
         }
-        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_tag_id_filter, llTadId, false);
+        View v = LayoutInflater.from(this).inflate(R.layout.lw008_item_tag_id_filter, mBind.llTagId, false);
         TextView title = v.findViewById(R.id.tv_tag_id_title);
         title.setText(String.format("Tag ID %d", count + 1));
-        llTadId.addView(v);
+        mBind.llTagId.addView(v);
     }
 
     public void onDel(View view) {
         if (isWindowLocked())
             return;
-        final int c = llTadId.getChildCount();
+        final int c = mBind.llTagId.getChildCount();
         if (c == 0) {
             ToastUtils.showToast(this, "There are currently no filters to delete");
             return;
         }
-        int count = llTadId.getChildCount();
+        int count = mBind.llTagId.getChildCount();
         if (count > 0) {
-            llTadId.removeViewAt(count - 1);
+            mBind.llTagId.removeViewAt(count - 1);
         }
     }
 
@@ -225,19 +214,19 @@ public class FilterBXPTagIdActivity extends BaseActivity {
     private void saveParams() {
         savedParamsError = false;
         List<OrderTask> orderTasks = new ArrayList<>();
-        orderTasks.add(OrderTaskAssembler.setFilterBXPTagEnable(cbEnable.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setFilterBXPTagPrecise(cbPreciseMatch.isChecked() ? 1 : 0));
-        orderTasks.add(OrderTaskAssembler.setFilterBXPTagReverse(cbReverseFilter.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagEnable(mBind.cbEnable.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagPrecise(mBind.cbPreciseMatch.isChecked() ? 1 : 0));
+        orderTasks.add(OrderTaskAssembler.setFilterBXPTagReverse(mBind.cbReverseFilter.isChecked() ? 1 : 0));
         orderTasks.add(OrderTaskAssembler.setFilterBXPTagRules(filterTagId));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     private boolean isValid() {
-        final int c = llTadId.getChildCount();
+        final int c = mBind.llTagId.getChildCount();
         filterTagId.clear();
         if (c > 0) {
             for (int i = 0; i < c; i++) {
-                View v = llTadId.getChildAt(i);
+                View v = mBind.llTagId.getChildAt(i);
                 EditText etTagId= v.findViewById(R.id.et_tag_id);
                 final String macAddress = etTagId.getText().toString();
                 if (TextUtils.isEmpty(macAddress)) {

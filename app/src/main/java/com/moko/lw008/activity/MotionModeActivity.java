@@ -9,9 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -19,8 +16,7 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008ActivityMotionModeBinding;
 import com.moko.lw008.dialog.BottomDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
@@ -37,39 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MotionModeActivity extends BaseActivity {
 
-    @BindView(R2.id.cb_fix_on_start)
-    CheckBox cbFixOnStart;
-    @BindView(R2.id.et_fix_on_start_number)
-    EditText etFixOnStartNumber;
-    @BindView(R2.id.tv_pos_strategy_on_start)
-    TextView tvPosStrategyOnStart;
-    @BindView(R2.id.cb_fix_in_trip)
-    CheckBox cbFixInTrip;
-    @BindView(R2.id.et_report_interval_in_trip)
-    EditText etReportIntervalInTrip;
-    @BindView(R2.id.tv_pos_strategy_in_trip)
-    TextView tvPosStrategyInTrip;
-    @BindView(R2.id.cb_fix_on_end)
-    CheckBox cbFixOnEnd;
-    @BindView(R2.id.et_trip_end_timeout)
-    EditText etTripEndTimeout;
-    @BindView(R2.id.et_fix_on_end_number)
-    EditText etFixOnEndNumber;
-    @BindView(R2.id.et_report_interval_on_end)
-    EditText etReportIntervalOnEnd;
-    @BindView(R2.id.tv_pos_strategy_on_end)
-    TextView tvPosStrategyOnEnd;
-    @BindView(R2.id.cb_notify_on_start)
-    CheckBox cbNotifyOnStart;
-    @BindView(R2.id.cb_notify_in_trip)
-    CheckBox cbNotifyInTrip;
-    @BindView(R2.id.cb_notify_on_end)
-    CheckBox cbNotifyOnEnd;
+    private Lw008ActivityMotionModeBinding mBind;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
     private ArrayList<String> mValues;
@@ -80,8 +46,8 @@ public class MotionModeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lw008_activity_motion_mode);
-        ButterKnife.bind(this);
+        mBind = Lw008ActivityMotionModeBinding.inflate(getLayoutInflater());
+        setContentView(mBind.getRoot());
         mValues = new ArrayList<>();
         mValues.add("WIFI");
         mValues.add("BLE");
@@ -97,7 +63,7 @@ public class MotionModeActivity extends BaseActivity {
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
         showSyncingProgressDialog();
-        cbFixOnStart.postDelayed(() -> {
+        mBind.cbFixOnStart.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getMotionModeEvent());
             orderTasks.add(OrderTaskAssembler.getMotionModeStartNumber());
@@ -185,65 +151,65 @@ public class MotionModeActivity extends BaseActivity {
                                     case KEY_MOTION_MODE_EVENT:
                                         if (length > 0) {
                                             int modeEvent = value[4] & 0xFF;
-                                            cbNotifyOnStart.setChecked((modeEvent & 1) == 1);
-                                            cbFixOnStart.setChecked((modeEvent & 2) == 2);
-                                            cbNotifyInTrip.setChecked((modeEvent & 4) == 4);
-                                            cbFixInTrip.setChecked((modeEvent & 8) == 8);
-                                            cbNotifyOnEnd.setChecked((modeEvent & 16) == 16);
-                                            cbFixOnEnd.setChecked((modeEvent & 32) == 32);
+                                            mBind.cbNotifyOnStart.setChecked((modeEvent & 1) == 1);
+                                            mBind.cbFixOnStart.setChecked((modeEvent & 2) == 2);
+                                            mBind.cbNotifyInTrip.setChecked((modeEvent & 4) == 4);
+                                            mBind.cbFixInTrip.setChecked((modeEvent & 8) == 8);
+                                            mBind.cbNotifyOnEnd.setChecked((modeEvent & 16) == 16);
+                                            mBind.cbFixOnEnd.setChecked((modeEvent & 32) == 32);
                                         }
                                         break;
                                     case KEY_MOTION_MODE_START_NUMBER:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
-                                            etFixOnStartNumber.setText(String.valueOf(number));
+                                            mBind.etFixOnStartNumber.setText(String.valueOf(number));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_START_POS_STRATEGY:
                                         if (length > 0) {
                                             int strategy = value[4] & 0xFF;
                                             mStartSelected = strategy;
-                                            tvPosStrategyOnStart.setText(mValues.get(mStartSelected));
+                                            mBind.tvPosStrategyOnStart.setText(mValues.get(mStartSelected));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_TRIP_REPORT_INTERVAL:
                                         if (length > 0) {
                                             byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                             int interval = MokoUtils.toInt(intervalBytes);
-                                            etReportIntervalInTrip.setText(String.valueOf(interval));
+                                            mBind.etReportIntervalInTrip.setText(String.valueOf(interval));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_TRIP_POS_STRATEGY:
                                         if (length > 0) {
                                             int strategy = value[4] & 0xFF;
                                             mTripSelected = strategy;
-                                            tvPosStrategyInTrip.setText(mValues.get(mTripSelected));
+                                            mBind.tvPosStrategyInTrip.setText(mValues.get(mTripSelected));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_END_TIMEOUT:
                                         if (length > 0) {
                                             int timeout = value[4] & 0xFF;
-                                            etTripEndTimeout.setText(String.valueOf(timeout));
+                                            mBind.etTripEndTimeout.setText(String.valueOf(timeout));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_END_NUMBER:
                                         if (length > 0) {
                                             int number = value[4] & 0xFF;
-                                            etFixOnEndNumber.setText(String.valueOf(number));
+                                            mBind.etFixOnEndNumber.setText(String.valueOf(number));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_END_REPORT_INTERVAL:
                                         if (length > 0) {
                                             byte[] intervalBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                             int interval = MokoUtils.toInt(intervalBytes);
-                                            etReportIntervalOnEnd.setText(String.valueOf(interval));
+                                            mBind.etReportIntervalOnEnd.setText(String.valueOf(interval));
                                         }
                                         break;
                                     case KEY_MOTION_MODE_END_POS_STRATEGY:
                                         if (length > 0) {
                                             int strategy = value[4] & 0xFF;
                                             mEndSelected = strategy;
-                                            tvPosStrategyOnEnd.setText(mValues.get(mEndSelected));
+                                            mBind.tvPosStrategyOnEnd.setText(mValues.get(mEndSelected));
                                         }
                                         break;
                                 }
@@ -328,31 +294,31 @@ public class MotionModeActivity extends BaseActivity {
     }
 
     private boolean isValid() {
-        final String startNumberStr = etFixOnStartNumber.getText().toString();
+        final String startNumberStr = mBind.etFixOnStartNumber.getText().toString();
         if (TextUtils.isEmpty(startNumberStr))
             return false;
         final int startNumber = Integer.parseInt(startNumberStr);
         if (startNumber < 1 || startNumber > 255)
             return false;
-        final String intervalTripStr = etReportIntervalInTrip.getText().toString();
+        final String intervalTripStr = mBind.etReportIntervalInTrip.getText().toString();
         if (TextUtils.isEmpty(intervalTripStr))
             return false;
         final int intervalTrip = Integer.parseInt(intervalTripStr);
         if (intervalTrip < 10 || intervalTrip > 86400)
             return false;
-        final String endTimeoutStr = etTripEndTimeout.getText().toString();
+        final String endTimeoutStr = mBind.etTripEndTimeout.getText().toString();
         if (TextUtils.isEmpty(endTimeoutStr))
             return false;
         final int endTimeout = Integer.parseInt(endTimeoutStr);
         if (endTimeout < 3 || endTimeout > 180)
             return false;
-        final String endNumberStr = etFixOnEndNumber.getText().toString();
+        final String endNumberStr = mBind.etFixOnEndNumber.getText().toString();
         if (TextUtils.isEmpty(endNumberStr))
             return false;
         final int endNumber = Integer.parseInt(endNumberStr);
         if (endNumber < 1 || endNumber > 255)
             return false;
-        final String endIntervalStr = etReportIntervalOnEnd.getText().toString();
+        final String endIntervalStr = mBind.etReportIntervalOnEnd.getText().toString();
         if (TextUtils.isEmpty(endIntervalStr))
             return false;
         final int endInterval = Integer.parseInt(endIntervalStr);
@@ -363,15 +329,15 @@ public class MotionModeActivity extends BaseActivity {
     }
 
     private void saveParams() {
-        final String startNumberStr = etFixOnStartNumber.getText().toString();
+        final String startNumberStr = mBind.etFixOnStartNumber.getText().toString();
         final int startNumber = Integer.parseInt(startNumberStr);
-        final String intervalTripStr = etReportIntervalInTrip.getText().toString();
+        final String intervalTripStr = mBind.etReportIntervalInTrip.getText().toString();
         final int intervalTrip = Integer.parseInt(intervalTripStr);
-        final String endTimeoutStr = etTripEndTimeout.getText().toString();
+        final String endTimeoutStr = mBind.etTripEndTimeout.getText().toString();
         final int endTimeout = Integer.parseInt(endTimeoutStr);
-        final String endNumberStr = etFixOnEndNumber.getText().toString();
+        final String endNumberStr = mBind.etFixOnEndNumber.getText().toString();
         final int endNumber = Integer.parseInt(endNumberStr);
-        final String endIntervalStr = etReportIntervalOnEnd.getText().toString();
+        final String endIntervalStr = mBind.etReportIntervalOnEnd.getText().toString();
         final int endInterval = Integer.parseInt(endIntervalStr);
 
         savedParamsError = false;
@@ -384,12 +350,12 @@ public class MotionModeActivity extends BaseActivity {
         orderTasks.add(OrderTaskAssembler.setMotionEndNumber(endNumber));
         orderTasks.add(OrderTaskAssembler.setMotionEndInterval(endInterval));
         orderTasks.add(OrderTaskAssembler.setMotionEndPosStrategy(mEndSelected));
-        int motionMode = (cbNotifyOnStart.isChecked() ? 1 : 0)
-                | (cbFixOnStart.isChecked() ? 2 : 0)
-                | (cbNotifyInTrip.isChecked() ? 4 : 0)
-                | (cbFixInTrip.isChecked() ? 8 : 0)
-                | (cbNotifyOnEnd.isChecked() ? 16 : 0)
-                | (cbFixOnEnd.isChecked() ? 32 : 0);
+        int motionMode = (mBind.cbNotifyOnStart.isChecked() ? 1 : 0)
+                | (mBind.cbFixOnStart.isChecked() ? 2 : 0)
+                | (mBind.cbNotifyInTrip.isChecked() ? 4 : 0)
+                | (mBind.cbFixInTrip.isChecked() ? 8 : 0)
+                | (mBind.cbNotifyOnEnd.isChecked() ? 16 : 0)
+                | (mBind.cbFixOnEnd.isChecked() ? 32 : 0);
         orderTasks.add(OrderTaskAssembler.setMotionModeEvent(motionMode));
         LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
@@ -401,7 +367,7 @@ public class MotionModeActivity extends BaseActivity {
         dialog.setDatas(mValues, mStartSelected);
         dialog.setListener(value -> {
             mStartSelected = value;
-            tvPosStrategyOnStart.setText(mValues.get(value));
+            mBind.tvPosStrategyOnStart.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -413,7 +379,7 @@ public class MotionModeActivity extends BaseActivity {
         dialog.setDatas(mValues, mTripSelected);
         dialog.setListener(value -> {
             mTripSelected = value;
-            tvPosStrategyInTrip.setText(mValues.get(value));
+            mBind.tvPosStrategyInTrip.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }
@@ -425,7 +391,7 @@ public class MotionModeActivity extends BaseActivity {
         dialog.setDatas(mValues, mEndSelected);
         dialog.setListener(value -> {
             mEndSelected = value;
-            tvPosStrategyOnEnd.setText(mValues.get(value));
+            mBind.tvPosStrategyOnEnd.setText(mValues.get(value));
         });
         dialog.show(getSupportFragmentManager());
     }

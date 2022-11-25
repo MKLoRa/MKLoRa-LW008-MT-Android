@@ -3,42 +3,32 @@ package com.moko.lw008.dialog;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import com.moko.lw008.R;
-import com.moko.lw008.R2;
+import com.moko.lw008.databinding.Lw008DialogLoadingMessageBinding;
 import com.moko.lw008.view.ProgressDrawable;
 
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class LoadingMessageDialog extends MokoBaseDialog {
-    private static final int DIALOG_DISMISS_DELAY_TIME = 5000;
+public class LoadingMessageDialog extends com.moko.lw008.dialog.MokoBaseDialog<Lw008DialogLoadingMessageBinding> {
+    //    private static final int DIALOG_DISMISS_DELAY_TIME = 15000;
     public static final String TAG = LoadingMessageDialog.class.getSimpleName();
-    @BindView(R2.id.iv_loading)
-    ImageView ivLoading;
-    @BindView(R2.id.tv_loading_message)
-    TextView tvLoadingMessage;
-
     private String message;
-
     private int messageId = -1;
 
     @Override
-    public int getLayoutRes() {
-        return R.layout.lw008_dialog_loading_message;
+    protected Lw008DialogLoadingMessageBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
+        return Lw008DialogLoadingMessageBinding.inflate(inflater, container, false);
     }
 
     @Override
-    public void bindView(View v) {
-        ButterKnife.bind(this, v);
+    protected void onCreateView() {
         ProgressDrawable progressDrawable = new ProgressDrawable();
         progressDrawable.setColor(ContextCompat.getColor(getContext(), R.color.lw008_text_black_4d4d4d));
-        ivLoading.setImageDrawable(progressDrawable);
+        mBind.ivLoading.setImageDrawable(progressDrawable);
         progressDrawable.start();
         if (messageId > 0) {
             message = getString(messageId);
@@ -46,18 +36,15 @@ public class LoadingMessageDialog extends MokoBaseDialog {
         if (TextUtils.isEmpty(message)) {
             message = getString(R.string.setting_syncing);
         }
-        tvLoadingMessage.setText(message);
-        tvLoadingMessage.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isVisible()) {
-                    dismissAllowingStateLoss();
-                    if (callback != null) {
-                        callback.onOvertimeDismiss();
-                    }
-                }
-            }
-        }, DIALOG_DISMISS_DELAY_TIME);
+        mBind.tvLoadingMessage.setText(message);
+//        mBind.tvLoadingMessage.postDelayed(() -> {
+//            if (isVisible()) {
+//                dismissAllowingStateLoss();
+//                if (callback != null) {
+//                    callback.onOvertimeDismiss();
+//                }
+//            }
+//        }, DIALOG_DISMISS_DELAY_TIME);
     }
 
     @Override
@@ -101,9 +88,8 @@ public class LoadingMessageDialog extends MokoBaseDialog {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ((ProgressDrawable) ivLoading.getDrawable()).stop();
+        ((ProgressDrawable) mBind.ivLoading.getDrawable()).stop();
     }
-
 
     public void setMessage(String message) {
         this.message = message;
