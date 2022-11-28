@@ -11,6 +11,7 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.databinding.Lw008ActivitySelftestBinding;
+import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
@@ -84,6 +85,21 @@ public class SelfTestActivity extends BaseActivity {
                                 return;
                             }
                             int length = value[3] & 0xFF;
+                            if (flag == 0x01) {
+                                // write
+                                int result = value[4] & 0xFF;
+                                switch (configKeyEnum) {
+                                    case KEY_BATTERY_RESET:
+                                        if (result == 1) {
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Reset Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
+                                        }
+                                        break;
+                                }
+                            }
                             if (flag == 0x00) {
                                 // read
                                 switch (configKeyEnum) {
@@ -135,6 +151,23 @@ public class SelfTestActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public void onBatteryReset(View view) {
+        if (isWindowLocked())
+            return;
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("Warning！");
+        dialog.setMessage("Are you sure to reset battery?");
+        dialog.setConfirm("OK");
+        dialog.setOnAlertConfirmListener(() -> {
+            showSyncingProgressDialog();
+            List<OrderTask> orderTasks = new ArrayList<>();
+            orderTasks.add(OrderTaskAssembler.setBatteryReset());
+            orderTasks.add(OrderTaskAssembler.getBatteryInfo());
+            LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        });
+        dialog.show(getSupportFragmentManager());
     }
 
     @Override

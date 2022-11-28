@@ -218,15 +218,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                         if (result == 1)
                                             ToastUtils.showToast(DeviceInfoActivity.this, "Time sync completed!");
                                         break;
-                                    case KEY_BATTERY_RESET:
-                                        if (result == 1) {
-                                            AlertMessageDialog dialog = new AlertMessageDialog();
-                                            dialog.setMessage("Reset Successfully！");
-                                            dialog.setConfirm("OK");
-                                            dialog.setCancelGone();
-                                            dialog.show(getSupportFragmentManager());
-                                        }
-                                        break;
                                     case KEY_OFFLINE_LOCATION_ENABLE:
                                     case KEY_HEARTBEAT_INTERVAL:
                                     case KEY_TIME_ZONE:
@@ -478,6 +469,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     public void onBack(View view) {
+        if (isWindowLocked())
+            return;
         back();
     }
 
@@ -742,20 +735,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         dialog.setOnAlertConfirmListener(() -> {
             showSyncingProgressDialog();
             LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.close());
-        });
-        dialog.show(getSupportFragmentManager());
-    }
-
-    public void onBatteryReset(View view) {
-        if (isWindowLocked())
-            return;
-        AlertMessageDialog dialog = new AlertMessageDialog();
-        dialog.setTitle("Warning！");
-        dialog.setMessage("Are you sure to reset battery?");
-        dialog.setConfirm("OK");
-        dialog.setOnAlertConfirmListener(() -> {
-            showSyncingProgressDialog();
-            LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setBatteryReset());
         });
         dialog.show(getSupportFragmentManager());
     }
