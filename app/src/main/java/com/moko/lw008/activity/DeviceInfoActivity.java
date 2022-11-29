@@ -22,7 +22,6 @@ import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.AppConstants;
 import com.moko.lw008.R;
 import com.moko.lw008.databinding.Lw008ActivityDeviceInfoBinding;
-import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.ChangePasswordDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
@@ -438,7 +437,14 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 dialog.show(getSupportFragmentManager());
             }
             if (resultCode == RESULT_FIRST_USER) {
-                showDisconnectDialog();
+                String mac = data.getStringExtra(AppConstants.EXTRA_KEY_DEVICE_MAC);
+                mBind.frameContainer.postDelayed(() -> {
+                    if (LoRaLW008MokoSupport.getInstance().isConnDevice(mac)) {
+                        LoRaLW008MokoSupport.getInstance().disConnectBle();
+                        return;
+                    }
+                    showDisconnectDialog();
+                }, 500);
             }
         }
     }
