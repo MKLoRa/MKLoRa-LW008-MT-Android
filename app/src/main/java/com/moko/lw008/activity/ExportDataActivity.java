@@ -23,7 +23,6 @@ import com.moko.lw008.AppConstants;
 import com.moko.lw008.R;
 import com.moko.lw008.adapter.ExportDataListAdapter;
 import com.moko.lw008.databinding.Lw008ActivityExportDataBinding;
-import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;

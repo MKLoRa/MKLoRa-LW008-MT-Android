@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -17,7 +16,6 @@ import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.databinding.Lw008ActivityAppSettingBinding;
-import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
@@ -35,7 +33,6 @@ import java.util.List;
 public class LoRaAppSettingActivity extends BaseActivity {
 
     private Lw008ActivityAppSettingBinding mBind;
-    EditText etNetworkCheckInterval;
     private boolean mReceiverTag = false;
     private boolean savedParamsError;
 
@@ -131,7 +128,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
                                     case KEY_LORA_NETWORK_CHECK_INTERVAL:
                                         if (length > 0) {
                                             int interval = value[4] & 0xFF;
-                                            etNetworkCheckInterval.setText(String.valueOf(interval));
+                                            mBind.etNetworkCheckInterval.setText(String.valueOf(interval));
                                         }
                                         break;
                                 }
@@ -162,7 +159,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
         if (syncInterval > 255) {
             return false;
         }
-        final String networkCheckIntervalStr = etNetworkCheckInterval.getText().toString();
+        final String networkCheckIntervalStr = mBind.etNetworkCheckInterval.getText().toString();
         if (TextUtils.isEmpty(networkCheckIntervalStr))
             return false;
         final int networkCheckInterval = Integer.parseInt(networkCheckIntervalStr);
@@ -176,7 +173,7 @@ public class LoRaAppSettingActivity extends BaseActivity {
 
     private void saveParams() {
         final String syncIntervalStr = mBind.etSyncInterval.getText().toString();
-        final String networkCheckIntervalStr = etNetworkCheckInterval.getText().toString();
+        final String networkCheckIntervalStr = mBind.etNetworkCheckInterval.getText().toString();
         final int syncInterval = Integer.parseInt(syncIntervalStr);
         final int networkCheckInterval = Integer.parseInt(networkCheckIntervalStr);
         savedParamsError = false;

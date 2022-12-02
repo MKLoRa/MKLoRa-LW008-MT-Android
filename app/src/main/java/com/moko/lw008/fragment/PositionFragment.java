@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.lw008.R;
 import com.moko.lw008.activity.DeviceInfoActivity;
-import com.moko.lw008.databinding.Lw008FragmentLoraBinding;
 import com.moko.lw008.databinding.Lw008FragmentPosBinding;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
