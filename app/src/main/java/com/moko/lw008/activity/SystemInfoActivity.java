@@ -14,7 +14,6 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.MokoConstants;

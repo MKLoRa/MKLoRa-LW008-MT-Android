@@ -13,7 +13,6 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.AppConstants;
 import com.moko.lw008.R;
 import com.moko.lw008.databinding.Lw008ActivityFilterRawDataSwitchBinding;
-import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;

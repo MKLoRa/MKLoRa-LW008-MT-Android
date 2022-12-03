@@ -44,6 +44,7 @@ public class ManDownDetectionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBind = Lw008ActivityManDownDetectionBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
+        EventBus.getDefault().register(this);
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);

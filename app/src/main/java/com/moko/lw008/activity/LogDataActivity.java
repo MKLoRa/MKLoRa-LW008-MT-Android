@@ -16,7 +16,6 @@ import com.moko.lw008.AppConstants;
 import com.moko.lw008.R;
 import com.moko.lw008.adapter.LogDataListAdapter;
 import com.moko.lw008.databinding.Lw008ActivityLogDataBinding;
-import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.AlertMessageDialog;
 import com.moko.lw008.entity.LogData;
 import com.moko.lw008.utils.Utils;

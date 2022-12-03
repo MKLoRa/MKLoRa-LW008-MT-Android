@@ -14,7 +14,6 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.R;
 import com.moko.lw008.databinding.Lw008ActivityBleSettingsBinding;
-import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.dialog.ChangePasswordDialog;
 import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.entity.TxPowerEnum;
