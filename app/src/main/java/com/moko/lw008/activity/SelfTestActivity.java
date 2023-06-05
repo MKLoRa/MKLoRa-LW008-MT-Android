@@ -135,7 +135,7 @@ public class SelfTestActivity extends BaseActivity {
                                             int wifiFixDuration = MokoUtils.toInt(Arrays.copyOfRange(value, 24, 28));
                                             mBind.tvWifiFixDuration.setText(String.format("%d ms", wifiFixDuration));
                                             int gpsFixDuration = MokoUtils.toInt(Arrays.copyOfRange(value, 28, 32));
-                                            mBind.tvGpsFixDuration.setText(String.format("%d ms", gpsFixDuration));
+                                            mBind.tvGpsFixDuration.setText(String.format("%d s", gpsFixDuration));
                                             int loraTransmissionTimes = MokoUtils.toInt(Arrays.copyOfRange(value, 32, 36));
                                             mBind.tvLoraTransmissionTimes.setText(String.format("%d times", loraTransmissionTimes));
                                             int loraPower = MokoUtils.toInt(Arrays.copyOfRange(value, 36, 40));

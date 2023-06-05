@@ -14,8 +14,11 @@ android {
         }
         minSdkVersion 18
         targetSdkVersion 31
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
+
+        def formatDate = new Date().format("yyyyMMddHHmm")
+        setProperty("archivesBaseName", "LW008_${versionName}_${formatDate}")
     }
 
     buildTypes {
@@ -60,27 +63,13 @@ android {
         abortOnError false
     }
 
-    if (!isLibrary.toBoolean()) {
-        applicationVariants.all { variant ->
-            variant.outputs.all { output ->
-                def outputFile = output.outputFile
-                if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                    def formatedDate = new Date().format("yyyyMMddHHmm")
-                    def apkFileName = "LW008_${defaultConfig.versionName}_${formatedDate}.apk"
-                    if (outputFile.name.contains('debug')) {
-                        apkFileName = "LW008_${defaultConfig.versionName}_${formatedDate}_debug.apk"
-                    }
-                    outputFileName = apkFileName
-                }
-            }
-        }
-    } else {
+    if (isLibrary.toBoolean()) {
         libraryVariants.all { variant ->
             if (variant.buildType.name == "release") {
                 // 修改aar名称
                 variant.outputs.all { output ->
-                    def formatedDate = new Date().format("yyyyMMddHHmm")
-                    outputFileName = "LW008_${android.defaultConfig.versionName}_${formatedDate}.aar"
+                    def formatDate = new Date().format("yyyyMMddHHmm")
+                    outputFileName = "LW008_${android.defaultConfig.versionName}_${formatDate}.aar"
                 }
                 // 复制aar到指定目录
                 variant.assemble.doLast {
