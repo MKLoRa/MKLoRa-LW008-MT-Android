@@ -34,9 +34,7 @@ public class FileUtils {
     public static String getPath(final Context context, final Uri uri) {
 
         // DocumentProvider
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                && DocumentsContract.isDocumentUri(context, uri)) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && DocumentsContract.isDocumentUri(context, uri)) {
             // LocalStorageProvider
             if (isLocalStorageDocument(uri)) {
                 // The path is the id

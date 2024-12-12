@@ -34,32 +34,35 @@ public class Utils {
             Uri uri;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 uri = IOUtils.insertDownloadFile(context, files[0]);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            } else {
                 if (BuildConfig.IS_LIBRARY) {
                     uri = FileProvider.getUriForFile(context, "com.moko.mklora.fileprovider", files[0]);
                 } else {
                     uri = FileProvider.getUriForFile(context, "com.moko.lw008.fileprovider", files[0]);
                 }
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            } else {
-                uri = Uri.fromFile(files[0]);
             }
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.putExtra(Intent.EXTRA_TEXT, body);
         } else {
             ArrayList<Uri> uris = new ArrayList<>();
-            for (int i = 0; i < files.length; i++) {
+            ArrayList<CharSequence> charSequences = new ArrayList<>();
+            for (File file : files) {
+                Uri fileUri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    Uri fileUri = IOUtils.insertDownloadFile(context, files[i]);
-                    uris.add(fileUri);
+                    fileUri = IOUtils.insertDownloadFile(context, file);
                 } else {
-                    uris.add(Uri.fromFile(files[i]));
+                    if (BuildConfig.IS_LIBRARY) {
+                        fileUri = FileProvider.getUriForFile(context, "com.moko.mklora.fileprovider", file);
+                    } else {
+                        fileUri = FileProvider.getUriForFile(context, "com.moko.lw008.fileprovider", file);
+                    }
                 }
+                uris.add(fileUri);
+                charSequences.add(body);
             }
             intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-            ArrayList<CharSequence> charSequences = new ArrayList<>();
-            charSequences.add(body);
             intent.putExtra(Intent.EXTRA_TEXT, charSequences);
         }
         String[] addresses = {address};

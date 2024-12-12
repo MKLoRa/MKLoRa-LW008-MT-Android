@@ -34,7 +34,7 @@ public class GuideActivity extends BaseActivity {
     }
 
     private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             //申请存储权限 6-9的版本走这里 需要申请写SD卡权限和定位权限
             if (!Utils.isLocServiceEnable(this)) {
                 showOpenLocationDialog();
@@ -45,7 +45,7 @@ public class GuideActivity extends BaseActivity {
                         getResources().getString(R.string.permission_storage_close_content));
                 return;
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             //判断GPS是否打开  10-11走这里 不再申请写SD权限 申请了也没用
             if (!Utils.isLocServiceEnable(this)) {
                 showOpenLocationDialog();
@@ -57,7 +57,7 @@ public class GuideActivity extends BaseActivity {
                         getResources().getString(R.string.permission_location_close_content));
                 return;
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        } else {
             //申请蓝牙、定位权限 12及以上版本还是需要位置权限 如果没有位置权限扫描的设备类型会受到限制  12以上版本走这里
             if (!Utils.isLocServiceEnable(this)) {
                 showOpenLocationDialog();
