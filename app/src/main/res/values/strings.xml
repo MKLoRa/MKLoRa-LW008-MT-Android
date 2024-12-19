@@ -55,4 +55,10 @@
     <string name="low_power_prompt_tips">*When the battery is less than or equal to %s, the green LED will flash once every 10 seconds.</string>
     <string name="bxp_t_h"><![CDATA[BXP - T&H]]></string>
     <string name="battery_reset_tips">*After replace with the new battery, need to click \"Reset\", otherwise the low power prompt will be unnormal.</string>
+
+    // net
+    <string name="main_sync_device">Sync to cloud</string>
+    <string name="request_error">Request Error!</string>
+    <string name="account_exit">Exit</string>
+    <string name="lora_gateway_tips">* If you have a LoRa gateway, please config the gateway connect to MOKO LoRa server, the server address is 101.37.81.143, the port is 1700, the current supported channel are AS923, AU915_CH00-07, AU915_CH08-15, EU868, US915_CH00-07, US915_CH08-15,select the correct channel please.</string>
 </resources>

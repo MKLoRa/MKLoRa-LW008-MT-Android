@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lw008_grey_f2f2f2"
@@ -14,7 +15,6 @@
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:drawableLeft="@drawable/lw008_ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
@@ -38,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:clickable="true"
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -59,11 +58,13 @@
             android:padding="10dp">
 
             <LinearLayout
+                android:id="@+id/llModemParams"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/lw008_white_ffffff"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -87,7 +88,7 @@
                         android:background="@drawable/lw008_shape_radius_blue_btn_bg"
                         android:clickable="true"
                         android:onClick="selectMode"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:text="ABP"
                         android:textColor="@color/lw008_white_ffffff"
                         android:textSize="15sp" />
@@ -204,7 +205,6 @@
                         android:orientation="vertical"
                         android:visibility="visible">
 
-
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -293,74 +293,230 @@
                 </FrameLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvDevEUI"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:background="@color/lw008_white_ffffff"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="DevEUI: "
+                android:textColor="@color/lw008_black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/rlRegion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Region/Subnet"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:onClick="selectRegion"
+                    android:padding="10dp"
+                    android:text="EU868"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlServerRegion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Region/Subnet"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvServerRegion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:onClick="selectServerRegion"
+                    android:padding="10dp"
+                    android:text="EU868"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ll_msg_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Message Type"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_message_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:onClick="selectMessageType"
+                    android:padding="12dp"
+                    android:text="Unconfirmed"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/lw008_white_ffffff"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/tvServerPlatform"
+                    android:text="LoRaWAN Server Platform"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvServerPlatform"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/lw008_shape_radius_blue_btn_bg"
+                    android:clickable="true"
+                    android:onClick="selectServerPlatform"
+                    android:padding="10dp"
+                    android:text="Third Party NS"
+                    android:textColor="@color/lw008_white_ffffff"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:id="@+id/llAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvServerPlatform"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvAccount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="1.0"
+                        android:text="Account:"
+                        android:textColor="@color/lw008_black_333333"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:onClick="onLogout"
+                        android:text="Logout"
+                        android:textColor="@color/lw008_blue_2f84d0"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
             <LinearLayout
+                android:id="@+id/llGatewayId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/lw008_white_ffffff"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="Region/Subnet"
-                        android:textColor="@color/lw008_black_333333"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_region"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/lw008_shape_radius_blue_btn_bg"
-                        android:clickable="true"
-                        android:onClick="selectRegion"
-                        android:padding="12dp"
-                        android:text="EU868"
-                        android:textColor="@color/lw008_white_ffffff"
-                        android:textSize="15sp" />
-
-                </RelativeLayout>
-
-                <View
-                    style="@style/lw008_divider_line"
-                    android:layout_marginTop="10dp" />
-
-                <RelativeLayout
-                    android:id="@+id/ll_msg_type"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:text="Gateway EUI(Gateway ID)"
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="Message Type"
-                        android:textColor="@color/lw008_black_333333"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/etGatewayId"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:digits="0123456789abcdefABCDEF"
+                    android:hint="8 Bytes"
+                    android:maxLength="16"
+                    android:singleLine="true"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/tv_message_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/lw008_shape_radius_blue_btn_bg"
-                        android:clickable="true"
-                        android:onClick="selectMessageType"
-                        android:padding="12dp"
-                        android:text="Unconfirmed"
-                        android:textColor="@color/lw008_white_ffffff"
-                        android:textSize="15sp" />
-                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cb_advance_setting"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="*The server address, up port and down port vaule can be found in &quot;MOKO IoT DM Guide&quot; document."
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cb_advance_setting"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="*Only UDP Packet forwarder protocol is available for gateway quick registration."
+                    android:textColor="@color/lw008_black_333333"
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <RelativeLayout
