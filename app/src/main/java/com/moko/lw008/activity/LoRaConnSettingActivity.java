@@ -1003,6 +1003,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                             dialog.show(getSupportFragmentManager());
                             return;
                         }
+                        mAccount = account;
                         SPUtiles.setStringValue(LoRaConnSettingActivity.this, AppConstants.SP_LOGIN_ACCOUNT, account);
                         SPUtiles.setStringValue(LoRaConnSettingActivity.this, AppConstants.SP_LOGIN_PASSWORD, password);
                         SPUtiles.setIntValue(LoRaConnSettingActivity.this, AppConstants.SP_LOGIN_ENV, envValue);
