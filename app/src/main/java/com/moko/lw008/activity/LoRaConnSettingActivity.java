@@ -494,9 +494,6 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                 mBind.rlCh.setVisibility(View.GONE);
                 mBind.rlRegion.setVisibility(View.VISIBLE);
                 mBind.rlServerRegion.setVisibility(View.GONE);
-                initCHDRRange();
-                updateCHDR();
-                initDutyCycle();
             } else {
                 // MK IoT DM
                 mBind.llModemParams.setVisibility(View.GONE);
@@ -504,100 +501,25 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                 mBind.tvDevEUI.setVisibility(View.VISIBLE);
                 mBind.rlRegion.setVisibility(View.GONE);
                 mBind.rlServerRegion.setVisibility(View.VISIBLE);
-                mSelectedDr = 0;
-                if (mSelectedServerRegion == 2 || mSelectedServerRegion == 4) {
-                    mSelectedCh1 = 0;
-                    mSelectedCh2 = 7;
-                } else if (mSelectedServerRegion == 3 || mSelectedServerRegion == 5) {
-                    mSelectedCh1 = 8;
-                    mSelectedCh2 = 15;
-                }
-                if (mSelectedServerRegion == 0 || mSelectedServerRegion > 1) {
-                    // AS923,US915,AU915
-                    mBind.rlDr.setVisibility(View.GONE);
-                } else {
-                    mBind.rlDr.setVisibility(View.VISIBLE);
-                }
-                if (mSelectedServerRegion == 0 || mSelectedServerRegion == 1 || mSelectedServerRegion == 4 ||
-                        mSelectedServerRegion == 5) {
-                    mSelectedDr1 = 2;
-                    mSelectedDr2 = 2;
-                } else {
-                    mSelectedDr1 = 0;
-                    mSelectedDr2 = 0;
-                }
-                if (mSelectedServerRegion == 1) {
-                    // EU868
-                    mBind.cbDutyCycle.setChecked(false);
-                    mBind.llDutyCycle.setVisibility(View.VISIBLE);
-                } else {
-                    mBind.llDutyCycle.setVisibility(View.GONE);
-                }
-                mBind.tvDr.setText(String.valueOf(mSelectedDr));
-                mBind.tvDr1.setText(String.valueOf(mSelectedDr1));
-                mBind.tvDr2.setText(String.valueOf(mSelectedDr2));
-                mBind.tvDevEUI.setText(String.format("DevEUI:%s", mRemoteDevEUI.toUpperCase()));
-                mAccount = SPUtiles.getStringValue(this, AppConstants.SP_LOGIN_ACCOUNT, "");
-                mPassword = SPUtiles.getStringValue(this, AppConstants.SP_LOGIN_PASSWORD, "");
-                if (TextUtils.isEmpty(mAccount))
-                    mBind.llAccount.setVisibility(View.GONE);
-                else
-                    mBind.tvAccount.setText(String.format("Account:%s", mAccount));
-                if (TextUtils.isEmpty(mPassword))
-                    mBind.llAccount.setVisibility(View.GONE);
-                else
-                    mBind.llAccount.setVisibility(View.VISIBLE);
+
             }
         });
+        initCHDRRange();
+        updateCHDR();
+        initDutyCycle();
+        if (mSelectedPlatform == 0) return;
+        mBind.tvDevEUI.setText(String.format("DevEUI:%s", mRemoteDevEUI.toUpperCase()));
+        mAccount = SPUtiles.getStringValue(this, AppConstants.SP_LOGIN_ACCOUNT, "");
+        mPassword = SPUtiles.getStringValue(this, AppConstants.SP_LOGIN_PASSWORD, "");
+        if (TextUtils.isEmpty(mAccount))
+            mBind.llAccount.setVisibility(View.GONE);
+        else
+            mBind.tvAccount.setText(String.format("Account:%s", mAccount));
+        if (TextUtils.isEmpty(mPassword))
+            mBind.llAccount.setVisibility(View.GONE);
+        else
+            mBind.llAccount.setVisibility(View.VISIBLE);
         bottomDialog.show(getSupportFragmentManager());
-    }
-
-
-    private void updateCHDR() {
-        switch (mSelectedRegion) {
-            case 1:
-            case 8:
-                // AU915、US915
-                mSelectedCh1 = 8;
-                mSelectedCh2 = 15;
-                mSelectedDr = 0;
-                break;
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-                // CN779、EU443、EU868、KR920、IN865
-                mSelectedCh1 = 0;
-                mSelectedCh2 = 2;
-                mSelectedDr = 0;
-                break;
-            case 2:
-                // CN470
-                mSelectedCh1 = 0;
-                mSelectedCh2 = 7;
-                mSelectedDr = 0;
-                break;
-            case 0:
-            case 9:
-                // AS923、RU864
-                mSelectedCh1 = 0;
-                mSelectedCh2 = 1;
-                mSelectedDr = 0;
-                break;
-        }
-        if (mSelectedRegion == 0 || mSelectedRegion == 1) {
-            mSelectedDr1 = 2;
-            mSelectedDr2 = 2;
-        } else {
-            mSelectedDr1 = 0;
-            mSelectedDr2 = 0;
-        }
-        mBind.tvCh1.setText(String.valueOf(mSelectedCh1));
-        mBind.tvCh2.setText(String.valueOf(mSelectedCh2));
-        mBind.tvDr.setText(String.valueOf(mSelectedDr));
-        mBind.tvDr1.setText(String.valueOf(mSelectedDr1));
-        mBind.tvDr2.setText(String.valueOf(mSelectedDr2));
     }
 
     private ArrayList<String> mCHList;
@@ -606,71 +528,170 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     private void initCHDRRange() {
         mCHList = new ArrayList<>();
         mDRList = new ArrayList<>();
-        switch (mSelectedRegion) {
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-                // CN779、EU443、EU868、KR920、IN865
-                mMaxCH = 2;
-                mMaxDR = 5;
-                break;
-            case 1:
+        if (mSelectedPlatform == 0) {
+            if (mSelectedRegion == 1) {
                 // AU915
                 mMaxCH = 63;
                 mMaxDR = 6;
-                break;
-            case 2:
+            } else if (mSelectedRegion == 2) {
                 // CN470
                 mMaxCH = 95;
                 mMaxDR = 5;
-                break;
-            case 8:
+            } else if (mSelectedRegion == 8) {
                 // US915
                 mMaxCH = 63;
                 mMaxDR = 4;
-                break;
-            case 0:
-            case 9:
+            } else if (mSelectedRegion == 0 || mSelectedRegion == 9) {
                 // AS923、RU864
                 mMaxCH = 1;
                 mMaxDR = 5;
-                break;
-        }
-        for (int i = 0; i <= mMaxCH; i++) {
-            mCHList.add(String.valueOf(i));
-        }
-        int minDR = 0;
-        if (mSelectedRegion == 0 || mSelectedRegion == 1) {
-            // AS923,AU915
-            minDR = 2;
-        }
-        for (int i = minDR; i <= mMaxDR; i++) {
-            mDRList.add(String.valueOf(i));
-        }
-        if (mSelectedRegion == 1 || mSelectedRegion == 2 || mSelectedRegion == 8) {
-            // US915,AU915,CN470
-            mBind.rlCh.setVisibility(View.VISIBLE);
+            } else {
+                // CN779、EU443、EU868、KR920、IN865
+                mMaxCH = 2;
+                mMaxDR = 5;
+            }
+            for (int i = 0; i <= mMaxCH; i++) {
+                mCHList.add(String.valueOf(i));
+            }
+            int minDR = 0;
+            if (mSelectedRegion == 0 || mSelectedRegion == 1) {
+                // AS923,AU915
+                minDR = 2;
+            }
+            for (int i = minDR; i <= mMaxDR; i++) {
+                mDRList.add(String.valueOf(i));
+            }
+            if (mSelectedRegion == 1 || mSelectedRegion == 2 || mSelectedRegion == 8) {
+                // US915,AU915,CN470
+                mBind.rlCh.setVisibility(View.VISIBLE);
+            } else {
+                mBind.rlCh.setVisibility(View.GONE);
+            }
+            if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 8) {
+                // AS923,US915,AU915
+                mBind.rlDr.setVisibility(View.GONE);
+            } else {
+                mBind.rlDr.setVisibility(View.VISIBLE);
+            }
         } else {
-            mBind.rlCh.setVisibility(View.GONE);
-        }
-        if (mSelectedRegion == 0 || mSelectedRegion == 1 || mSelectedRegion == 8) {
-            // AS923,US915,AU915
-            mBind.rlDr.setVisibility(View.GONE);
-        } else {
-            mBind.rlDr.setVisibility(View.VISIBLE);
+            int minDR = 0;
+            if (mSelectedServerRegion == 0) {
+                // AS923
+                mMaxCH = 1;
+                minDR = 2;
+                mMaxDR = 5;
+                mBind.rlCh.setVisibility(View.GONE);
+                mBind.rlDr.setVisibility(View.GONE);
+            } else if (mSelectedServerRegion == 1) {
+                // EU868
+                mMaxCH = 2;
+                mMaxDR = 5;
+                mBind.rlCh.setVisibility(View.GONE);
+                mBind.rlDr.setVisibility(View.VISIBLE);
+            } else if (mSelectedServerRegion == 2 || mSelectedServerRegion == 3) {
+                // US915
+                mMaxCH = 63;
+                mMaxDR = 4;
+                mBind.rlCh.setVisibility(View.VISIBLE);
+                mBind.rlDr.setVisibility(View.GONE);
+            } else if (mSelectedServerRegion == 4 || mSelectedServerRegion == 5) {
+                // AU915
+                mMaxCH = 63;
+                minDR = 2;
+                mMaxDR = 6;
+                mBind.rlCh.setVisibility(View.VISIBLE);
+                mBind.rlDr.setVisibility(View.GONE);
+            }
+            for (int i = 0; i <= mMaxCH; i++) {
+                mCHList.add(String.valueOf(i));
+            }
+            for (int i = minDR; i <= mMaxDR; i++) {
+                mDRList.add(String.valueOf(i));
+            }
         }
     }
 
-    private void initDutyCycle() {
-        if (mSelectedRegion == 3 || mSelectedRegion == 4
-                || mSelectedRegion == 5 || mSelectedRegion == 9) {
-            mBind.cbDutyCycle.setChecked(false);
-            // CN779,EU433,EU868 and RU864
-            mBind.llDutyCycle.setVisibility(View.VISIBLE);
+    private void updateCHDR() {
+        if (mSelectedPlatform == 0) {
+            if (mSelectedRegion == 1 || mSelectedRegion == 8) {
+                // AU915、US915
+                mSelectedCh1 = 8;
+                mSelectedCh2 = 15;
+                mSelectedDr = 0;
+            } else if (mSelectedRegion == 2) {
+                // CN470
+                mSelectedCh1 = 0;
+                mSelectedCh2 = 7;
+                mSelectedDr = 0;
+            } else if (mSelectedRegion == 0 || mSelectedRegion  == 9) {
+                // AS923、RU864
+                mSelectedCh1 = 0;
+                mSelectedCh2 = 1;
+                mSelectedDr = 0;
+            } else {
+                // CN779、EU443、EU868、KR920、IN865
+                mSelectedCh1 = 0;
+                mSelectedCh2 = 2;
+                mSelectedDr = 0;
+            }
+            if (mSelectedRegion == 0 || mSelectedRegion == 1) {
+                mSelectedDr1 = 2;
+                mSelectedDr2 = 2;
+            } else {
+                mSelectedDr1 = 0;
+                mSelectedDr2 = 0;
+            }
         } else {
-            mBind.llDutyCycle.setVisibility(View.GONE);
+            mSelectedDr = 0;
+            if (mSelectedServerRegion == 2 || mSelectedServerRegion == 4) {
+                // US915 FSB1、AU915 FSB1
+                mSelectedCh1 = 0;
+                mSelectedCh2 = 7;
+            } else if (mSelectedServerRegion == 3 || mSelectedServerRegion == 5) {
+                // US915 FSB2、AU915 FSB2
+                mSelectedCh1 = 8;
+                mSelectedCh2 = 15;
+            }
+            if (mSelectedServerRegion == 0 || mSelectedServerRegion > 1) {
+                // AS923,US915,AU915
+                mBind.rlDr.setVisibility(View.GONE);
+            } else {
+                mBind.rlDr.setVisibility(View.VISIBLE);
+            }
+            if (mSelectedServerRegion == 0 || mSelectedServerRegion == 4 || mSelectedServerRegion == 5) {
+                mSelectedDr1 = 2;
+                mSelectedDr2 = 2;
+            } else {
+                mSelectedDr1 = 0;
+                mSelectedDr2 = 0;
+            }
+        }
+        mBind.tvCh1.setText(String.valueOf(mSelectedCh1));
+        mBind.tvCh2.setText(String.valueOf(mSelectedCh2));
+        mBind.tvDr.setText(String.valueOf(mSelectedDr));
+        mBind.tvDr1.setText(String.valueOf(mSelectedDr1));
+        mBind.tvDr2.setText(String.valueOf(mSelectedDr2));
+    }
+
+
+    private void initDutyCycle() {
+        if (mSelectedPlatform == 0) {
+            if (mSelectedRegion == 3 || mSelectedRegion == 4
+                    || mSelectedRegion == 5 || mSelectedRegion == 9) {
+                mBind.cbDutyCycle.setChecked(false);
+                // CN779,EU433,EU868 and RU864
+                mBind.llDutyCycle.setVisibility(View.VISIBLE);
+            } else {
+                mBind.llDutyCycle.setVisibility(View.GONE);
+            }
+        } else {
+            if (mSelectedServerRegion == 1) {
+                // EU868
+                mBind.cbDutyCycle.setChecked(false);
+                mBind.llDutyCycle.setVisibility(View.VISIBLE);
+            } else {
+                mBind.llDutyCycle.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -710,8 +731,9 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
     public void selectDr1(View view) {
         if (isWindowLocked())
             return;
-        if (mSelectedRegion == 0 || mSelectedRegion == 1) {
-            BottomDialog bottomDialog = new BottomDialog();
+        BottomDialog bottomDialog = new BottomDialog();
+        if ((mSelectedPlatform == 0 && mSelectedRegion <= 1)
+                || (mSelectedPlatform == 1 && (mSelectedServerRegion == 0 || mSelectedServerRegion >= 4))) {
             bottomDialog.setDatas(mDRList, mSelectedDr1 - 2);
             bottomDialog.setListener(value -> {
                 mSelectedDr1 = value + 2;
@@ -721,9 +743,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                     mBind.tvDr2.setText(mDRList.get(value));
                 }
             });
-            bottomDialog.show(getSupportFragmentManager());
         } else {
-            BottomDialog bottomDialog = new BottomDialog();
             bottomDialog.setDatas(mDRList, mSelectedDr1);
             bottomDialog.setListener(value -> {
                 mSelectedDr1 = value;
@@ -733,8 +753,8 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                     mBind.tvDr2.setText(mDRList.get(value));
                 }
             });
-            bottomDialog.show(getSupportFragmentManager());
         }
+        bottomDialog.show(getSupportFragmentManager());
     }
 
     public void selectDr2(View view) {
