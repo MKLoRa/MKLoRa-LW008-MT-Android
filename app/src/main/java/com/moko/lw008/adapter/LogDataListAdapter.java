@@ -14,6 +14,6 @@ public class LogDataListAdapter extends BaseQuickAdapter<LogData, BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, LogData item) {
         helper.setText(R.id.tv_time, item.name);
-        helper.setImageResource(R.id.iv_checked, item.isSelected ? R.drawable.lw008_ic_selected : R.drawable.lw008_ic_unselected);
+        helper.setImageResource(R.id.iv_checked, item.isSelected ? R.drawable.ic_selected : R.drawable.ic_unselected);
     }
 }

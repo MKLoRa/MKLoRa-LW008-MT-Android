@@ -8,20 +8,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/lw008_blue_2f84d0">
+        android:background="@color/blue_2f84d0">
 
         <TextView
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:drawableLeft="@drawable/lw008_ic_back"
+            android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="16dp"
             android:text=""
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="15sp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Filter by Raw Data"
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -41,13 +41,13 @@
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/lw008_ic_save" />
+            android:src="@drawable/ic_save" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lw008_grey_f2f2f2">
+        android:background="@color/grey_f2f2f2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,14 +60,14 @@
                 android:id="@+id/cb_enable"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/lw008_white_ffffff"
+                android:background="@color/white_ffffff"
                 android:button="@null"
                 android:checked="false"
-                android:drawableRight="@drawable/lw008_selector_cb_btn"
+                android:drawableRight="@drawable/selector_cb_btn"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:text="BXP-Tag"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@color/lw008_white_ffffff"
+                android:background="@color/white_ffffff"
                 android:orientation="vertical">
 
                 <CheckBox
@@ -84,15 +84,15 @@
                     android:layout_height="50dp"
                     android:button="@null"
                     android:checked="false"
-                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:drawableRight="@drawable/selector_cb_btn"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
                     android:text="Precise Match Tag ID"
-                    android:textColor="@color/lw008_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <View style="@style/lw008_divider_line" />
+                <View style="@style/divider_line" />
 
                 <CheckBox
                     android:id="@+id/cb_reverse_filter"
@@ -100,15 +100,15 @@
                     android:layout_height="50dp"
                     android:button="@null"
                     android:checked="false"
-                    android:drawableRight="@drawable/lw008_selector_cb_btn"
+                    android:drawableRight="@drawable/selector_cb_btn"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
                     android:text="Reverse Filter Tag ID"
-                    android:textColor="@color/lw008_black_333333"
+                    android:textColor="@color/black_333333"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <View style="@style/lw008_divider_line" />
+                <View style="@style/divider_line" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Edit Tag ID"
-                        android:textColor="@color/lw008_black_333333"
+                        android:textColor="@color/black_333333"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@id/iv_tag_id_add"
@@ -135,7 +135,7 @@
                         android:clickable="true"
                         android:onClick="onDel"
                         android:padding="12dp"
-                        android:src="@drawable/lw008_ic_del"
+                        android:src="@drawable/ic_del"
                         app:layout_constraintBottom_toBottomOf="@id/iv_tag_id_add"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@id/iv_tag_id_add" />
@@ -147,7 +147,7 @@
                         android:clickable="true"
                         android:onClick="onAdd"
                         android:padding="12dp"
-                        android:src="@drawable/lw008_ic_add"
+                        android:src="@drawable/ic_add"
                         app:layout_constraintRight_toLeftOf="@id/iv_tag_id_del"
                         app:layout_constraintTop_toTopOf="parent" />
 

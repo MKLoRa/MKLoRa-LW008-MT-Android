@@ -8,20 +8,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/lw008_blue_2f84d0">
+        android:background="@color/blue_2f84d0">
 
         <TextView
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:drawableLeft="@drawable/lw008_ic_back"
+            android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="16dp"
             android:text=""
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="15sp" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/general_ble_settings"
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -42,21 +42,21 @@
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/lw008_ic_save" />
+            android:src="@drawable/ic_save" />
 
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lw008_grey_f2f2f2"
+        android:background="@color/grey_f2f2f2"
         android:padding="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_adv_params"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/lw008_white_ffffff"
+            android:background="@color/white_ffffff"
             android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ADV Name"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_adv_name"
@@ -81,8 +81,8 @@
                 android:hint="0 ~ 16Characters"
                 android:maxLength="16"
                 android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -92,7 +92,7 @@
 
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -106,7 +106,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:text="Tx Power"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -117,14 +117,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="(-40,-20,-16,-12,-8-4,0,+2,+3,+4,+5,+6,+7,+8)"
-                android:textColor="@color/lw008_grey_b3b3b3"
+                android:textColor="@color/grey_b3b3b3"
                 android:textSize="12sp"
                 app:layout_constraintTop_toBottomOf="@id/tx_power"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
             <SeekBar
                 android:id="@+id/sb_tx_power"
-                style="@style/LW008CustomSeekbarStyle"
+                style="@style/CustomSeekbarStyle"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:max="13"
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="0dBm"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/sb_tx_power"
@@ -152,7 +152,7 @@
                 app:layout_constraintTop_toTopOf="@id/sb_tx_power" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -163,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Broadcast Timeout"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_adv_timeout"
@@ -180,8 +180,8 @@
                 android:inputType="number"
                 android:maxLength="3"
                 android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.82"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -193,7 +193,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mins"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_adv_timeout"
@@ -207,7 +207,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@color/lw008_white_ffffff"
+            android:background="@color/white_ffffff"
             android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -219,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="Login Password"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/iv_login_mode"
@@ -235,12 +235,12 @@
                 android:paddingLeft="6dp"
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
-                android:src="@drawable/lw008_ic_unchecked"
+                android:src="@drawable/ic_unchecked"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -252,15 +252,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@color/lw008_white_ffffff"
+                android:background="@color/white_ffffff"
                 android:clickable="true"
-                android:drawableRight="@drawable/lw008_ic_arrow_right"
+                android:drawableRight="@drawable/ic_arrow_right"
                 android:gravity="center_vertical"
                 android:onClick="onChangePassword"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="Change Password"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:visibility="visible"

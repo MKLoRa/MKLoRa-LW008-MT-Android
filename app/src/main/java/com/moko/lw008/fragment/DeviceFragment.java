@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.moko.ble.lib.task.OrderTask;
+import com.moko.lib.loraui.dialog.BottomDialog;
 import com.moko.lw008.R;
 import com.moko.lw008.activity.DeviceInfoActivity;
 import com.moko.lw008.databinding.Lw008FragmentDeviceBinding;
-import com.moko.lw008.dialog.BottomDialog;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
 
@@ -92,13 +92,13 @@ public class DeviceFragment extends Fragment {
 
     public void setShutdownPayload(int enable) {
         mShutdownPayloadEnable = enable == 1;
-        mBind.ivShutdownPayload.setImageResource(mShutdownPayloadEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivShutdownPayload.setImageResource(mShutdownPayloadEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
 
     public void setLowPowerPayload(int enable) {
         mLowPowerPayloadEnable = enable == 1;
-        mBind.ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivLowPowerPayload.setImageResource(mLowPowerPayloadEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
 //    public void setLowPower(int lowPower) {

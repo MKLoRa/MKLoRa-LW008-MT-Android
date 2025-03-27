@@ -24,7 +24,6 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.AppConstants;
 import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
-import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.service.DfuService;
 import com.moko.lw008.utils.FileUtils;
 import com.moko.lw008.utils.ToastUtils;

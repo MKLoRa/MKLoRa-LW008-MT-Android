@@ -7,20 +7,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/lw008_blue_2f84d0">
+        android:background="@color/blue_2f84d0">
 
         <TextView
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:drawableLeft="@drawable/lw008_ic_back"
+            android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="16dp"
             android:text=""
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="15sp" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/lw008_ic_save"
+            android:src="@drawable/ic_save"
             android:visibility="gone" />
 
     </RelativeLayout>
@@ -51,15 +51,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1.0"
-        android:background="@color/lw008_white_ffffff" />
+        android:background="@color/white_ffffff" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lw008_white_ffffff"
+        android:background="@color/white_ffffff"
         android:orientation="vertical">
 
-        <View style="@style/lw008_divider_line" />
+        <View style="@style/divider_line" />
 
         <RadioGroup
             android:id="@+id/rg_options"
@@ -73,13 +73,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:button="@null"
-                android:drawableTop="@drawable/lw008_selector_adv"
+                android:drawableTop="@drawable/selector_tab_adv"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/title_lora_lw008"
-                android:textColor="@drawable/lw008_selector_option_radiobtn_color"
+                android:textColor="@drawable/selector_option_radiobtn_color"
                 android:textSize="12sp" />
 
 
@@ -89,13 +89,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:button="@null"
-                android:drawableTop="@drawable/lw008_selector_pos"
+                android:drawableTop="@drawable/selector_tab_pos"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/title_position"
-                android:textColor="@drawable/lw008_selector_option_radiobtn_color"
+                android:textColor="@drawable/selector_option_radiobtn_color"
                 android:textSize="12sp" />
 
             <RadioButton
@@ -104,13 +104,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:button="@null"
-                android:drawableTop="@drawable/lw008_selector_general"
+                android:drawableTop="@drawable/selector_tab_general"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/title_general"
-                android:textColor="@drawable/lw008_selector_option_radiobtn_color"
+                android:textColor="@drawable/selector_option_radiobtn_color"
                 android:textSize="12sp" />
 
             <RadioButton
@@ -119,13 +119,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:button="@null"
-                android:drawableTop="@drawable/lw008_selector_device"
+                android:drawableTop="@drawable/selector_tab_device"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/title_device"
-                android:textColor="@drawable/lw008_selector_option_radiobtn_color"
+                android:textColor="@drawable/selector_option_radiobtn_color"
                 android:textSize="12sp" />
 
         </RadioGroup>

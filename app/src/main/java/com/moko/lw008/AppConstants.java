@@ -11,16 +11,12 @@ public class AppConstants {
     public static final String PATTERN_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     // action
     // sp
-    public static final String SP_NAME = "sp_name_beacon";
+    public static final String SP_NAME = "sp_name_lw008";
 
     public static final String SP_KEY_DEVICE_ADDRESS = "sp_key_device_address";
     public static final String SP_KEY_SAVED_PASSWORD_LW008 = "SP_KEY_SAVED_PASSWORD_LW008";
-    public static final String SP_URL = "SP_URL";
-    public static final String SP_LOGIN_ACCOUNT = "SP_LOGIN_ACCOUNT";
-    public static final String SP_LOGIN_PASSWORD = "SP_LOGIN_PASSWORD";
-    public static final String SP_LOGIN_ENV = "SP_LOGIN_ENV";
     // extra_key
-    // 设备列表\
+    // 设备列表
     public static final String EXTRA_KEY_DEVICE_PARAM = "EXTRA_KEY_DEVICE_PARAM";
     public static final String EXTRA_KEY_DEVICE_INFO = "EXTRA_KEY_DEVICE_INFO";
     public static final String EXTRA_KEY_DEVICE_UUID = "EXTRA_KEY_DEVICE_UUID";

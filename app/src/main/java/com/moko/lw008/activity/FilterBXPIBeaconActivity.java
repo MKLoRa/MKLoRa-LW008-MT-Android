@@ -12,7 +12,6 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lw008.databinding.Lw008ActivityFilterBxpIbeaconBinding;
-import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;

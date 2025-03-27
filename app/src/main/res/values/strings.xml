@@ -1,18 +1,7 @@
 <resources>
     <string name="app_name">LW008-MT</string>
 
-    <string name="cancel">Cancel</string>
-    <string name="ensure">OK</string>
-    <string name="confirm">Confirm</string>
-
-
-    <string name="please_enter_password">Please enter password</string>
-    <string name="password_null">Password cannot be empty!</string>
-    <string name="main_password_length">The password should be 8 characters</string>
-    <string name="change_password_length">The password should be 8 characters.Please try again</string>
-    <string name="change_password_match">Password do not match!Please try again.</string>
     <string name="main_exit_tips">Are you sure you want to quit?</string>
-    <string name="setting_syncing">syncing</string>
 
     <string name="company_name">MOKO TECHNOLOGY LTD.</string>
     <string name="about_title">ABOUT</string>
@@ -28,6 +17,7 @@
     <string name="permission_location_close_content">Please find it in cellphone setting- permission, and allow LW008 use the Location permission</string>
     <string name="permission_location_need_content">LW008 requires access to Location permission. If the permissions are not on, LW008 cannot be used normally.</string>
     <string name="permission_ble_content">LW008 requires access to bluetooth scan contract and location permission. If the permissions are not on, LW008 cannot be used normally.</string>
+
     <string name="title_lora_lw008">LoRa</string>
     <string name="title_position">POSITION</string>
     <string name="title_general">GENERAL</string>
@@ -57,8 +47,5 @@
     <string name="battery_reset_tips">*After replace with the new battery, need to click \"Reset\", otherwise the low power prompt will be unnormal.</string>
 
     // net
-    <string name="main_sync_device">Sync to cloud</string>
     <string name="request_error">Request Error!</string>
-    <string name="account_exit">Exit</string>
-    <string name="lora_gateway_tips">* If you have a LoRa gateway, please config the gateway connect to MOKO LoRa server, the server address is 101.37.81.143, the port is 1700, the current supported channel are AS923, AU915_CH00-07, AU915_CH08-15, EU868, US915_CH00-07, US915_CH08-15,select the correct channel please.</string>
 </resources>

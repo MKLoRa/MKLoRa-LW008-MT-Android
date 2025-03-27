@@ -22,16 +22,15 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.lib.loraui.dialog.AlertMessageDialog;
+import com.moko.lib.loraui.dialog.LoadingMessageDialog;
+import com.moko.lib.loraui.dialog.PasswordDialog;
+import com.moko.lib.loraui.dialog.ScanFilterDialog;
 import com.moko.lw008.AppConstants;
 import com.moko.lw008.BuildConfig;
 import com.moko.lw008.R;
 import com.moko.lw008.adapter.DeviceListAdapter;
 import com.moko.lw008.databinding.Lw008ActivityMainBinding;
-import com.moko.lw008.dialog.AlertMessageDialog;
-import com.moko.lw008.dialog.LoadingDialog;
-import com.moko.lw008.dialog.LoadingMessageDialog;
-import com.moko.lw008.dialog.PasswordDialog;
-import com.moko.lw008.dialog.ScanFilterDialog;
 import com.moko.lw008.entity.AdvInfo;
 import com.moko.lw008.utils.AdvInfoAnalysisImpl;
 import com.moko.lw008.utils.SPUtiles;
@@ -102,7 +101,7 @@ public class LoRaLW008MainActivity extends BaseActivity implements MokoScanDevic
         adapter.openLoadAnimation();
         mBind.rvDevices.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.lw008_shape_recycleview_divider));
+        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.shape_recycleview_divider));
         mBind.rvDevices.addItemDecoration(itemDecoration);
         mBind.rvDevices.setAdapter(adapter);
         mHandler = new Handler(Looper.getMainLooper());
@@ -126,7 +125,7 @@ public class LoRaLW008MainActivity extends BaseActivity implements MokoScanDevic
             LoRaLW008MokoSupport.getInstance().enableBluetooth();
             return;
         }
-        animation = AnimationUtils.loadAnimation(this, R.anim.lw008_rotate_refresh);
+        animation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
         mBind.ivRefresh.startAnimation(animation);
         beaconInfoParseable = new AdvInfoAnalysisImpl();
         mokoBleScanner.startScanDevice(this);

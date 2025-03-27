@@ -10,7 +10,6 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.lw008.databinding.Lw008ActivityAuxiliaryOperationBinding;
-import com.moko.lw008.dialog.LoadingMessageDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

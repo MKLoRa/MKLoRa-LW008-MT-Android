@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lw008_white_ffffff"
+    android:background="@color/white_ffffff"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/lw008_blue_2f84d0">
+        android:background="@color/blue_2f84d0">
 
         <TextView
             android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:drawableLeft="@drawable/lw008_ic_back"
+            android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="16dp"
             android:text=""
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="15sp" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/general_axis_setting"
-            android:textColor="@color/lw008_white_ffffff"
+            android:textColor="@color/white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -43,14 +43,14 @@
             android:onClick="onSave"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/lw008_ic_save" />
+            android:src="@drawable/ic_save" />
 
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lw008_white_ffffff"
+        android:background="@color/white_ffffff"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wakeup Threshold"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_wakeup_threshold"
@@ -79,8 +79,8 @@
                 android:hint="1~20"
                 android:inputType="number"
                 android:maxLength="2"
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="x16mg"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_wakeup_threshold"
@@ -101,7 +101,7 @@
                 app:layout_constraintTop_toTopOf="@id/et_wakeup_threshold" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wakeup Duration"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_wakeup_duration"
@@ -130,8 +130,8 @@
                 android:inputType="number"
                 android:maxLength="2"
                 android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="x10ms"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_wakeup_duration"
@@ -152,7 +152,7 @@
                 app:layout_constraintTop_toTopOf="@id/et_wakeup_duration" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -163,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Motion Threshold"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_motion_threshold"
@@ -180,8 +180,8 @@
                 android:inputType="number"
                 android:maxLength="3"
                 android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="x2mg"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_motion_threshold"
@@ -202,7 +202,7 @@
                 app:layout_constraintTop_toTopOf="@id/et_motion_threshold" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -213,7 +213,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Motion Duration"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_motion_duration"
@@ -230,8 +230,8 @@
                 android:inputType="number"
                 android:maxLength="2"
                 android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -244,7 +244,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="x5ms"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_motion_duration"
@@ -252,7 +252,7 @@
                 app:layout_constraintTop_toTopOf="@id/et_motion_duration" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -263,7 +263,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Shock Thresholds"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_vibration_thresholds"
@@ -280,8 +280,8 @@
                 android:inputType="number"
                 android:maxLength="3"
                 android:text=""
-                android:textColor="@color/lw008_black_333333"
-                android:textColorHint="@color/lw008_grey_ebebeb"
+                android:textColor="@color/black_333333"
+                android:textColorHint="@color/grey_ebebeb"
                 android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -294,7 +294,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="x10mg"
-                android:textColor="@color/lw008_black_333333"
+                android:textColor="@color/black_333333"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/et_vibration_thresholds"
@@ -302,7 +302,7 @@
                 app:layout_constraintTop_toTopOf="@id/et_vibration_thresholds" />
 
             <View
-                style="@style/lw008_divider_line"
+                style="@style/divider_line"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"

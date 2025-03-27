@@ -42,7 +42,7 @@ public class PositionFragment extends Fragment {
 
     public void setOfflineLocationEnable(int enable) {
         mOfflineLocationEnable = enable == 1;
-        mBind.ivOfflineFix.setImageResource(mOfflineLocationEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+        mBind.ivOfflineFix.setImageResource(mOfflineLocationEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
 

@@ -9,10 +9,9 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.lib.loraui.dialog.BottomDialog;
 import com.moko.lw008.R;
 import com.moko.lw008.databinding.Lw008ActivityFilterTlmBinding;
-import com.moko.lw008.dialog.BottomDialog;
-import com.moko.lw008.dialog.LoadingMessageDialog;
 import com.moko.lw008.utils.ToastUtils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
@@ -125,7 +124,7 @@ public class FilterTLMActivity extends BaseActivity {
                                     case KEY_FILTER_EDDYSTONE_TLM_ENABLE:
                                         if (length > 0) {
                                             mTLMEnable = value[4] == 1;
-                                            mBind.ivTlmEnable.setImageResource(mTLMEnable ? R.drawable.lw008_ic_checked : R.drawable.lw008_ic_unchecked);
+                                            mBind.ivTlmEnable.setImageResource(mTLMEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
                                         }
                                         break;
                                 }

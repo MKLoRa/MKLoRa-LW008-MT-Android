@@ -67,7 +67,7 @@ event,distinguish between function via `OrderTaskResponse`.
 
 * Android Studio 3.6.+
 
-* minSdkVersion 18
+* minSdkVersion 26
 
 **Import to Project**
 
