@@ -23,13 +23,7 @@ android {
 }
 
 dependencies {
-    api files('libs/mokoBleLib.jar')
-    api 'com.google.code.gson:gson:2.10.1'
-    api 'no.nordicsemi.android.support.v18:scanner:1.6.0'
-    api 'no.nordicsemi.android:dfu:2.4.1'
-    api 'org.greenrobot:eventbus:3.3.1'
-    api 'com.elvishew:xlog:1.6.1'
-    implementation 'no.nordicsemi.android:ble:2.7.3'
+    api 'com.github.MOKO-Android-Base-Library:MKBleLib:1.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
 

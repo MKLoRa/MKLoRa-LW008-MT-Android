@@ -94,17 +94,12 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     if (!isLibrary.toBoolean()) {
         implementation project(path: ':mokosupport')
-        implementation 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.5'
+        implementation 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.7'
+        implementation 'com.github.MOKO-Android-Base-Library:MKLoRaUILib:1.0.10'
     } else {
-        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.5'
-        compileOnly files('libs/mokoBleLib.jar')
+        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.7'
+        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaUILib:1.0.10'
+        compileOnly 'com.github.MOKO-Android-Base-Library:MKBleLib:1.0.1'
         implementation files('libs/mokoSupport.jar')
-        // mokosupport
-        implementation 'com.google.code.gson:gson:2.10.1'
-        implementation 'no.nordicsemi.android.support.v18:scanner:1.6.0'
-        implementation 'no.nordicsemi.android:dfu:2.4.1'
-        implementation 'org.greenrobot:eventbus:3.3.1'
-        implementation 'com.elvishew:xlog:1.6.1'
-        implementation 'no.nordicsemi.android:ble:2.7.3'
     }
 }

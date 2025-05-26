@@ -22,6 +22,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 
 public class GuideActivity extends BaseActivity {
+
+    private String mAppName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,7 @@ public class GuideActivity extends BaseActivity {
             finish();
             return;
         }
+        mAppName = getString(R.string.app_name);
         requestPermission();
     }
 
@@ -41,8 +45,8 @@ public class GuideActivity extends BaseActivity {
                 return;
             }
             if (!isWriteStoragePermissionOpen() || !isLocationPermissionOpen()) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION}, getResources().getString(R.string.permission_storage_need_content),
-                        getResources().getString(R.string.permission_storage_close_content));
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION}, getResources().getString(R.string.permission_storage_need_content, mAppName, mAppName),
+                        getResources().getString(R.string.permission_storage_close_content, mAppName));
                 return;
             }
         } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
@@ -53,8 +57,8 @@ public class GuideActivity extends BaseActivity {
             }
             //申请定位权限 BLUETOOTH BLUETOOTH_ADMIN不属于动态权限
             if (!isLocationPermissionOpen()) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, getResources().getString(R.string.permission_location_need_content),
-                        getResources().getString(R.string.permission_location_close_content));
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, getResources().getString(R.string.permission_location_need_content, mAppName, mAppName),
+                        getResources().getString(R.string.permission_location_close_content, mAppName));
                 return;
             }
         } else {
@@ -65,8 +69,8 @@ public class GuideActivity extends BaseActivity {
             }
             if (!hasBlePermission() || !isLocationPermissionOpen()) {
                 requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN,
-                                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, getResources().getString(R.string.permission_ble_content),
-                        getResources().getString(R.string.permission_ble_close_content));
+                                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, getResources().getString(R.string.permission_ble_content, mAppName, mAppName),
+                        getResources().getString(R.string.permission_ble_close_content, mAppName));
                 return;
             }
         }
@@ -101,8 +105,8 @@ public class GuideActivity extends BaseActivity {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setCancelable(false)
                 .setTitle(R.string.location_need_title)
-                .setMessage(R.string.location_need_content)
-                .setPositiveButton(getString(R.string.permission_open), (dialog1, which) -> {
+                .setMessage(getString(R.string.location_need_content, mAppName))
+                .setPositiveButton(getString(R.string.ok), (dialog1, which) -> {
                     Intent intent = new Intent();
                     intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startLauncher.launch(intent);
