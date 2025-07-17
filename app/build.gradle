@@ -6,13 +6,13 @@ if (!isLibrary.toBoolean()) {
 
 android {
     namespace "com.moko.lw008"
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
-        minSdk 26
-        targetSdk 34
-        versionCode 9
-        versionName "1.0.8"
+        minSdk 28
+        targetSdk 35
+        versionCode 109
+        versionName "1.0.9"
 
         def formatDate = new Date().format("yyyyMMddHHmm")
         setProperty("archivesBaseName", "LW008_${versionName}_${formatDate}")
@@ -94,10 +94,10 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     if (!isLibrary.toBoolean()) {
         implementation project(path: ':mokosupport')
-        implementation 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.7'
+        implementation 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.9'
         implementation 'com.github.MOKO-Android-Base-Library:MKLoRaUILib:1.0.10'
     } else {
-        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.7'
+        compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaIoTLib:1.0.9'
         compileOnly 'com.github.MOKO-Android-Base-Library:MKLoRaUILib:1.0.10'
         compileOnly 'com.github.MOKO-Android-Base-Library:MKBleLib:1.0.1'
         implementation files('libs/mokoSupport.jar')
