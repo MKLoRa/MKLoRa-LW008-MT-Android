@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_ebebeb"
@@ -255,6 +256,28 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                android:id="@+id/tv_battery_consume"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white_ffffff"
+                android:clickable="true"
+                android:drawableRight="@drawable/ic_arrow_right"
+                android:gravity="center_vertical"
+                android:onClick="onBatteryConsumeInfo"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Battery Consumption Information"
+                android:textColor="@color/black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_system"
+                tools:visibility="visible" />
+
+            <TextView
                 android:id="@+id/tv_debug"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
@@ -272,7 +295,7 @@
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_system" />
+                app:layout_constraintTop_toBottomOf="@id/tv_battery_consume" />
 
             <View
                 android:layout_width="0dp"

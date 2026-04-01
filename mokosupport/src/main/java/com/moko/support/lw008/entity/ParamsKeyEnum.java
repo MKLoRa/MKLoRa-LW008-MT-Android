@@ -4,6 +4,23 @@ package com.moko.support.lw008.entity;
 import java.io.Serializable;
 
 public enum ParamsKeyEnum implements Serializable {
+    //// 电池管理参数
+    // 条件1低电电压值
+    KEY_CONDITION_1_VOLTAGE_THRESHOLD(0x01),
+    // 条件1最小采样间隔
+    KEY_CONDITION_1_MIN_SAMPLE_INTERVAL(0x02),
+    // 条件1连续采样次数
+    KEY_CONDITION_1_SAMPLE_TIMES(0x03),
+    // 条件2低电电压值
+    KEY_CONDITION_2_VOLTAGE_THRESHOLD(0x04),
+    // 条件2最小采样间隔
+    KEY_CONDITION_2_MIN_SAMPLE_INTERVAL(0x05),
+    // 条件2连续采样次数
+    KEY_CONDITION_2_SAMPLE_TIMES(0x06),
+    KEY_BATTERY_RESET_NEW(0x07),
+    KEY_BATTERY_INFO_NEW(0x08),
+    KEY_BATTERY_INFO_LAST(0x09),
+    KEY_BATTERY_INFO_ALL(0x0A),
 
     //// 系统相关参数
     KEY_CLOSE(0x10),
@@ -43,10 +60,12 @@ public enum ParamsKeyEnum implements Serializable {
     KEY_PCBA_STATUS(0x22),
     // 自检状态
     KEY_SELFTEST_STATUS(0x23),
-    // 电池信息信息
+    // 电池信息
     KEY_BATTERY_INFO(0x25),
     // 电池信息清除
     KEY_BATTERY_RESET(0x26),
+    // 三轴开关
+    KEY_AXIS_ENABLE(0x29),
 
 
     //// 蓝牙相关参数

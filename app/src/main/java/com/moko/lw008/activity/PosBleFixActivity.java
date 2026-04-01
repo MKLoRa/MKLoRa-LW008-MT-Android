@@ -134,14 +134,10 @@ public class PosBleFixActivity extends BaseActivity implements SeekBar.OnSeekBar
                                     case KEY_BLE_POS_MAC_NUMBER:
                                     case KEY_FILTER_BLE_SCAN_PHY:
                                     case KEY_BLE_POS_MECHANISM:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_FILTER_RELATIONSHIP:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(PosBleFixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

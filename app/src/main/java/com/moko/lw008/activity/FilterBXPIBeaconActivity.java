@@ -96,14 +96,10 @@ public class FilterBXPIBeaconActivity extends BaseActivity {
                                     case KEY_FILTER_BXP_IBEACON_UUID:
                                     case KEY_FILTER_BXP_IBEACON_MAJOR_RANGE:
                                     case KEY_FILTER_BXP_IBEACON_MINOR_RANGE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_FILTER_BXP_IBEACON_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(FilterBXPIBeaconActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

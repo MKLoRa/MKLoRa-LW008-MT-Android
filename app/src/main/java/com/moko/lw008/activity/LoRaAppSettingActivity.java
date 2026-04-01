@@ -99,14 +99,10 @@ public class LoRaAppSettingActivity extends BaseActivity {
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
                                     case KEY_LORA_TIME_SYNC_INTERVAL:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_LORA_NETWORK_CHECK_INTERVAL:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(LoRaAppSettingActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

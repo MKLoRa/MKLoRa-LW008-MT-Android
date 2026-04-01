@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_f2f2f2"
@@ -179,5 +180,25 @@
                 app:layout_constraintTop_toTopOf="@id/et_heartbeat_interval" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <CheckBox
+            android:id="@+id/cbAxisEnable"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white_ffffff"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_cb_btn"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="3-Axis Switch"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_heartbeat_interval"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

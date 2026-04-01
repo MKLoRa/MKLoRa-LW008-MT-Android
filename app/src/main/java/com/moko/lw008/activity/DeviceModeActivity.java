@@ -101,9 +101,7 @@ public class DeviceModeActivity extends BaseActivity {
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
                                     case KEY_DEVICE_MODE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(DeviceModeActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

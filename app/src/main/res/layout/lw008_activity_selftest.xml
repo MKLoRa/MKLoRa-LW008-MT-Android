@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_ebebeb"
@@ -33,6 +34,19 @@
             android:textColor="@color/white_ffffff"
             android:textSize="17sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivSave"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:onClick="onSave"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/ic_save"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </RelativeLayout>
 
     <ScrollView
@@ -156,6 +170,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+                android:id="@+id/llBatteryInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -310,6 +325,278 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_battery_reset" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clLoraLowPowerCondition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white_ffffff"
+                android:padding="10dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvCondition1VoltageThreshold"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/shape_radius_blue_btn_bg"
+                    android:gravity="center"
+                    android:text="2.9"
+                    android:textColor="@color/white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toLeftOf="@id/tvCondition1VoltageThresholdUnit"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCondition1VoltageThresholdUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="V"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Condition 1 Voltage Threshold"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCondition1VoltageThreshold" />
+
+                <EditText
+                    android:id="@+id/etCondition1MinSampleInterval"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:hint="1~1440"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition1MinSampleIntervalUnit"
+                    app:layout_constraintRight_toLeftOf="@id/tvCondition1MinSampleIntervalUnit" />
+
+                <TextView
+                    android:id="@+id/tvCondition1MinSampleIntervalUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Mins"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCondition1VoltageThresholdUnit" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Min. Sample Interval"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition1MinSampleIntervalUnit"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+                <View
+                    style="@style/divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etCondition1MinSampleInterval" />
+
+                <EditText
+                    android:id="@+id/etCondition1SampleTimes"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:hint="1~100"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition1SampleTimesUnit"
+                    app:layout_constraintRight_toLeftOf="@id/tvCondition1SampleTimesUnit" />
+
+                <TextView
+                    android:id="@+id/tvCondition1SampleTimesUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Times"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCondition1MinSampleIntervalUnit" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Sample Times"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition1SampleTimesUnit"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clGpsLowPowerCondition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white_ffffff"
+                android:padding="10dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvCondition2VoltageThreshold"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/shape_radius_blue_btn_bg"
+                    android:gravity="center"
+                    android:text="2.9"
+                    android:textColor="@color/white_ffffff"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toLeftOf="@id/tvCondition2VoltageThresholdUnit"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCondition2VoltageThresholdUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="V"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Condition 2 Voltage Threshold"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    style="@style/divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCondition2VoltageThreshold" />
+
+                <EditText
+                    android:id="@+id/etCondition2MinSampleInterval"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:hint="1~1440"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition2MinSampleIntervalUnit"
+                    app:layout_constraintRight_toLeftOf="@id/tvCondition2MinSampleIntervalUnit" />
+
+                <TextView
+                    android:id="@+id/tvCondition2MinSampleIntervalUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Mins"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCondition2VoltageThresholdUnit" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Min. Sample Interval"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition2MinSampleIntervalUnit"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+                <View
+                    style="@style/divider_line"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etCondition2MinSampleInterval" />
+
+                <EditText
+                    android:id="@+id/etCondition2SampleTimes"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:hint="1~100"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition2SampleTimesUnit"
+                    app:layout_constraintRight_toLeftOf="@id/tvCondition2SampleTimesUnit" />
+
+                <TextView
+                    android:id="@+id/tvCondition2SampleTimesUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Times"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCondition2MinSampleIntervalUnit" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Sample Times"
+                    android:textColor="@color/black_333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvCondition2SampleTimesUnit"
+                    app:layout_constraintLeft_toLeftOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

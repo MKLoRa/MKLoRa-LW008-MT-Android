@@ -106,14 +106,10 @@ public class FilterOtherActivity extends BaseActivity {
                                 switch (configKeyEnum) {
                                     case KEY_FILTER_OTHER_RELATIONSHIP:
                                     case KEY_FILTER_OTHER_RULES:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_FILTER_OTHER_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(FilterOtherActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

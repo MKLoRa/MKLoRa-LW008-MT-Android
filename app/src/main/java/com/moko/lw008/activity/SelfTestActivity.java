@@ -2,7 +2,9 @@ package com.moko.lw008.activity;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
@@ -11,7 +13,12 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.lib.loraui.dialog.AlertMessageDialog;
+import com.moko.lib.loraui.dialog.BottomDialog;
+import com.moko.lib.loraui.utils.ToastUtils;
+import com.moko.lw008.AppConstants;
 import com.moko.lw008.databinding.Lw008ActivitySelftestBinding;
+import com.moko.lw008.utils.SPUtiles;
+import com.moko.lw008.utils.Utils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
 import com.moko.support.lw008.entity.OrderCHAR;
@@ -29,20 +36,65 @@ public class SelfTestActivity extends BaseActivity {
 
     private Lw008ActivitySelftestBinding mBind;
 
+    private ArrayList<String> mValues;
+    private String mVersion;
+    private boolean savedParamsError;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBind = Lw008ActivitySelftestBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
         EventBus.getDefault().register(this);
+        mVersion = SPUtiles.getStringValue(this, AppConstants.SP_KEY_FIREWARE_VERSION, "V1.0.0");
         showSyncingProgressDialog();
         mBind.tvSelftestStatus.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getSelfTestStatus());
             orderTasks.add(OrderTaskAssembler.getPCBAStatus());
-            orderTasks.add(OrderTaskAssembler.getBatteryInfo());
+            if (!Utils.isNewFunction(mVersion, "V1.0.9"))
+                orderTasks.add(OrderTaskAssembler.getBatteryInfo());
+            else {
+                orderTasks.add(OrderTaskAssembler.getCondition1VoltageThreshold());
+                orderTasks.add(OrderTaskAssembler.getCondition1MinSampleInterval());
+                orderTasks.add(OrderTaskAssembler.getCondition1SampleTimes());
+                orderTasks.add(OrderTaskAssembler.getCondition2VoltageThreshold());
+                orderTasks.add(OrderTaskAssembler.getCondition2MinSampleInterval());
+                orderTasks.add(OrderTaskAssembler.getCondition2SampleTimes());
+            }
             LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
+        if (Utils.isNewFunction(mVersion, "V1.0.9")) {
+            mBind.ivSave.setVisibility(View.VISIBLE);
+            mBind.llBatteryInfo.setVisibility(View.GONE);
+            mBind.clBatteryReset.setVisibility(View.GONE);
+            mBind.clLoraLowPowerCondition.setVisibility(View.VISIBLE);
+            mBind.clGpsLowPowerCondition.setVisibility(View.VISIBLE);
+            mValues = new ArrayList<>();
+            for (int i = 44; i <= 64; i++) {
+                mValues.add(MokoUtils.getDecimalFormat("0.##").format(i * 0.05f));
+            }
+            mBind.tvCondition1VoltageThreshold.setTag(0);
+            mBind.tvCondition1VoltageThreshold.setOnClickListener(v -> {
+                showThresholdDialog(v);
+            });
+            mBind.tvCondition2VoltageThreshold.setTag(0);
+            mBind.tvCondition2VoltageThreshold.setOnClickListener(v -> {
+                showThresholdDialog(v);
+            });
+        }
+    }
+
+    private void showThresholdDialog(View v) {
+        if (isWindowLocked()) return;
+        int selected = (int) v.getTag();
+        BottomDialog dialog = new BottomDialog();
+        dialog.setDatas(mValues, selected);
+        dialog.setListener(value -> {
+            ((TextView) v).setText(mValues.get(value));
+            v.setTag(value);
+        });
+        dialog.show(getSupportFragmentManager());
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 300)
@@ -88,6 +140,20 @@ public class SelfTestActivity extends BaseActivity {
                                 // write
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
+                                    case KEY_CONDITION_1_VOLTAGE_THRESHOLD:
+                                    case KEY_CONDITION_1_MIN_SAMPLE_INTERVAL:
+                                    case KEY_CONDITION_1_SAMPLE_TIMES:
+                                    case KEY_CONDITION_2_VOLTAGE_THRESHOLD:
+                                    case KEY_CONDITION_2_MIN_SAMPLE_INTERVAL:
+                                        savedParamsError |= result != 1;
+                                        break;
+                                    case KEY_CONDITION_2_SAMPLE_TIMES:
+                                        savedParamsError |= result != 1;
+                                        if (savedParamsError)
+                                            ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+                                        else
+                                            ToastUtils.showToast(this, "Save Successfully！");
+                                        break;
                                     case KEY_BATTERY_RESET:
                                         if (result == 1) {
                                             AlertMessageDialog dialog = new AlertMessageDialog();
@@ -143,6 +209,34 @@ public class SelfTestActivity extends BaseActivity {
                                             mBind.tvBatteryConsume.setText(String.format("%s mAH", batteryConsumeStr));
                                         }
                                         break;
+                                    case KEY_CONDITION_1_VOLTAGE_THRESHOLD:
+                                        int thresholdNon = value[4] & 0xFF;
+                                        int selectedNon = thresholdNon - 44;
+                                        mBind.tvCondition1VoltageThreshold.setText(mValues.get(selectedNon));
+                                        mBind.tvCondition1VoltageThreshold.setTag(selectedNon);
+                                        break;
+                                    case KEY_CONDITION_1_MIN_SAMPLE_INTERVAL:
+                                        int intervalNon = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 4 + length));
+                                        mBind.etCondition1MinSampleInterval.setText(String.valueOf(intervalNon));
+                                        break;
+                                    case KEY_CONDITION_1_SAMPLE_TIMES:
+                                        int timesNon = value[4] & 0xFF;
+                                        mBind.etCondition1SampleTimes.setText(String.valueOf(timesNon));
+                                        break;
+                                    case KEY_CONDITION_2_VOLTAGE_THRESHOLD:
+                                        int threshold = value[4] & 0xFF;
+                                        int selected = threshold - 44;
+                                        mBind.tvCondition2VoltageThreshold.setText(mValues.get(selected));
+                                        mBind.tvCondition2VoltageThreshold.setTag(selected);
+                                        break;
+                                    case KEY_CONDITION_2_MIN_SAMPLE_INTERVAL:
+                                        int interval = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 4 + length));
+                                        mBind.etCondition2MinSampleInterval.setText(String.valueOf(interval));
+                                        break;
+                                    case KEY_CONDITION_2_SAMPLE_TIMES:
+                                        int times = value[4] & 0xFF;
+                                        mBind.etCondition2SampleTimes.setText(String.valueOf(times));
+                                        break;
                                 }
                             }
                         }
@@ -168,6 +262,59 @@ public class SelfTestActivity extends BaseActivity {
         });
         dialog.show(getSupportFragmentManager());
     }
+
+    public void onSave(View view) {
+        if (isValid()) {
+            showSyncingProgressDialog();
+            saveParams();
+        } else {
+            ToastUtils.showToast(this, "Para error!");
+        }
+    }
+
+    private boolean isValid() {
+        if (TextUtils.isEmpty(mBind.etCondition1MinSampleInterval.getText())) return false;
+        String intervalNonStr = mBind.etCondition1MinSampleInterval.getText().toString();
+        int intervalNon = Integer.parseInt(intervalNonStr);
+        if (intervalNon < 1 || intervalNon > 1440)
+            return false;
+        if (TextUtils.isEmpty(mBind.etCondition1SampleTimes.getText())) return false;
+        String timesNonStr = mBind.etCondition1SampleTimes.getText().toString();
+        int timesNon = Integer.parseInt(timesNonStr);
+        if (timesNon < 1 || timesNon > 100)
+            return false;
+        if (TextUtils.isEmpty(mBind.etCondition2MinSampleInterval.getText())) return false;
+        String intervalStr = mBind.etCondition2MinSampleInterval.getText().toString();
+        int interval = Integer.parseInt(intervalStr);
+        if (interval < 1 || interval > 1440)
+            return false;
+        if (TextUtils.isEmpty(mBind.etCondition2SampleTimes.getText())) return false;
+        String timesStr = mBind.etCondition2SampleTimes.getText().toString();
+        int times = Integer.parseInt(timesStr);
+        if (times < 1 || times > 100)
+            return false;
+        return true;
+    }
+
+    private void saveParams() {
+        savedParamsError = false;
+        int thresholdNon = (int) mBind.tvCondition1VoltageThreshold.getTag() + 44;
+        int intervalNon = Integer.parseInt(mBind.etCondition1MinSampleInterval.getText().toString());
+        int timesNon = Integer.parseInt(mBind.etCondition1SampleTimes.getText().toString());
+        int threshold = (int) mBind.tvCondition2VoltageThreshold.getTag() + 44;
+        int interval = Integer.parseInt(mBind.etCondition2MinSampleInterval.getText().toString());
+        int times = Integer.parseInt(mBind.etCondition2SampleTimes.getText().toString());
+
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(OrderTaskAssembler.setCondition1VoltageThreshold(thresholdNon));
+        orderTasks.add(OrderTaskAssembler.setCondition1MinSampleInterval(intervalNon));
+        orderTasks.add(OrderTaskAssembler.setCondition1SampleTimes(timesNon));
+        orderTasks.add(OrderTaskAssembler.setCondition2VoltageThreshold(threshold));
+        orderTasks.add(OrderTaskAssembler.setCondition2MinSampleInterval(interval));
+        orderTasks.add(OrderTaskAssembler.setCondition2SampleTimes(times));
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
 
     @Override
     protected void onDestroy() {

@@ -120,14 +120,10 @@ public class PosGpsLR1110FixActivity extends BaseActivity {
                                     case KEY_GPS_POS_AUTONMOUS_AIDING_ENABLE:
                                     case KEY_GPS_POS_AUXILIARY_LAT_LON:
                                     case KEY_GPS_POS_EPHEMERIS_START_NOTIFY_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_GPS_POS_EPHEMERIS_END_NOTIFY_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(PosGpsLR1110FixActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

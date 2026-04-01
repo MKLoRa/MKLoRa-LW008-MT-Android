@@ -28,7 +28,9 @@ import com.moko.lw008.fragment.DeviceFragment;
 import com.moko.lw008.fragment.GeneralFragment;
 import com.moko.lw008.fragment.LoRaFragment;
 import com.moko.lw008.fragment.PositionFragment;
+import com.moko.lw008.utils.SPUtiles;
 import com.moko.lw008.utils.ToastUtils;
+import com.moko.lw008.utils.Utils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
 import com.moko.support.lw008.entity.OrderCHAR;
@@ -64,6 +66,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private int mDeviceType;
 
     private boolean savedParamsError;
+
+    public String mVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(OrderTaskAssembler.getLoraRegion());
                 orderTasks.add(OrderTaskAssembler.getLoraUploadMode());
                 orderTasks.add(OrderTaskAssembler.getLoraNetworkStatus());
+                orderTasks.add(OrderTaskAssembler.getFirmwareVersion());
                 LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }, 500);
         }
@@ -196,6 +201,11 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 int responseType = response.responseType;
                 byte[] value = response.responseValue;
                 switch (orderCHAR) {
+                    case CHAR_FIRMWARE_REVISION:
+                        mVersion = new String(value);
+                        generalFragment.setAxisShown(mVersion);
+                        SPUtiles.setStringValue(this, AppConstants.SP_KEY_FIREWARE_VERSION, mVersion);
+                        break;
                     case CHAR_PARAMS:
                         if (value.length >= 4) {
                             int header = value[0] & 0xFF;// 0xED
@@ -221,10 +231,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                     case KEY_TIME_ZONE:
                                     case KEY_SHUTDOWN_PAYLOAD_ENABLE:
                                     case KEY_LOW_POWER_PAYLOAD_ENABLE:
+                                    case KEY_AXIS_ENABLE:
 //                                    case KEY_LOW_POWER_PERCENT:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(DeviceInfoActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
@@ -270,6 +279,11 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                             generalFragment.setHeartbeatInterval(MokoUtils.toInt(intervalBytes));
                                         }
                                         break;
+                                    case KEY_AXIS_ENABLE:
+                                        if (length > 0) {
+                                            int enable = value[4] & 0xFF;
+                                            generalFragment.setAxisEnable(enable);
+                                        }
                                     case KEY_TIME_ZONE:
                                         if (length > 0) {
                                             int timeZone = value[4];
@@ -533,7 +547,13 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 .hide(deviceFragment)
                 .commit();
         showSyncingProgressDialog();
-        LoRaLW008MokoSupport.getInstance().sendOrder(OrderTaskAssembler.getHeartBeatInterval());
+
+        List<OrderTask> orderTasks = new ArrayList<>();
+        // device
+        orderTasks.add(OrderTaskAssembler.getHeartBeatInterval());
+        if (Utils.isNewFunction(mVersion, "V1.0.9"))
+            orderTasks.add(OrderTaskAssembler.getAxisEnable());
+        LoRaLW008MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     private void showPosAndGetData() {

@@ -199,14 +199,10 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                     case KEY_LORA_MAX_RETRANSMISSION_TIMES:
                                     case KEY_LORA_ADR_ACK_LIMIT:
                                     case KEY_LORA_ADR_ACK_DELAY:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_LORA_UPLINK_STRATEGY:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(LoRaConnSettingActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
@@ -215,9 +211,7 @@ public class LoRaConnSettingActivity extends BaseActivity implements CompoundBut
                                         }
                                         break;
                                     case KEY_REBOOT:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

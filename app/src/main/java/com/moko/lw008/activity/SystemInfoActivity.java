@@ -26,7 +26,9 @@ import com.moko.lw008.AppConstants;
 import com.moko.lw008.databinding.Lw008ActivitySystemInfoBinding;
 import com.moko.lw008.service.DfuService;
 import com.moko.lw008.utils.FileUtils;
+import com.moko.lw008.utils.SPUtiles;
 import com.moko.lw008.utils.ToastUtils;
+import com.moko.lw008.utils.Utils;
 import com.moko.support.lw008.LoRaLW008MokoSupport;
 import com.moko.support.lw008.OrderTaskAssembler;
 import com.moko.support.lw008.entity.OrderCHAR;
@@ -43,6 +45,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
@@ -55,6 +58,7 @@ public class SystemInfoActivity extends BaseActivity {
     private boolean mReceiverTag = false;
     private String mDeviceMac;
     private String mDeviceName;
+    private String mVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,10 @@ public class SystemInfoActivity extends BaseActivity {
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
         mReceiverTag = true;
+        mVersion = SPUtiles.getStringValue(this, AppConstants.SP_KEY_FIREWARE_VERSION, "V1.0.0");
+        if (Utils.isNewFunction(mVersion, "V1.0.9")) {
+            mBind.tvBatteryConsume.setVisibility(View.VISIBLE);
+        }
         showSyncingProgressDialog();
         mBind.tvSoftwareVersion.postDelayed(() -> {
             List<OrderTask> orderTasks = new ArrayList<>();
@@ -186,6 +194,13 @@ public class SystemInfoActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public void onBatteryConsumeInfo(View view) {
+        if (isWindowLocked())
+            return;
+        Intent intent = new Intent(this, BatteryConsumeActivity.class);
+        startActivity(intent);
     }
 
     public void onDebuggerMode(View view) {

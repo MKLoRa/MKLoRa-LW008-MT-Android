@@ -175,7 +175,7 @@ public class ParamsWriteTask extends OrderTask {
         response.responseValue = data;
     }
 
-//    public void setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
+    //    public void setLowPowerPercent(@IntRange(from = 0, to = 1) int percent) {
 //        data = new byte[]{
 //                (byte) 0xED,
 //                (byte) 0x01,
@@ -185,6 +185,16 @@ public class ParamsWriteTask extends OrderTask {
 //        };
 //        response.responseValue = data;
 //    }
+    public void setAxisEnable(@IntRange(from = 0, to = 1) int enable) {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_AXIS_ENABLE.getParamsKey(),
+                (byte) 0x01,
+                (byte) enable
+        };
+        response.responseValue = data;
+    }
 
     public void setPasswordVerifyEnable(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[]{
@@ -1561,13 +1571,85 @@ public class ParamsWriteTask extends OrderTask {
     }
 
 
-
     public void setBatteryReset() {
         data = new byte[]{
                 (byte) 0xED,
                 (byte) 0x01,
                 (byte) ParamsKeyEnum.KEY_BATTERY_RESET.getParamsKey(),
                 (byte) 0x00
+        };
+    }
+
+    public void setBatteryResetNew() {
+        data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_BATTERY_RESET_NEW.getParamsKey(),
+                (byte) 0x00
+        };
+    }
+
+    public void setCondition1VoltageThreshold(@IntRange(from = 44, to = 64) int threshold) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CONDITION_1_VOLTAGE_THRESHOLD.getParamsKey(),
+                (byte) 0x01,
+                (byte) threshold
+        };
+    }
+
+    public void setCondition1MinSampleInterval(@IntRange(from = 1, to = 1440) int interval) {
+        byte[] rawDataBytes = MokoUtils.toByteArray(interval, 2);
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CONDITION_1_MIN_SAMPLE_INTERVAL.getParamsKey(),
+                (byte) 0x02,
+                (byte) rawDataBytes[0],
+                (byte) rawDataBytes[1]
+        };
+    }
+
+    public void setCondition1SampleTimes(@IntRange(from = 1, to = 100) int times) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CONDITION_1_SAMPLE_TIMES.getParamsKey(),
+                (byte) 0x01,
+                (byte) times
+        };
+    }
+
+    public void setCondition2VoltageThreshold(@IntRange(from = 44, to = 64) int threshold) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CONDITION_2_VOLTAGE_THRESHOLD.getParamsKey(),
+                (byte) 0x01,
+                (byte) threshold
+        };
+    }
+
+    public void setCondition2MinSampleInterval(@IntRange(from = 1, to = 1440) int interval) {
+        byte[] rawDataBytes = MokoUtils.toByteArray(interval, 2);
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CONDITION_2_MIN_SAMPLE_INTERVAL.getParamsKey(),
+                (byte) 0x02,
+                (byte) rawDataBytes[0],
+                (byte) rawDataBytes[1]
+        };
+    }
+
+    public void setCondition2SampleTimes(@IntRange(from = 1, to = 100) int times) {
+        response.responseValue = data = new byte[]{
+                (byte) 0xED,
+                (byte) 0x01,
+                (byte) ParamsKeyEnum.KEY_CONDITION_2_SAMPLE_TIMES.getParamsKey(),
+                (byte) 0x01,
+                (byte) times
         };
     }
 

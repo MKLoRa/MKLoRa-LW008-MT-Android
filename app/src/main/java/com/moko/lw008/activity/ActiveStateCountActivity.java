@@ -102,14 +102,10 @@ public class ActiveStateCountActivity extends BaseActivity {
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
                                     case KEY_ACTIVE_STATE_COUNT_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_ACTIVE_STATE_TIMEOUT:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(ActiveStateCountActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

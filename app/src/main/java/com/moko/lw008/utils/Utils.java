@@ -135,4 +135,40 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.US);
         return sdf.format(calendar.getTime());
     }
+
+    public static boolean isNewFunction(String version1, String version2) {
+        // 去除可能的 'V' 或 'v' 前缀
+        String v1 = version1.trim();
+        String v2 = version2.trim();
+        if (v1.startsWith("V") || v1.startsWith("v")) {
+            v1 = v1.substring(1);
+        }
+        if (v2.startsWith("V") || v2.startsWith("v")) {
+            v2 = v2.substring(1);
+        }
+
+        // 按小数点分割，得到三个版本部分
+        String[] parts1 = v1.split("\\.");
+        String[] parts2 = v2.split("\\.");
+
+
+        // 解析大版本（第一部分）
+        int major1 = Integer.parseInt(parts1[0]);
+        int major2 = Integer.parseInt(parts2[0]);
+        if (major1 != major2) {
+            return major1 > major2;
+        }
+
+        // 解析中间版本（第二部分）
+        int minor1 = Integer.parseInt(parts1[1]);
+        int minor2 = Integer.parseInt(parts2[1]);
+        if (minor1 != minor2) {
+            return minor1 > minor2;
+        }
+
+        // 解析小版本（第三部分）
+        int patch1 = Integer.parseInt(parts1[2]);
+        int patch2 = Integer.parseInt(parts2[2]);
+        return patch1 >= patch2;
+    }
 }

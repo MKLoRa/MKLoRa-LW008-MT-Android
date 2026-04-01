@@ -19,7 +19,8 @@ import androidx.annotation.IntRange;
 public class OrderTaskAssembler {
     ///////////////////////////////////////////////////////////////////////////
     // READ
-    ///////////////////////////////////////////////////////////////////////////
+
+    /// ////////////////////////////////////////////////////////////////////////
 
     public static OrderTask getManufacturer() {
         GetManufacturerNameTask getManufacturerTask = new GetManufacturerNameTask();
@@ -120,6 +121,49 @@ public class OrderTaskAssembler {
         return task;
     }
 
+    public static OrderTask setBatteryResetNew() {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setBatteryResetNew();
+        return task;
+    }
+
+
+    public static OrderTask setCondition1VoltageThreshold(@IntRange(from = 44, to = 64) int threshold) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setCondition1VoltageThreshold(threshold);
+        return task;
+    }
+
+    public static OrderTask setCondition1MinSampleInterval(@IntRange(from = 1, to = 1440) int interval) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setCondition1MinSampleInterval(interval);
+        return task;
+    }
+
+    public static OrderTask setCondition1SampleTimes(@IntRange(from = 1, to = 100) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setCondition1SampleTimes(times);
+        return task;
+    }
+
+    public static OrderTask setCondition2VoltageThreshold(@IntRange(from = 44, to = 64) int threshold) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setCondition2VoltageThreshold(threshold);
+        return task;
+    }
+
+    public static OrderTask setCondition2MinSampleInterval(@IntRange(from = 1, to = 1440) int interval) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setCondition2MinSampleInterval(interval);
+        return task;
+    }
+
+    public static OrderTask setCondition2SampleTimes(@IntRange(from = 1, to = 100) int times) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setCondition2SampleTimes(times);
+        return task;
+    }
+
     public static OrderTask getChipTemp() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_CHIP_TEMP);
@@ -159,6 +203,66 @@ public class OrderTaskAssembler {
     public static OrderTask getBatteryInfo() {
         ParamsReadTask task = new ParamsReadTask();
         task.setData(ParamsKeyEnum.KEY_BATTERY_INFO);
+        return task;
+    }
+
+    public static OrderTask getBatteryInfoNew() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_BATTERY_INFO_NEW);
+        return task;
+    }
+
+    public static OrderTask getBatteryInfoLast() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_BATTERY_INFO_LAST);
+        return task;
+    }
+
+    public static OrderTask getBatteryInfoAll() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_BATTERY_INFO_ALL);
+        return task;
+    }
+
+    public static OrderTask getCondition1VoltageThreshold() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_CONDITION_1_VOLTAGE_THRESHOLD);
+        return task;
+    }
+
+    public static OrderTask getCondition1MinSampleInterval() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_CONDITION_1_MIN_SAMPLE_INTERVAL);
+        return task;
+    }
+
+    public static OrderTask getCondition1SampleTimes() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_CONDITION_1_SAMPLE_TIMES);
+        return task;
+    }
+
+    public static OrderTask getCondition2VoltageThreshold() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_CONDITION_2_VOLTAGE_THRESHOLD);
+        return task;
+    }
+
+    public static OrderTask getCondition2MinSampleInterval() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_CONDITION_2_MIN_SAMPLE_INTERVAL);
+        return task;
+    }
+
+    public static OrderTask getCondition2SampleTimes() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_CONDITION_2_SAMPLE_TIMES);
+        return task;
+    }
+
+    public static OrderTask getAxisEnable() {
+        ParamsReadTask task = new ParamsReadTask();
+        task.setData(ParamsKeyEnum.KEY_AXIS_ENABLE);
         return task;
     }
 
@@ -783,7 +887,8 @@ public class OrderTaskAssembler {
 
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
-    ///////////////////////////////////////////////////////////////////////////
+
+    /// ////////////////////////////////////////////////////////////////////////
     public static OrderTask setPassword(String password) {
         SetPasswordTask task = new SetPasswordTask();
         task.setData(password);
@@ -868,6 +973,12 @@ public class OrderTaskAssembler {
 //        return task;
 //    }
 
+
+    public static OrderTask setAxisEnable(@IntRange(from = 0, to = 1) int enable) {
+        ParamsWriteTask task = new ParamsWriteTask();
+        task.setAxisEnable(enable);
+        return task;
+    }
 
     public static OrderTask setPasswordVerifyEnable(@IntRange(from = 0, to = 1) int enable) {
         ParamsWriteTask task = new ParamsWriteTask();

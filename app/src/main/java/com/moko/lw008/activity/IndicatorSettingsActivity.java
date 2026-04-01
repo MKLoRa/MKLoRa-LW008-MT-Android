@@ -100,9 +100,7 @@ public class IndicatorSettingsActivity extends BaseActivity {
                                 int result = value[4] & 0xFF;
                                 switch (configKeyEnum) {
                                     case KEY_INDICATOR_STATUS:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(IndicatorSettingsActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {

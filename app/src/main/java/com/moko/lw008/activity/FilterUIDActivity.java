@@ -95,14 +95,10 @@ public class FilterUIDActivity extends BaseActivity {
                                 switch (configKeyEnum) {
                                     case KEY_FILTER_EDDYSTONE_UID_NAMESPACE:
                                     case KEY_FILTER_EDDYSTONE_UID_INSTANCE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         break;
                                     case KEY_FILTER_EDDYSTONE_UID_ENABLE:
-                                        if (result != 1) {
-                                            savedParamsError = true;
-                                        }
+                                        savedParamsError |= result != 1;
                                         if (savedParamsError) {
                                             ToastUtils.showToast(FilterUIDActivity.this, "Opps！Save failed. Please check the input characters and try again.");
                                         } else {
