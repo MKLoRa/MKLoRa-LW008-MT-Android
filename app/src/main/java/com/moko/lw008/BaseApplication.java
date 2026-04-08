@@ -15,7 +15,7 @@ import com.elvishew.xlog.printer.Printer;
 import com.elvishew.xlog.printer.file.FilePrinter;
 import com.elvishew.xlog.printer.file.naming.ChangelessFileNameGenerator;
 import com.moko.ble.lib.log.ClearLogBackStrategy;
-import com.moko.lib.loraiot.IoTDMSupport;
+import com.moko.lib.scanneriot.IoTDMSupport;
 import com.moko.lw008.utils.IOUtils;
 
 import java.io.File;
