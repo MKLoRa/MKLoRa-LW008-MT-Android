@@ -327,11 +327,6 @@ public class SelfTestActivity extends BaseActivity {
         backHome();
     }
 
-    @Override
-    public void onBackPressed() {
-        backHome();
-    }
-
     private void backHome() {
         finish();
     }
